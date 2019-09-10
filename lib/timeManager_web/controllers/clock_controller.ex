@@ -12,7 +12,6 @@ defmodule TimeManagerWeb.ClockController do
   end
 
   def create(conn, %{"clock" => clock_params}) do
-    IO.puts(id)
     with {:ok, %Clock{} = clock} <- Auth.create_clock(clock_params) do
       conn
       |> put_status(:created)
