@@ -1,3 +1,9 @@
+# si vous chargez le projet :  
+1) vérifier bien la connection à la DB : /config/dev.exs  
+2) Migrer : mix ecto.migrate  
+3) Finit.
+  
+
 # TimeManager
 
 user_path  GET     /api/users             TimeManagerWeb.UserController :index  
@@ -20,6 +26,9 @@ workingtime_path  PATCH   /api/workingtimes/:id  TimeManagerWeb.WorkingtimeContr
 workingtime_path  DELETE  /api/workingtimes/:id  TimeManagerWeb.WorkingtimeController :delete  
 websocket  WS      /socket/websocket      TimeManagerWeb.UserSocket  
   
+
+working times délimite la période de travail.
+la clock c'est quand il va venir pointer. (arrive à 9h = commence la clock). Stop la clock = on part, le workingtimes = le temps passé.
 
 ## do mix phx.routes
 
