@@ -15,5 +15,7 @@ defmodule TimeManager.Auth.Workingtime do
     workingtime
     |> cast(attrs, [:start, :end])
     |> validate_required([:start, :end])
+    |> validate_format(:start, ~r/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$/)
+    |> validate_format(:end, ~r/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$/)
   end
 end
