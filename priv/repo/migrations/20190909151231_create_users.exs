@@ -3,11 +3,15 @@ defmodule TimeManager.Repo.Migrations.CreateUsers do
 
   def change do
     create table(:users) do
-      add :username, :string
-      add :email, :string
+      add :username, :string, null: false
+      add :email, :string, null: false
 
       timestamps()
     end
-
+    create constraint(
+      "users", 
+      "is_email_valid",
+      check: "email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$'"
+    )
   end
 end
