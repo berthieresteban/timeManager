@@ -132,6 +132,11 @@ defmodule TimeManager.Auth do
 
   """
   def get_clock!(id), do: Repo.get!(Clock, id)
+  def get_clock_by_user!(id) do 
+    #Repo.get_by!(Clock, [user: id])
+    query = from c in Clock, where: c.user == ^id
+    Repo.all(query)
+  end
 
   @doc """
   Creates a clock.

@@ -6,6 +6,7 @@ defmodule TimeManager.Auth.Clock do
     field :status, :boolean, default: false
     field :time, :utc_datetime
     field :user, :id
+    #belongs_to :user, TimeManager.Auth.User
 
     timestamps()
   end
@@ -13,7 +14,7 @@ defmodule TimeManager.Auth.Clock do
   @doc false
   def changeset(clock, attrs) do
     clock
-    |> cast(attrs, [:time, :status])
-    |> validate_required([:time, :status])
+    |> cast(attrs, [:time, :status, :user])
+    |> validate_required([:time, :status, :user])
   end
 end

@@ -12,6 +12,7 @@ defmodule TimeManagerWeb.ClockController do
   end
 
   def create(conn, %{"clock" => clock_params}) do
+    IO.puts(id)
     with {:ok, %Clock{} = clock} <- Auth.create_clock(clock_params) do
       conn
       |> put_status(:created)
@@ -21,8 +22,9 @@ defmodule TimeManagerWeb.ClockController do
   end
 
   def show(conn, %{"id" => id}) do
-    clock = Auth.get_clock!(id)
-    render(conn, "show.json", clock: clock)
+    clocks = Auth.get_clock_by_user!(id)
+    render(conn, "index.json", clocks: clocks)
+    #render(conn, "show.json", clock: clock)
   end
 
   def update(conn, %{"id" => id, "clock" => clock_params}) do
