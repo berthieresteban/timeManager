@@ -17,11 +17,10 @@ defmodule TimeManager.Auth do
       [%User{}, ...]
 
   """
-  def list_users() do
-    Repo.all(User)
-  end
+
 
   def list_users(params) do
+    IO.inspect(params)
     query = from u in User
     if (params["email"]) do
       query = from u in User, where: u.email == ^params["email"]
@@ -35,8 +34,9 @@ defmodule TimeManager.Auth do
       if (params["username"]) do
         query = from u in User, where: u.username == ^params["username"]
         Repo.all(query)
+      else
+        Repo.all(query)
       end
-      Repo.all(query)
     end
   end
 
