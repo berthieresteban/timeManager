@@ -7,7 +7,7 @@ defmodule TimeManagerWeb.UserController do
   action_fallback TimeManagerWeb.FallbackController
 
   def index(conn, _params) do
-    users = Auth.list_users()
+    users = Auth.list_users(_params)
     render(conn, "index.json", users: users)
   end
 

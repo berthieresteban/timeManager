@@ -17,8 +17,27 @@ defmodule TimeManager.Auth do
       [%User{}, ...]
 
   """
-  def list_users do
+  def list_users() do
     Repo.all(User)
+  end
+
+  def list_users(params) do
+    query = from u in User
+    if (params["email"]) do
+      query = from u in User, where: u.email == ^params["email"]
+      if (params["username"]) do
+        query = from u in User, where: u.email == ^params["email"], where: u.username == ^params["username"]
+        Repo.all(query)
+      else
+        Repo.all(query)
+      end
+    else
+      if (params["username"]) do
+        query = from u in User, where: u.username == ^params["username"]
+        Repo.all(query)
+      end
+      Repo.all(query)
+    end
   end
 
   @doc """
@@ -216,6 +235,23 @@ defmodule TimeManager.Auth do
   """
   def list_workingtimes do
     Repo.all(Workingtime)
+  end
+
+  def list_workingtimes(params) do
+    if (params["start"]) do
+      if (params["end"]) do
+        Repo.all(from w in Workingtime, where: w.start == ^params["start"], where: w.end == ^params["end"])
+      else
+        Repo.all(from w in Workingtime, where: w.start == ^params["start"])
+      end
+    else
+      if (params["end"]) do
+        Repo.all(from w in Workingtime, where: w.end == ^params["end"])
+      else
+        Repo.all(Workingtime)
+      end
+    end
+
   end
 
   @doc """
