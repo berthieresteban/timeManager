@@ -20,6 +20,16 @@ defmodule TimeManagerWeb.ClockController do
     end
   end
 
+  def create_for_user(conn, %{"id" => id, "clock" => clock_params}) do
+    with {:ok, %Clock{} = clock} <- Auth.create_clock_for_user(id, clock_params) do
+      workgintime = Auth.check_endclock_create_workingtime(clock)
+      conn
+      |> put_status(:created)
+      |> put_resp_header("location", Routes.clock_path(conn, :show, clock))
+      |> render("show.json", clock: clock)
+    end
+  end
+
   def show(conn, %{"id" => id}) do
     clocks = Auth.get_clock_by_user!(id)
     render(conn, "index.json", clocks: clocks)

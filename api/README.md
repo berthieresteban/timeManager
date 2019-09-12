@@ -1,35 +1,47 @@
-# si vous chargez le projet :  
+### si vous chargez le projet :  
 1) vérifier bien la connection à la DB : /config/dev.exs  
 2) Migrer : mix ecto.migrate  
-3) Finit.
+3) lancez le serveur [mix phx.server]
   
 
-# TimeManager
-
-user_path  GET     /api/users                        TimeManagerWeb.UserController :index  
-user_path  GET     /api/users/:id                    TimeManagerWeb.UserController :show  
-user_path  POST    /api/users                        TimeManagerWeb.UserController :create  
-user_path  PATCH   /api/users/:id                    TimeManagerWeb.UserController :update  
-           PUT     /api/users/:id                    TimeManagerWeb.UserController :update  
-user_path  DELETE  /api/users/:id                    TimeManagerWeb.UserController :delete  
-clock_path GET     /api/clocks                       TimeManagerWeb.ClockController :index  
-clock_path GET     /api/clocks/:id                   TimeManagerWeb.ClockController :show  
-clock_path POST    /api/clocks                       TimeManagerWeb.ClockController :create  
-clock_path PATCH   /api/clocks/:id                   TimeManagerWeb.ClockController :update  
-           PUT     /api/clocks/:id                   TimeManagerWeb.ClockController :update  
-clock_path DELETE  /api/clocks/:id                   TimeManagerWeb.ClockController :delete  
-workingtime_path  GET     /api/workingtimes          TimeManagerWeb.WorkingtimeController :index  
-workingtime_path  GET     /api/workingtimes/:id      TimeManagerWeb.WorkingtimeController :show  
-workingtime_path  POST    /api/workingtimes          TimeManagerWeb.WorkingtimeController :create  
-workingtime_path  PATCH   /api/workingtimes/:id      TimeManagerWeb.WorkingtimeController :update  
-                  PUT     /api/workingtimes/:id      TimeManagerWeb.WorkingtimeController :update  
-workingtime_path  DELETE  /api/workingtimes/:id      TimeManagerWeb.WorkingtimeController :delete  
+# TimeManager API  
   
+## How to use ? (Doc personnelle)  
+*USER*
 
-working times délimite la période de travail.
-la clock c'est quand il va venir pointer. (arrive à 9h = commence la clock). Stop la clock = on part, le workingtimes = le temps passé.
+    a GET method : http://localhost:4000/api/users?email=XXX&username=YYY 
+	`*Retour : JSON utilisateur*`
+    a GET method : http://localhost:4000/api/users/:userID
+	`*Retour : JSON utilisateur*`
+    a POST method : http://localhost:4000/api/users
+	`*Retour : JSON utilisateurs*`
+    a PUT method : http://localhost:4000/api/users/:userID
+	`*Retour : JSON utilisateur*`
+    a DELETE method : http://localhost:4000/api/users/:userID
+	`*Retour : vide*`
 
-## do mix phx.routes
+
+*WORKING TIME*
+
+    a GET (ALL) method : http://localhost:4000/api/workingtimes/:userID?start=XXX?end=YYY
+	`Retour : JSON workingtimes de l'utilisateur, avec des conditions (Pas exact)`
+	a POST method : http://localhost:4000/api/workingtimes/:userID
+	`*Retour : JSON workingtime de l'utilisateur*`
+    a GET (ONE) method : http://localhost:4000/api/workingtimes/:userID/:workingtimeID
+	`Retour : JSON workingtime spécifique de l'utilisateur`
+    a PUT method : http://localhost:4000/api/workingtimes/:id
+	`Retour : JSON workingtime modifié`
+    a DELETE method : http://localhost:4000/api/workingtimes/:id
+	` Retour : vide`
+*CLOCKING
+
+    a GET method : http://localhost:4000/api/clocks/ 
+	`Retour : JSON clocks : toute les clocks`
+    a GET method : http://localhost:4000/api/clocks/:userID
+	`Retour : JSSON clocks de l'utilisateur`
+    a POST method : http://localhost:4000/api/clocks/:userID 
+	`= POINTAGE : on POST pas de status false, mais forcément TRUE, au bout de 2 TRUE l'API créée automatiquement un workingtimes.
+
 
 To start your Phoenix server:
 
