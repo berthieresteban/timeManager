@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card :dark="darkMode">
     <donut-chart id="donut" :data="donutData" :colors="colors" resize="true" />
   </v-card>
 </template>
@@ -14,6 +14,9 @@ export default {
   computed: {
     colors() {
       return this.$store.state.donutChart.colors;
+    },
+    darkMode() {
+      return this.$store.state.darkMode;
     }
   },
   data() {

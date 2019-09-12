@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card :dark="darkMode">
     <bar-chart
       id="bar"
       :data="barData"
@@ -23,6 +23,9 @@ export default {
   computed: {
     colors() {
       return this.$store.state.barChart.colors;
+    },
+    darkMode() {
+      return this.$store.state.darkMode;
     }
   },
   data() {

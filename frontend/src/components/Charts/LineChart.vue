@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card :dark="darkMode">
     <line-chart
       id="line"
       :data="lineData"
@@ -23,6 +23,9 @@ export default {
   computed: {
     colors() {
       return this.$store.state.lineChart.colors;
+    },
+    darkMode() {
+      return this.$store.state.darkMode;
     }
   },
   data() {

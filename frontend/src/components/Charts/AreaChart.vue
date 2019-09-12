@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card :dark="darkMode">
     <area-chart
       id="area"
       :data="areaData"
@@ -25,6 +25,9 @@ export default {
   computed: {
     colors() {
       return this.$store.state.areaChart.colors;
+    },
+    darkMode() {
+      return this.$store.state.darkMode;
     }
   },
   data() {
