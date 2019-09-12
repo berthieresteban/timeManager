@@ -182,6 +182,28 @@ defmodule TimeManager.Auth do
     |> Repo.insert()
   end
 
+  def check_endclock_create_workingtime(clock) do
+    if (clock.status == true) do
+      user = clock.user
+      query = from c in Clock, where: c.user == ^user, where: c.status == true, order_by: c.time
+      last_clocks = Repo.all(query)
+      last_clock = List.first(last_clocks)
+      startClock = last_clock.time
+      endClock = clock.time
+      if (clock != last_clock) do
+        nParams = %{time: last_clock.time, status: false, user: last_clock.user}
+        last_clock
+        |> Clock.changeset(nParams)
+        |> Repo.update()
+        nParams = %{time: clock.time, status: false, user: clock.user}
+        clock
+        |> Clock.changeset(nParams)
+        |> Repo.update()
+        create_auto_workingtime(clock.user, startClock, endClock)
+      end
+    end
+  end
+
   @doc """
   Updates a clock.
 
@@ -307,6 +329,13 @@ defmodule TimeManager.Auth do
     |> Repo.insert()
     #%Workingtime{}
     #|> Workingtime.changeset(attrs)
+  end
+
+  def create_auto_workingtime(userId, clockStart, clockEnd) do
+    obj = %{start: clockStart, end: clockEnd, user: userId}
+    %Workingtime{}
+    |> Workingtime.changeset(obj)
+    |> Repo.insert()
   end
 
   @doc """
