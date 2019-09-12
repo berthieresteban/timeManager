@@ -1,8 +1,7 @@
 <template>
   <v-navigation-drawer
     :clipped="clipped"
-    v-model="drawer"
-    enable-resize-watcher
+    v-model="drawerCopy"
     app
     :light="!darkMode"
     :dark="darkMode"
@@ -36,6 +35,14 @@
         <v-list-item-title>Update my informations</v-list-item-title>
       </v-list-item>
     </v-list>
+    <v-divider></v-divider>
+    <div class="hidden-md-and-up">
+      <v-btn text link to="/workingTimes/1">Working Times</v-btn>
+      <v-btn text link to="/workingTime/1">Create Working Time</v-btn>
+      <v-btn text link to="/workingTime/2/3">Edit Working Time</v-btn>
+      <v-btn text link to="/clock/username">Clock Manager</v-btn>
+      <v-btn text link to="/chartManager/1">Chart Manager</v-btn>
+    </div>
   </v-navigation-drawer>
 </template>
 
@@ -44,23 +51,34 @@ export default {
   name: "User",
   props: {
     drawer: Boolean,
-    clipped: Boolean,
+    clipped: Boolean
   },
   computed: {
     darkMode() {
       return this.$store.state.darkMode;
     }
   },
+  created() {
+    this.drawerCopy = this.drawer;
+  },
   data() {
     return {
       email: "test@test.com",
+      drawerCopy: null,
       username: "test",
       darkModeCopy: false
     };
   },
   watch: {
     darkModeCopy() {
-      this.$store.commit('turnDarkMode')
+      this.$store.commit("turnDarkMode");
+    },
+    drawer(value) {
+      if (value === this.drawerCopy) return;
+      this.drawerCopy = this.drawer;
+    },
+    drawerCopy(value) {
+      this.$emit("drawerCopy", value);
     }
   },
   methods: {
