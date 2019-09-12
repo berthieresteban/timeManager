@@ -16,6 +16,5 @@ defmodule TimeManager.Auth.Clock do
     clock
     |> cast(attrs, [:time, :status, :user])
     |> validate_required([:time, :status, :user])
-    |> validate_format(:time, ~r/^[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}$/)
   end
 end

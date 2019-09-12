@@ -20,9 +20,29 @@ defmodule TimeManagerWeb.WorkingtimeController do
     end
   end
 
+  def create_for_user(conn, %{"id" => id, "workingtime" => workingtime_params}) do
+    with {:ok, %Workingtime{} = workingtime} <- Auth.create_workingtime_for_user(id, workingtime_params) do
+      conn
+      |> put_status(:created)
+      |> put_resp_header("location", Routes.workingtime_path(conn, :show, workingtime))
+      |> render("show.json", workingtime: workingtime)
+    end
+  end
+
   def show(conn, %{"id" => id}) do
-    workingtime = Auth.get_workingtime!(id)
-    render(conn, "show.json", workingtime: workingtime)
+    workingtimes = Auth.get_workingtime_by_user!(id)
+    render(conn, "index.json", workingtimes: workingtimes)
+    #render(conn, "show.json", workingtime: workingtime)
+  end
+
+  def show_one(conn, %{"id" => id, "idw" => idw}) do
+    workingtimes = Auth.get_workingtime_by_user!(id)
+    Enum.each workingtimes, fn workingtime -> 
+      if "#{workingtime.id}" == idw do
+        render(conn, "show.json", workingtime: workingtime)
+      end
+    end
+    render(conn, "show.json", workingtime: nil)
   end
 
   def update(conn, %{"id" => id, "workingtime" => workingtime_params}) do

@@ -175,6 +175,13 @@ defmodule TimeManager.Auth do
     |> Repo.insert()
   end
 
+  def create_clock_for_user(id, attrs \\ %{}) do
+    cuser = %{time: attrs["time"], status: attrs["status"], user: id}
+    %Clock{}
+    |> Clock.changeset(cuser)
+    |> Repo.insert()
+  end
+
   @doc """
   Updates a clock.
 
@@ -270,6 +277,11 @@ defmodule TimeManager.Auth do
   """
   def get_workingtime!(id), do: Repo.get!(Workingtime, id)
 
+  def get_workingtime_by_user!(id) do
+      query = from w in Workingtime, where: w.user == ^id
+      Repo.all(query)
+  end
+
   @doc """
   Creates a workingtime.
 
@@ -286,6 +298,15 @@ defmodule TimeManager.Auth do
     %Workingtime{}
     |> Workingtime.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def create_workingtime_for_user(id, attrs \\ %{}) do
+    wuser = %{start: attrs["start"], end: attrs["end"], user: id}
+    %Workingtime{}
+    |> Workingtime.changeset(wuser)
+    |> Repo.insert()
+    #%Workingtime{}
+    #|> Workingtime.changeset(attrs)
   end
 
   @doc """
