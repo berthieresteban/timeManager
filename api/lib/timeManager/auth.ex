@@ -175,6 +175,35 @@ defmodule TimeManager.Auth do
     |> Repo.insert()
   end
 
+  def create_clock_for_user(id, attrs \\ %{}) do
+    cuser = %{time: attrs["time"], status: attrs["status"], user: id}
+    %Clock{}
+    |> Clock.changeset(cuser)
+    |> Repo.insert()
+  end
+
+  def check_endclock_create_workingtime(clock) do
+    if (clock.status == true) do
+      user = clock.user
+      query = from c in Clock, where: c.user == ^user, where: c.status == true, order_by: c.time
+      last_clocks = Repo.all(query)
+      last_clock = List.first(last_clocks)
+      startClock = last_clock.time
+      endClock = clock.time
+      if (clock != last_clock) do
+        nParams = %{time: last_clock.time, status: false, user: last_clock.user}
+        last_clock
+        |> Clock.changeset(nParams)
+        |> Repo.update()
+        nParams = %{time: clock.time, status: false, user: clock.user}
+        clock
+        |> Clock.changeset(nParams)
+        |> Repo.update()
+        create_auto_workingtime(clock.user, startClock, endClock)
+      end
+    end
+  end
+
   @doc """
   Updates a clock.
 
@@ -270,6 +299,11 @@ defmodule TimeManager.Auth do
   """
   def get_workingtime!(id), do: Repo.get!(Workingtime, id)
 
+  def get_workingtime_by_user!(id) do
+      query = from w in Workingtime, where: w.user == ^id
+      Repo.all(query)
+  end
+
   @doc """
   Creates a workingtime.
 
@@ -285,6 +319,22 @@ defmodule TimeManager.Auth do
   def create_workingtime(attrs \\ %{}) do
     %Workingtime{}
     |> Workingtime.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def create_workingtime_for_user(id, attrs \\ %{}) do
+    wuser = %{start: attrs["start"], end: attrs["end"], user: id}
+    %Workingtime{}
+    |> Workingtime.changeset(wuser)
+    |> Repo.insert()
+    #%Workingtime{}
+    #|> Workingtime.changeset(attrs)
+  end
+
+  def create_auto_workingtime(userId, clockStart, clockEnd) do
+    obj = %{start: clockStart, end: clockEnd, user: userId}
+    %Workingtime{}
+    |> Workingtime.changeset(obj)
     |> Repo.insert()
   end
 
