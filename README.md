@@ -1,6 +1,7 @@
 # timeManager _ MsC 1 
   
-`Le projet va être géré sous docker-compose, à venir lors du mini projet dev ops`
+*Create : `sudo docker-compose build`*
+*Run all (dev): `sudo docker-compose up`*
   
 ## Mini-project 01 : /api  
 *Contient l'API du projet, fait en Elixir / Phoenix framework.*  
