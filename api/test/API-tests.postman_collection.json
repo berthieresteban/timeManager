@@ -1,0 +1,942 @@
+{
+	"info": {
+		"_postman_id": "7966a240-8248-403c-8d42-1f4208049a14",
+		"name": "API tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "Create user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});",
+									"",
+									"pm.test(\"email_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.email).to.eql(\"email@test.com\");",
+									"});",
+									"",
+									"pm.test(\"username_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.username).to.eql(\"username_test\");",
+									"});",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"user_id\", jsonData.data.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"user\": {\n\t\t\"username\": \"username_test\",\n\t\t\"email\": \"email@test.com\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/users?",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "test",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "test",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "be63ec3f-6379-4464-89b5-1f17ff7c9088",
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+									"});",
+									"",
+									"pm.test(\"email_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    const found = jsonData.data.find(el => el.email === \"email@test.com\")",
+									"    pm.expect(found).not.equal(undefined);",
+									"});",
+									"",
+									"pm.test(\"username_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    const found = jsonData.data.find(el => el.username === \"username_test\")",
+									"    pm.expect(found).not.equal(undefined);",
+									"});",
+									"",
+									"pm.test(\"id_test\", function () {",
+									"    const id = pm.environment.get(\"user_id\");",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    const found = jsonData.data.find(el => el.id === id)",
+									"    pm.expect(found).not.equal(undefined);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/users?",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "email",
+									"value": "email",
+									"disabled": true
+								},
+								{
+									"key": "username",
+									"value": "username",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get user created by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "2869598f-c505-4f7b-99b7-356f00801a4a",
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+									"});",
+									"",
+									"pm.test(\"email_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.email).to.eql(\"email@test.com\");",
+									"});",
+									"",
+									"pm.test(\"username_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.username).to.eql(\"username_test\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/users/{{user_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update user created",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c347d178-9dc2-4f5a-93df-9409d87e44be",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+									"});",
+									"",
+									"pm.test(\"email_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.email).to.eql(\"email@test2.com\");",
+									"});",
+									"",
+									"pm.test(\"username_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.username).to.eql(\"username_test_2\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"user\": {\n\t\t\"username\": \"username_test_2\",\n\t\t\"email\": \"email@test2.com\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/users/{{user_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user created",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "833deea9-b4c1-4e5f-a62d-f3e7abc0cd97",
+								"exec": [
+									"pm.test(\"Successful DELETE request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([204]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/users/{{user_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "workingtime",
+			"item": [
+				{
+					"name": "Create user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});",
+									"",
+									"pm.test(\"email_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.email).to.eql(\"email@test.com\");",
+									"});",
+									"",
+									"pm.test(\"username_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.username).to.eql(\"username_test\");",
+									"});",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"user_id\", jsonData.data.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"user\": {\n\t\t\"username\": \"username_test\",\n\t\t\"email\": \"email@test.com\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/users?",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "test",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "test",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create working time",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "fd7b33a2-f19e-4b4b-bee4-b1ad2a97023b",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});",
+									"",
+									"pm.test(\"start_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.start).to.eql(\"2019-09-09 09:30:27\");",
+									"});",
+									"",
+									"pm.test(\"end_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.end).to.eql(\"2019-09-09 17:30:27\");",
+									"});",
+									"",
+									"pm.test(\"user_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    const user_id = pm.environment.get(\"user_id\");",
+									"    pm.expect(jsonData.data.user).to.eql(user_id);",
+									"});",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"workingtime_id\", jsonData.data.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"workingtime\": {\n\t\t\"start\": \"2019-09-09 09:30:27\",\n\t\t\"end\": \"2019-09-09 17:30:27\",\n\t\t\"user\": {{user_id}}\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/workingtimes/{{user_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"workingtimes",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get working time by ids",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "b5d0e902-78f9-472e-84de-d12333c6d3eb",
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+									"});",
+									"",
+									"pm.test(\"start_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.start).to.eql(\"2019-09-09 09:30:27\");",
+									"});",
+									"",
+									"pm.test(\"end_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.end).to.eql(\"2019-09-09 17:30:27\");",
+									"});",
+									"",
+									"pm.test(\"user_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    const user_id = pm.environment.get(\"user_id\");",
+									"    pm.expect(jsonData.data.user).to.eql(user_id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/workingtimes/{{user_id}}/{{workingtime_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"workingtimes",
+								"{{user_id}}",
+								"{{workingtime_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get working time by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "c5133a99-1533-487a-b61a-f1745c716289",
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+									"});",
+									"",
+									"pm.test(\"start_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    const found = jsonData.data.find(el => el.start === \"2019-09-09 09:30:27\");",
+									"    pm.expect(found).not.equal(undefined);",
+									"});",
+									"",
+									"pm.test(\"end_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    const found = jsonData.data.find(el => el.end === \"2019-09-09 17:30:27\");",
+									"    pm.expect(found).not.equal(undefined);",
+									"});",
+									"",
+									"pm.test(\"user_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    const user_id = pm.environment.get(\"user_id\");",
+									"    const found = jsonData.data.find(el => el.user === user_id);",
+									"    pm.expect(found).not.equal(undefined);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/workingtimes/{{user_id}}?start=2019-09-09 09:00:27&end=2019-09-09 18:00:27",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"workingtimes",
+								"{{user_id}}"
+							],
+							"query": [
+								{
+									"key": "start",
+									"value": "2019-09-09 09:00:27"
+								},
+								{
+									"key": "end",
+									"value": "2019-09-09 18:00:27"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update working time",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0f8484eb-079d-4fd0-8324-15ea6b825c12",
+								"exec": [
+									"pm.test(\"Successful PUT request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+									"});",
+									"",
+									"pm.test(\"start_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.start).to.eql(\"2019-09-09 09:42:27\");",
+									"});",
+									"",
+									"pm.test(\"end_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.end).to.eql(\"2019-09-09 17:42:27\");",
+									"});",
+									"",
+									"pm.test(\"user_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    const user_id = pm.environment.get(\"user_id\");",
+									"    pm.expect(jsonData.data.user).to.eql(user_id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"workingtime\": {\n\t\t\"start\": \"2019-09-09 09:42:27\",\n\t\t\"end\": \"2019-09-09 17:42:27\",\n\t\t\"user\": {{user_id}}\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/workingtimes/{{workingtime_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"workingtimes",
+								"{{workingtime_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete working time",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "79be2d0a-7d65-4778-a867-d15db2d3e559",
+								"exec": [
+									"pm.test(\"Successful DELETE request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([204]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/workingtimes/{{workingtime_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"workingtimes",
+								"{{workingtime_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user created",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "833deea9-b4c1-4e5f-a62d-f3e7abc0cd97",
+								"exec": [
+									"pm.test(\"Successful DELETE request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([204]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/users/{{user_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "clock",
+			"item": [
+				{
+					"name": "Create user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});",
+									"",
+									"pm.test(\"email_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.email).to.eql(\"email@test.com\");",
+									"});",
+									"",
+									"pm.test(\"username_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.username).to.eql(\"username_test\");",
+									"});",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"user_id\", jsonData.data.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"user\": {\n\t\t\"username\": \"username_test\",\n\t\t\"email\": \"email@test.com\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/users?",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"users"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "test",
+									"disabled": true
+								},
+								{
+									"key": "email",
+									"value": "test",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create clock",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4fa4a837-dcdd-4d41-a3d2-05418bbad590",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});",
+									"",
+									"pm.test(\"time_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.time).to.eql(\"2019-09-09 09:42:27\");",
+									"});",
+									"",
+									"pm.test(\"status_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.status).to.eql(true);",
+									"});",
+									"",
+									"pm.test(\"user_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    const user_id = pm.environment.get(\"user_id\");",
+									"    pm.expect(jsonData.data.user).to.eql(user_id);",
+									"});",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"clock_id\", jsonData.data.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"clock\": {\n\t\t\"time\": \"2019-09-09 09:42:27\",\n\t\t\"status\": true,\n\t\t\"user\": {{user_id}}\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/clocks/{{user_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"clocks",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get clock",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "0f570a36-b77f-4fa8-b1b7-bc8c8de7ad2f",
+								"exec": [
+									"pm.test(\"Successful GET request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+									"});",
+									"",
+									"pm.test(\"time_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.time).to.eql(\"2019-09-09 09:42:27\");",
+									"});",
+									"",
+									"pm.test(\"status_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    pm.expect(jsonData.data.status).to.eql(true);",
+									"});",
+									"",
+									"pm.test(\"user_test\", function () {",
+									"    var jsonData = JSON.parse(responseBody);",
+									"    const user_id = pm.environment.get(\"user_id\");",
+									"    pm.expect(jsonData.data.user).to.eql(user_id);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:4000/api/clocks/{{user_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"clocks",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete user created",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "833deea9-b4c1-4e5f-a62d-f3e7abc0cd97",
+								"exec": [
+									"pm.test(\"Successful DELETE request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([204]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/users/{{user_id}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"users",
+								"{{user_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

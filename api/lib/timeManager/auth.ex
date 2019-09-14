@@ -269,13 +269,13 @@ defmodule TimeManager.Auth do
   def list_workingtimes(params) do
     if (params["start"]) do
       if (params["end"]) do
-        Repo.all(from w in Workingtime, where: w.start == ^params["start"], where: w.end == ^params["end"])
+        Repo.all(from w in Workingtime, where: w.start >= ^params["start"], where: w.end <= ^params["end"])
       else
-        Repo.all(from w in Workingtime, where: w.start == ^params["start"])
+        Repo.all(from w in Workingtime, where: w.start >= ^params["start"])
       end
     else
       if (params["end"]) do
-        Repo.all(from w in Workingtime, where: w.end == ^params["end"])
+        Repo.all(from w in Workingtime, where: w.end <= ^params["end"])
       else
         Repo.all(Workingtime)
       end
