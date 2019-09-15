@@ -35,13 +35,11 @@ export default {
     };
   },
   mounted() {
-    console.log("mounted");
     this.item = this.currentItem;
-    // console.log(this.item);
   },
   methods: {
     handleConfirm() {
-      this.$emit("confirmed");
+      this.$emit("confirmed", this.item.id);
     },
     handleCancel() {
       this.$emit("cancelled");

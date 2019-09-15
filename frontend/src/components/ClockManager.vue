@@ -12,8 +12,14 @@
           >{{ getText }}</v-progress-circular>
         </v-col>
         <v-col cols="12" sm="12">
-          <v-slider :dark="darkMode" v-model="hoursToDo" min="0" max="10" label="Number of hour to do today" />
-          <v-btn @click="clock">{{ clockIn? "Clock'OUT": "Clock'IN" }}</v-btn>
+          <v-slider
+            :dark="darkMode"
+            v-model="hoursToDo"
+            min="0"
+            max="10"
+            label="Number of hour to do today"
+          />
+          <v-btn @click="clock(Date.now())">{{ clockIn? "Clock'OUT": "Clock'IN" }}</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -33,20 +39,79 @@ export default {
     },
     getText() {
       return this.clockIn ? this.time : "Not clocked in!";
+    },
+    todayStart() {
+      const today = Date.now();
+      return this.formateDate(today, "start");
+    },
+    todayEnd() {
+      const today = Date.now();
+      return this.formateDate(today, "end");
+    },
+    now() {
+      const today = Date.now();
+      return this.formateDate(today, "now");
+    },
+    id() {
+      return this.$store.state.user.id;
     }
   },
   data() {
     return {
-      hoursToDo: 1,
       value: null,
+      hoursToDo: 8,
       startDateTime: null,
       clockIn: false,
       time: null,
       interval: null
     };
   },
-  mounted() {},
+  mounted() {
+    this.getLastClock();
+  },
   methods: {
+    sanitize(number) {
+      return ("0" + number).slice(-2);
+    },
+    async getLastClock() {
+      const response = await this.$store.dispatch("getClocks", this.id);
+      if (response.status !== 200) {
+        this.$store.commit(
+          "createSnackBarError",
+          "An error occured while searching last clock!"
+        );
+        return;
+      }
+      const todayClock = response.data.data.find(
+        d => d.time.split("T")[0] === this.todayStart.split(" ")[0]
+      );
+      if (!todayClock || !todayClock.status) {
+        return;
+      }
+      console.log(todayClock);
+
+      const date = new Date(todayClock.time);
+      this.clock(date.valueOf());
+    },
+    formateDate(time, mode) {
+      const date = new Date(time);
+      const year = date.getFullYear();
+      const month = this.sanitize(date.getMonth() + 1);
+      const day = this.sanitize(date.getDate());
+      let formattedDate;
+      if (mode === "start") {
+        formattedDate = `${year}-${month}-${day} 00:00:01`;
+      } else if (mode === "end") {
+        formattedDate = `${year}-${month}-${day} 23:59:59`;
+      } else {
+        const hours = this.sanitize(date.getHours());
+        const secondes = this.sanitize(date.getSeconds());
+        const minutes = this.sanitize(date.getMinutes());
+        formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${secondes}`;
+      }
+      return formattedDate;
+    },
+
     setTime() {
       const now = Date.now();
       const diff = now - this.startDateTime;
@@ -61,15 +126,37 @@ export default {
       this.value = (timeInSeconds / timeToDoInSeconds) * 100;
       this.time = time;
     },
+    async sendClock() {
+      const payload = {
+        id: this.id,
+        data: {
+          clock: {
+            time: this.now,
+            status: true,
+            user: this.id
+          }
+        }
+      };
+      const response = await this.$store.dispatch("createClock", payload);
+      if (response.status !== 201) {
+        this.$store.commit(
+          "createSnackBarError",
+          "An error occured while creating clock!"
+        );
+        return;
+      }
+    },
     refresh() {},
-    clock() {
+    clock(date) {
       this.clockIn = !this.clockIn;
       if (this.clockIn) {
-        this.startDateTime = Date.now();
+        this.sendClock();
+        this.startDateTime = date;
         this.interval = setInterval(() => {
           this.setTime();
         }, 1000);
       } else {
+        this.sendClock();
         this.startDateTime = null;
         this.time = null;
         this.value = null;

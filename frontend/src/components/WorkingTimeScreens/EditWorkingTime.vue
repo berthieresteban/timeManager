@@ -29,6 +29,9 @@
 
 <script>
 export default {
+  props: {
+    workingTimes: Array
+  },
   data() {
     return {
       currentItem: null,
@@ -42,38 +45,6 @@ export default {
         },
         { text: "Clock'in", value: "in" },
         { text: "Clock'out", value: "out" }
-      ],
-      workingTimes: [
-        {
-          user: "test",
-          date: "2019-09-02",
-          in: "09:32:37",
-          out: "17:28:48"
-        },
-        {
-          user: "test",
-          date: "2019-09-03",
-          in: "09:34:37",
-          out: "17:36:48"
-        },
-        {
-          user: "test",
-          date: "2019-09-04",
-          in: "09:31:37",
-          out: "17:22:48"
-        },
-        {
-          user: "test",
-          date: "2019-09-05",
-          in: "09:45:37",
-          out: "17:52:48"
-        },
-        {
-          user: "test",
-          date: "2019-09-06",
-          in: "09:12:37",
-          out: "17:39:48"
-        }
       ]
     };
   },

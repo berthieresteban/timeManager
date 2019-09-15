@@ -114,7 +114,21 @@ export default {
   },
   methods: {
     handleCreateWorkingTime() {
-      this.$emit("createWorkingTime");
+      if (this.startTime >= this.endTime) {
+        console.log("erreur");
+        return;
+
+      }
+      const start = `${this.datePicker} ${this.startTime}:00`;
+      const end = `${this.datePicker} ${this.endTime}:00`;
+      const payload = {
+          workingtime: {
+            start: start,
+            end: end,
+            user: this.$store.state.user.id
+          }
+      };
+      this.$emit("createWorkingTime", payload);
     }
   }
 };

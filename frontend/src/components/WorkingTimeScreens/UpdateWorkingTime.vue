@@ -51,7 +51,16 @@ export default {
   },
   methods: {
     handleConfirm() {
-      this.$emit("confirmed");
+      const payload = {
+        id: this.currentItem.id,
+        data: {
+          workingtime: {
+            start: `${this.date} ${this.start}`,
+            end: `${this.date} ${this.end}`
+          }
+        }
+      };
+      this.$emit("confirmed", payload);
     },
     handleCancel() {
       this.$emit("cancelled");

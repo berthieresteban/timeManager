@@ -40,5 +40,7 @@ defmodule TimeManagerWeb.Endpoint do
     key: "_timeManager_key",
     signing_salt: "K9GDZA1P"
 
+  plug CORSPlug, origin: ["*"]
+
   plug TimeManagerWeb.Router
 end

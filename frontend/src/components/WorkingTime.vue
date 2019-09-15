@@ -15,10 +15,14 @@
       @cancelled="cancelledDelete"
     />
     <div v-if="creationMode">
-      <CreateWorkingTime @createWorkingTime="createWorkingTime"/>
+      <CreateWorkingTime @createWorkingTime="createWorkingTime" />
     </div>
     <div v-else>
-      <EditWorkingTime @deleteWorkingTime="deleteWorkingTime" @updateWorkingTime="updateWorkingTime" />
+      <EditWorkingTime
+        :workingTimes="workingTimes"
+        @deleteWorkingTime="deleteWorkingTime"
+        @updateWorkingTime="updateWorkingTime"
+      />
     </div>
   </div>
 </template>
@@ -43,6 +47,7 @@ export default {
       openedUpdateDialog: false,
       creationMode: true,
       currentItem: null,
+      workingTimes: []
     };
   },
   computed: {
@@ -60,17 +65,54 @@ export default {
     cancelledDelete() {
       this.openedDeleteDialog = false;
     },
-    confirmedDelete() {
+    async confirmedDelete(id) {
+      const response = await this.$store.dispatch("deleteWorkingTime", id);
+      if (response.status === 204) {
+        this.fetchWorkingTimes();
+        this.$store.commit(
+          "createSnackBarSuccess",
+          "Working time successfully deleted!"
+        );
+      } else {
+        this.$store.commit(
+          "createSnackBarError",
+          "An error occured while deleting working time!"
+        );
+      }
       this.openedDeleteDialog = false;
     },
     cancelledUpdate() {
       this.openedUpdateDialog = false;
     },
-    confirmedUpdate() {
+    async confirmedUpdate(payload) {
+      const response = await this.$store.dispatch("updateWorkingTime", payload);
+      if (response.status === 200) {
+        this.fetchWorkingTimes();
+        this.$store.commit(
+          "createSnackBarSuccess",
+          "Working time successfully updated!"
+        );
+      } else {
+        this.$store.commit(
+          "createSnackBarError",
+          "An error occured while updating working time!"
+        );
+      }
       this.openedUpdateDialog = false;
     },
-    createWorkingTime() {
-      alert('WorkingTime Created!')
+    async createWorkingTime(payload) {
+      const response = await this.$store.dispatch("createWorkingTime", payload);
+      if (response.status === 201) {
+        this.$store.commit(
+          "createSnackBarSuccess",
+          "Working time successfully created!"
+        );
+      } else {
+        this.$store.commit(
+          "createSnackBarError",
+          "An error occured while creating working time!"
+        );
+      }
     },
     updateWorkingTime(item) {
       this.currentItem = item;
@@ -79,6 +121,29 @@ export default {
     deleteWorkingTime(item) {
       this.currentItem = item;
       this.openedDeleteDialog = true;
+    },
+    async fetchWorkingTimes() {
+      this.workingTimes = [];
+      const start = "2019-10-03 09:30:27";
+      const end = "2019-08-03 09:30:27";
+      const response = await this.$store.dispatch("getWorkingTimes", {
+        id: this.$store.state.user.id,
+        start: start,
+        end: end
+      });
+      response.data.data.sort((d1, d2) => {
+        return new Date(d1.start) - new Date(d2.start);
+      });
+      response.data.data.reverse();
+      this.workingTimes = response.data.data.map(d => {
+        return {
+          user: this.$store.state.user.username,
+          date: d.start.split("T")[0],
+          in: d.start.split("T")[1].split("Z")[0],
+          out: d.end.split("T")[1].split("Z")[0],
+          id: d.id
+        };
+      });
     }
   },
   mounted() {
@@ -87,6 +152,7 @@ export default {
     } else {
       this.creationMode = false;
     }
+    this.fetchWorkingTimes();
   },
   watch: {
     $route(to, from) {

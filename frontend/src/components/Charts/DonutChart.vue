@@ -1,6 +1,10 @@
 <template>
   <v-card :dark="darkMode">
-    <donut-chart id="donut" :data="donutData" :colors="colors" resize="true" />
+    <v-card-title>Yesterday</v-card-title>
+    <donut-chart v-if="data.length" id="donut" :data="data" :colors="colors" resize="true" />
+    <v-card-text v-else>
+      Havn't worked yesterday !
+    </v-card-text>
   </v-card>
 </template>
 
@@ -11,6 +15,9 @@ export default {
   components: {
     DonutChart
   },
+  props:{
+    data: Array
+  },
   computed: {
     colors() {
       return this.$store.state.donutChart.colors;
@@ -18,11 +25,6 @@ export default {
     darkMode() {
       return this.$store.state.darkMode;
     }
-  },
-  data() {
-    return {
-      donutData: [{ label: "Red", value: 300 }, { label: "Blue", value: 50 }]
-    };
   }
 };
 </script>

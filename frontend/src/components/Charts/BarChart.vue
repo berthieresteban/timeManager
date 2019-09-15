@@ -1,15 +1,18 @@
 <template>
   <v-card :dark="darkMode">
+    <v-card-title>Last Week</v-card-title>
     <bar-chart
+      v-if="data.length"
       id="bar"
-      :data="barData"
-      :xkey="'year'"
-      :ykeys="[ 'win' ]"
+      :data="data"
+      :xkey="'date'"
+      :ykeys="[ 'value' ]"
       :bar-colors="colors"
       grid="true"
       grid-text-weight="bold"
       resize="true"
     />
+    <v-card-text v-else>Havn't worked last week !</v-card-text>
   </v-card>
 </template>
 
@@ -20,6 +23,9 @@ export default {
   components: {
     BarChart
   },
+  props: {
+    data: Array
+  },
   computed: {
     colors() {
       return this.$store.state.barChart.colors;
@@ -29,14 +35,7 @@ export default {
     }
   },
   data() {
-    return {
-      barData: [
-        { year: "2013", win: 2 },
-        { year: "2014", win: 3 },
-        { year: "2015", win: 2 },
-        { year: "2016", win: 1 }
-      ]
-    };
+    return {};
   }
 };
 </script>
