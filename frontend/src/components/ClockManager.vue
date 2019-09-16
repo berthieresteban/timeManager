@@ -82,6 +82,9 @@ export default {
         );
         return;
       }
+      response.data.data.sort((d1, d2) => {
+        return new Date(d1.time) - new Date(d2.time);
+      });
       const todayClock = response.data.data.find(
         d => d.time.split("T")[0] === this.todayStart.split(" ")[0]
       );
