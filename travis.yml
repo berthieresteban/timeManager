@@ -1,28 +1,18 @@
 ---
 sudo: true
 
+language: node_js
+node_js: 
+  - "stable"
+
+services: 
+  - docker
+
 jobs:
   include:
     - stage: Tests
-      name: Unit Tests
       if: type = pull_request OR type = push AND branch = master
-
-      before_install:
-        - wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && sudo dpkg -i erlang-solutions_1.0_all.deb
-        - apt-get update
-        - apt-get install -y curl
-        - curl -sL https://deb.nodesource.com/setup_12.x | bash -
-
-      install:
-        - apt-get install -y nodejs
-        - apt-get install -y inotify-tools
-        - apt-get install -y postgresql-client
-        - apt-get install esl-erlang
-        - apt-get install elixir
-
       script:
-        - cd ./api
-        - mix deps.get
-        - mix ecto.setup
-        - mix phx.server
-        - ./api/test/test_api.sh
+       - docker-compose build
+       - docker-compose up
+       - ./api/test/test_api.sh
