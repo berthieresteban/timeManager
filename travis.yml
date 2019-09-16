@@ -5,6 +5,7 @@ jobs:
   include:
     - stage: Tests
       name: Unit Tests
+      # if: type = pull_request OR type = push AND branch = master
       if: type = pull_request OR type = push AND branch = master
 
       before_install:
@@ -24,5 +25,5 @@ jobs:
         - cd ./api
         - mix deps.get
         - mix ecto.setup
-        - mix phx.server
+        - mix phx.erver
         - ./api/test/test_api.sh
