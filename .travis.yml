@@ -1,10 +1,4 @@
 ---
-sudo: true
-
-language: node_js
-node_js: 
-  - "stable"
-
 services: 
   - docker
 
@@ -12,6 +6,7 @@ jobs:
   include:
     - stage: Tests
       if: type = pull_request OR type = push AND branch = master
+
       script:
        - docker-compose build
        - docker-compose up
