@@ -8,6 +8,6 @@ jobs:
       if: type = pull_request OR type = push AND branch = master
 
       script:
-       - docker-compose build
-       - docker-compose up &
-       - ./api/test/test_api.sh
+        - docker-compose build
+        - docker-compose up &
+        - ./api/test/test_api.sh

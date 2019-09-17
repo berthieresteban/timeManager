@@ -26,7 +26,9 @@ checkNewMan() {
 }
 
 runNewman() {
-    newman run ./api/test/API-tests.postman_collection.json -e ./api/test/API_test.postman_environment.json --timeout 1800000 --timeout-request 1800000 --timeout-script 1800000
+    newman run ./api/test/API-tests.postman_collection.json -e ./api/test/API_test.postman_environment.json --timeout 1800000 --timeout-request 1800000 --timeout-script 1800000 --bail
+    status=$?
+    exit $status
 }
 
 ## MAIN FUNCTION ##
@@ -35,6 +37,5 @@ main() {
     displayHello
     checkNewMan
     runNewman
-    printf "#\n#\n#\n"
 }
 main
