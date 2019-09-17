@@ -26,7 +26,7 @@ checkNewMan() {
 }
 
 runNewman() {
-    newman run ./api/test/API-tests.postman_collection.json
+    newman run ./api/test/API-tests.postman_collection.json -e ./api/test/API_test.postman_environment.json
 }
 
 ## MAIN FUNCTION ##
