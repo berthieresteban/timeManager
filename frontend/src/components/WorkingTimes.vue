@@ -144,6 +144,36 @@ export default {
         value: this.getWorkedHours(d),
         date: d.start.split("T")[0]
       }));
+      const test = this.barData.reduce((acc, obj) => {
+        let value = null;
+        if (acc[obj.date] && acc[obj.date].value) {
+          value = acc[obj.date].value + obj.value;
+        } else {
+          value = obj.value;
+        }
+        acc[obj.date] = {
+          value: value,
+          date: obj.date
+        };
+        return acc;
+      }, Object.create(null));
+      let i,
+        arr = [],
+        j = 1,
+        daysOfMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      for (i of Object.keys(test)) {
+        const date = i.split("-");
+        if (date[2] - 1 <= daysOfMonth[date[1] - 1]) {
+          const yes = `${date[0]}-${date[1]}-${date[2] - 1}`;
+          if (!test[yes] && j !== 1) {
+            arr.push({ value: 0, date: yes });
+          }
+        }
+
+        arr.push(test[i]);
+        j++;
+      }
+      this.barData = arr;
     },
     setupDonutData() {
       const workedYesterday = this.workingTimes.find(
@@ -172,10 +202,63 @@ export default {
       lastMonth.sort((d1, d2) => {
         return new Date(d1.start) - new Date(d2.start);
       });
-      this.lineData = lastMonth.map(d => ({
-        value: this.getWorkedHours(d),
-        date: d.start.split("T")[0]
-      }));
+
+      this.lineData = lastMonth.map(d => {
+        const start =
+          this.timeToInt(d.start.split("T")[1].split("Z")[0]) / 3600;
+        const end = this.timeToInt(d.end.split("T")[1].split("Z")[0]) / 3600;
+        return {
+          start: start,
+          end: end,
+          date: d.start.split("T")[0]
+        };
+      });
+
+      const test = this.lineData.reduce((acc, obj) => {
+        let start,
+          end = null;
+
+        if (acc[obj.date] && acc[obj.date].start && acc[obj.date].end) {
+          start =
+            acc[obj.date].start < obj.start ? acc[obj.date].start : obj.start;
+          end = acc[obj.date].end > obj.end ? acc[obj.date].end : obj.end;
+        } else {
+          start = obj.start;
+          end = obj.end;
+        }
+        acc[obj.date] = {
+          start: start,
+          end: end,
+          date: obj.date
+        };
+        return acc;
+      }, Object.create(null));
+      let i,
+        arr = [],
+        j = 1,
+        daysOfMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+      for (i of Object.keys(test)) {
+        // console.log(i);
+        // const date = i.split("-");
+        // if (date[2] - 1 <= daysOfMonth[date[1] - 1]) {
+        //   const yes = `${date[0]}-${date[1]}-${date[2] - 1}`;
+        //   if (!test[yes] && j !== 1) {
+        //     console.log('okkkkkkkk');
+
+        //     arr.push({ start: 0, end:0, date: yes });
+        //   }
+        // }
+        arr.push({
+          date: test[i].date,
+          start: test[i].start,
+          end: test[i].end
+        });
+        j++;
+      }
+      console.log(arr, this.lineData);
+
+      this.lineData = arr;
     },
     setupAreaData() {
       const lastMonth = this.workingTimes.filter(
@@ -188,18 +271,10 @@ export default {
       lastMonth.sort((d1, d2) => {
         return new Date(d1.start) - new Date(d2.start);
       });
-
-      this.areaData = lastMonth.map(d => {
-        const start =
-          this.timeToInt(d.start.split("T")[1].split("Z")[0]) / 3600;
-        const end = this.timeToInt(d.end.split("T")[1].split("Z")[0]) / 3600;
-        console.log(start, end);
-        return {
-          start: start,
-          end: end,
-          date: d.start.split("T")[0]
-        };
-      });
+      this.areaData = lastMonth.map(d => ({
+        value: this.getWorkedHours(d),
+        date: d.start.split("T")[0]
+      }));
     },
     sanitize(number) {
       return ("0" + number).slice(-2);

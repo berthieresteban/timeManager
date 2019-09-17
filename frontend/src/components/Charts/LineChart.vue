@@ -1,12 +1,13 @@
 <template>
   <v-card :dark="darkMode">
-    <v-card-title>Last Month (worked Time)</v-card-title>
+    <v-card-title>Last Month (Clock'In / Clock'Out)</v-card-title>
     <line-chart
       v-if="data.length"
       id="line"
       :data="data"
       xkey="date"
-      :ykeys="[ 'value' ]"
+      :ykeys="[ 'start', 'end' ]"
+      :labels="['Clock\'in', 'Clock\'out']"
       :line-colors="colors"
       grid="true"
       grid-text-weight="bold"

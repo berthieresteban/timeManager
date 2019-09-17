@@ -7,6 +7,7 @@
       :data="data"
       :xkey="'date'"
       :ykeys="[ 'value' ]"
+      :labels="['Worked hours']"
       :bar-colors="colors"
       grid="true"
       grid-text-weight="bold"
@@ -36,7 +37,11 @@ export default {
   },
   data() {
     return {};
-  }
+  },
+  mounted() {
+    console.log(this.data);
+
+  },
 };
 </script>
 

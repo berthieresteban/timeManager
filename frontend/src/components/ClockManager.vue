@@ -19,7 +19,7 @@
             max="10"
             label="Number of hour to do today"
           />
-          <v-btn @click="clock(Date.now())">{{ clockIn? "Clock'OUT": "Clock'IN" }}</v-btn>
+          <v-btn @click="clock(Date.now(), true)">{{ clockIn? "Clock'OUT": "Clock'IN" }}</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -83,18 +83,19 @@ export default {
         return;
       }
       response.data.data.sort((d1, d2) => {
-        return new Date(d1.time) - new Date(d2.time);
+        return new Date(d2.time) - new Date(d1.time);
       });
       const todayClock = response.data.data.find(
-        d => d.time.split("T")[0] === this.todayStart.split(" ")[0]
+        d =>
+          d.time.split("T")[0] === this.todayStart.split(" ")[0] &&
+          d.status === true
       );
       if (!todayClock || !todayClock.status) {
         return;
       }
-      console.log(todayClock);
-
       const date = new Date(todayClock.time);
-      this.clock(date.valueOf());
+      // Remove 2 hours because receive as gmt+2
+      this.clock((date.valueOf() - (3600000*2)), false);
     },
     formateDate(time, mode) {
       const date = new Date(time);
@@ -150,16 +151,17 @@ export default {
       }
     },
     refresh() {},
-    clock(date) {
+    clock(date, send) {
       this.clockIn = !this.clockIn;
-      if (this.clockIn) {
+      if (send) {
         this.sendClock();
+      }
+      if (this.clockIn) {
         this.startDateTime = date;
         this.interval = setInterval(() => {
           this.setTime();
         }, 1000);
       } else {
-        this.sendClock();
         this.startDateTime = null;
         this.time = null;
         this.value = null;

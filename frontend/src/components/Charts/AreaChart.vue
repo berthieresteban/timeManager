@@ -1,19 +1,18 @@
 <template>
   <v-card :dark="darkMode">
-    <v-card-title>Last Month (Clock'in Clock'out)</v-card-title>
+    <v-card-title>Last Month (Worked Hours)</v-card-title>
     <area-chart
       v-if="data.length"
       id="area"
       :data="data"
       xkey="date"
-      :ykeys="[ 'start', 'end' ]"
-      :labels="[ 'start', 'end' ]"
+      :ykeys="[ 'value' ]"
+      :labels="[ 'Worked hours' ]"
       :line-colors="colors"
       grid="true"
       grid-text-weight="bold"
-      resize="true"
     />
-    <v-card-text v-else>Havn't worked last year !</v-card-text>
+    <v-card-text v-else>Havn't worked last month !</v-card-text>
   </v-card>
 </template>
 
