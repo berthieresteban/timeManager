@@ -166,7 +166,6 @@ defmodule TimeManager.Auth do
     #Repo.get_by!(Clock, [user: id])
     query = from c in Clock, where: c.user == ^id
     Repo.all(query)
-    |> Repo.preload(:users)
   end
 
   @doc """
