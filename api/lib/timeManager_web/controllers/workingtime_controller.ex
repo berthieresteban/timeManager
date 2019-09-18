@@ -42,7 +42,10 @@ defmodule TimeManagerWeb.WorkingtimeController do
         render(conn, "show.json", workingtime: workingtime)
       end
     end
-    render(conn, "show.json", workingtime: nil)
+    conn
+    |> put_status(:not_found)
+    |> put_view(TimeManagerWeb.ErrorView)
+    |> render(:"404")
   end
 
   def update(conn, %{"id" => id, "workingtime" => workingtime_params}) do

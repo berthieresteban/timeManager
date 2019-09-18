@@ -56,6 +56,14 @@ defmodule TimeManager.Auth do
   """
   def get_user!(id), do: Repo.get!(User, id)
 
+  def get_user_login(username, password) do
+    password = Base.encode16(:crypto.hash(:sha256,  "#{password}_s3cr3tp4s$xXxX_______try_to_crack_this_lol"))
+    IO.inspect(username)
+    IO.inspect(password)
+    query = from u in User, where: u.username == ^username, where: u.password == ^password
+    Repo.all(query)
+  end
+
   @doc """
   Creates a user.
 
@@ -69,8 +77,11 @@ defmodule TimeManager.Auth do
 
   """
   def create_user(attrs \\ %{}) do
+    password = password = Base.encode16(:crypto.hash(:sha256,  "#{attrs["password"]}_s3cr3tp4s$xXxX_______try_to_crack_this_lol"))
+    IO.inspect(password)
     %User{}
     |> User.changeset(attrs)
+    |> User.changeset(%{password: password})
     |> Repo.insert()
   end
 
@@ -155,6 +166,7 @@ defmodule TimeManager.Auth do
     #Repo.get_by!(Clock, [user: id])
     query = from c in Clock, where: c.user == ^id
     Repo.all(query)
+    |> Repo.preload(:users)
   end
 
   @doc """
@@ -383,5 +395,197 @@ defmodule TimeManager.Auth do
   """
   def change_workingtime(%Workingtime{} = workingtime) do
     Workingtime.changeset(workingtime, %{})
+  end
+
+  alias TimeManager.Auth.Role
+
+  @doc """
+  Returns the list of roles.
+
+  ## Examples
+
+      iex> list_roles()
+      [%Role{}, ...]
+
+  """
+  def list_roles do
+    Repo.all(Role)
+  end
+
+  @doc """
+  Gets a single role.
+
+  Raises `Ecto.NoResultsError` if the Role does not exist.
+
+  ## Examples
+
+      iex> get_role!(123)
+      %Role{}
+
+      iex> get_role!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_role!(id), do: Repo.get!(Role, id)
+
+  @doc """
+  Creates a role.
+
+  ## Examples
+
+      iex> create_role(%{field: value})
+      {:ok, %Role{}}
+
+      iex> create_role(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_role(attrs \\ %{}) do
+    %Role{}
+    |> Role.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a role.
+
+  ## Examples
+
+      iex> update_role(role, %{field: new_value})
+      {:ok, %Role{}}
+
+      iex> update_role(role, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_role(%Role{} = role, attrs) do
+    role
+    |> Role.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Role.
+
+  ## Examples
+
+      iex> delete_role(role)
+      {:ok, %Role{}}
+
+      iex> delete_role(role)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_role(%Role{} = role) do
+    Repo.delete(role)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking role changes.
+
+  ## Examples
+
+      iex> change_role(role)
+      %Ecto.Changeset{source: %Role{}}
+
+  """
+  def change_role(%Role{} = role) do
+    Role.changeset(role, %{})
+  end
+
+  alias TimeManager.Auth.Managing
+
+  @doc """
+  Returns the list of managing.
+
+  ## Examples
+
+      iex> list_managing()
+      [%Managing{}, ...]
+
+  """
+  def list_managing do
+    Repo.all(Managing)
+  end
+
+  @doc """
+  Gets a single managing.
+
+  Raises `Ecto.NoResultsError` if the Managing does not exist.
+
+  ## Examples
+
+      iex> get_managing!(123)
+      %Managing{}
+
+      iex> get_managing!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_managing!(id), do: Repo.get!(Managing, id)
+
+  @doc """
+  Creates a managing.
+
+  ## Examples
+
+      iex> create_managing(%{field: value})
+      {:ok, %Managing{}}
+
+      iex> create_managing(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_managing(attrs \\ %{}) do
+    %Managing{}
+    |> Managing.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a managing.
+
+  ## Examples
+
+      iex> update_managing(managing, %{field: new_value})
+      {:ok, %Managing{}}
+
+      iex> update_managing(managing, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_managing(%Managing{} = managing, attrs) do
+    managing
+    |> Managing.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Managing.
+
+  ## Examples
+
+      iex> delete_managing(managing)
+      {:ok, %Managing{}}
+
+      iex> delete_managing(managing)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_managing(%Managing{} = managing) do
+    Repo.delete(managing)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking managing changes.
+
+  ## Examples
+
+      iex> change_managing(managing)
+      %Ecto.Changeset{source: %Managing{}}
+
+  """
+  def change_managing(%Managing{} = managing) do
+    Managing.changeset(managing, %{})
   end
 end
