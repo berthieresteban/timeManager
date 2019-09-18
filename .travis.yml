@@ -8,4 +8,4 @@ jobs:
       if: type = pull_request OR type = push AND branch = master
       script:
         - ./ci/tests.sh
-        - ./ci/api/test_api.sh
+        - ./api/test/test_api.sh
