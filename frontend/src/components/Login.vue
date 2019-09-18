@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     accountCreated() {
-      this.$store.commit("createSnackBarSuccess", "Account successfully created!")
+      this.$store.commit("createSnackBarSuccess", {text: "Account successfully created!", announcer: this.$announcer})
       this.$router.push(`/workingTimes/${this.$store.state.user.id}`);
       this.creatingAccount = false;
     },
@@ -65,7 +65,7 @@ export default {
       }
       await this.$store.commit("setUser", resp.data[0]);
       await this.$store.commit("setLogged");
-      this.$store.commit("createSnackBarSuccess", `Welcome back ${this.$store.state.user.username} !`)
+      this.$store.commit("createSnackBarSuccess", {text: `Welcome back ${this.$store.state.user.username} !`, announcer: this.$announcer})
       this.$router.push(`/workingTimes/${this.$store.state.user.id}`);
     },
     createAccount() {

@@ -5,21 +5,43 @@
       <v-container>
         <v-row>
           <v-col cols="3">
-            <v-switch @change="handleDisplayedChange" v-model="displayed" label="Displayed" />
+            <v-switch
+              @mouseover="setAnnouncer(`set ${title} ${displayed? 'not displayed': 'displayed'}`)"
+              @change="handleDisplayedChange"
+              v-model="displayed"
+              label="Displayed"
+            />
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="2">
             <v-radio-group v-model="size" @change="handleSizeChange" label="Size">
-              <v-radio v-for="n in availableSize" :key="n" :label="`${n}`" :value="n"></v-radio>
+              <v-radio
+                v-for="n in availableSize"
+                :key="n"
+                :label="`${n}`"
+                :value="n"
+                @mouseover="setAnnouncer(`set the size of ${title} to ${n}, currently ${size}`)"
+              ></v-radio>
             </v-radio-group>
           </v-col>
           <v-col cols="2">
             <v-radio-group v-model="position" @change="handlePositionChange" label="Position">
-              <v-radio v-for="n in availablePosition" :key="n" :label="`${n}`" :value="n"></v-radio>
+              <v-radio
+                v-for="n in availablePosition"
+                :key="n"
+                :label="`${n}`"
+                :value="n"
+                @mouseover="setAnnouncer(`set the position of ${title} to ${n}, currently ${position}`)"
+              ></v-radio>
             </v-radio-group>
           </v-col>
-          <v-col cols="4" v-for="color in getChart.colors.length" :key="color">
+          <v-col
+            cols="4"
+            v-for="color in getChart.colors.length"
+            :key="color"
+            @mouseover="setAnnouncer(`change the color of ${title}`)"
+          >
             <v-color-picker
               label="Color"
               hide-inputs
@@ -59,6 +81,9 @@ export default {
     };
   },
   methods: {
+    setAnnouncer(text) {
+      this.$announcer.set(text);
+    },
     handlePositionChange(value) {
       const params = {
         chart: this.chart,

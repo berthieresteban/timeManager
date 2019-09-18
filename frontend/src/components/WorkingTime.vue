@@ -69,15 +69,15 @@ export default {
       const response = await this.$store.dispatch("deleteWorkingTime", id);
       if (response.status === 204) {
         this.fetchWorkingTimes();
-        this.$store.commit(
-          "createSnackBarSuccess",
-          "Working time successfully deleted!"
-        );
+        this.$store.commit("createSnackBarSuccess", {
+          text: "Working time successfully deleted!",
+          announcer: this.$announcer
+        });
       } else {
-        this.$store.commit(
-          "createSnackBarError",
-          "An error occured while deleting working time!"
-        );
+        this.$store.commit("createSnackBarError", {
+          text: "An error occured while deleting working time!",
+          announcer: this.$announcer
+        });
       }
       this.openedDeleteDialog = false;
     },
@@ -88,30 +88,30 @@ export default {
       const response = await this.$store.dispatch("updateWorkingTime", payload);
       if (response.status === 200) {
         this.fetchWorkingTimes();
-        this.$store.commit(
-          "createSnackBarSuccess",
-          "Working time successfully updated!"
-        );
+        this.$store.commit("createSnackBarSuccess", {
+          text: "Working time successfully updated!",
+          announcer: this.$announcer
+        });
       } else {
-        this.$store.commit(
-          "createSnackBarError",
-          "An error occured while updating working time!"
-        );
+        this.$store.commit("createSnackBarError", {
+          text: "An error occured while updating working time!",
+          announcer: this.$announcer
+        });
       }
       this.openedUpdateDialog = false;
     },
     async createWorkingTime(payload) {
       const response = await this.$store.dispatch("createWorkingTime", payload);
       if (response.status === 201) {
-        this.$store.commit(
-          "createSnackBarSuccess",
-          "Working time successfully created!"
-        );
+        this.$store.commit("createSnackBarSuccess", {
+          text: "Working time successfully created!",
+          announcer: this.$announcer
+        });
       } else {
-        this.$store.commit(
-          "createSnackBarError",
-          "An error occured while creating working time!"
-        );
+        this.$store.commit("createSnackBarError", {
+          text: "An error occured while creating working time!",
+          announcer: this.$announcer
+        });
       }
     },
     updateWorkingTime(item) {

@@ -2,7 +2,7 @@
   <div class="hello">
     <v-container>
       <v-row>
-        <v-col cols="12" sm="12">
+        <v-col cols="12" sm="12" @mouseover="setAnnouncer(getText)">
           <v-progress-circular
             :color="getColor"
             :rotate="360"
@@ -11,7 +11,11 @@
             :value="value"
           >{{ getText }}</v-progress-circular>
         </v-col>
-        <v-col cols="12" sm="12">
+        <v-col
+          cols="12"
+          sm="12"
+          @mouseover="setAnnouncer(`Select the number of hour to do, currently ${hoursToDo}`)"
+        >
           <v-slider
             :dark="darkMode"
             v-model="hoursToDo"
@@ -19,7 +23,10 @@
             max="10"
             label="Number of hour to do today"
           />
-          <v-btn @click="clock(Date.now(), true)">{{ clockIn? "Clock'OUT": "Clock'IN" }}</v-btn>
+          <v-btn
+            @mouseover="setAnnouncer(`${clockIn? 'Clock\'OUT': 'Clock\'IN'}`)"
+            @click="clock(Date.now(), true)"
+          >{{ clockIn? "Clock'OUT": "Clock'IN" }}</v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -70,16 +77,19 @@ export default {
     this.getLastClock();
   },
   methods: {
+    setAnnouncer(text) {
+      this.$announcer.set(text);
+    },
     sanitize(number) {
       return ("0" + number).slice(-2);
     },
     async getLastClock() {
       const response = await this.$store.dispatch("getClocks", this.id);
       if (response.status !== 200) {
-        this.$store.commit(
-          "createSnackBarError",
-          "An error occured while searching last clock!"
-        );
+        this.$store.commit("createSnackBarError", {
+          text: "An error occured while searching last clock!",
+          announcer: this.$announcer
+        });
         return;
       }
       response.data.data.sort((d1, d2) => {
@@ -95,7 +105,7 @@ export default {
       }
       const date = new Date(todayClock.time);
       // Remove 2 hours because receive as gmt+2
-      this.clock((date.valueOf() - (3600000*2)), false);
+      this.clock(date.valueOf() - 3600000 * 2, false);
     },
     formateDate(time, mode) {
       const date = new Date(time);
@@ -143,10 +153,10 @@ export default {
       };
       const response = await this.$store.dispatch("createClock", payload);
       if (response.status !== 201) {
-        this.$store.commit(
-          "createSnackBarError",
-          "An error occured while creating clock!"
-        );
+        this.$store.commit("createSnackBarError", {
+          text: "An error occured while creating clock!",
+          announcer: this.$announcer
+        });
         return;
       }
     },

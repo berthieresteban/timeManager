@@ -69,15 +69,15 @@ export default {
           email: this.email,
           id: this.$store.state.user.id
         });
-        this.$store.commit(
-          "createSnackBarSuccess",
-          `Account successfully updated!`
-        );
+        this.$store.commit("createSnackBarSuccess", {
+          text: `Account successfully updated!`,
+          announcer: this.$announcer
+        });
       } else {
-        this.$store.commit(
-          "createSnackBarError",
-          `An error occured while updating you're account!`
-        );
+        this.$store.commit("createSnackBarError", {
+          text: `An error occured while updating you're account!`,
+          announcer: this.$announcer
+        });
       }
       this.$emit("endUpdate");
     }

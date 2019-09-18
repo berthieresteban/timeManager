@@ -7,5 +7,5 @@ jobs:
     - stage: Tests API
       if: type = pull_request OR type = push AND branch = master
       script:
-        - cd ./test
-        - docker-compose up
+        - ./ci/tests.sh
+        - ./ci/api/test_api.sh

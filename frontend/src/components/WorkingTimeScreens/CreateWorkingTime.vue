@@ -1,7 +1,13 @@
 <template>
   <v-container :dark="darkMode" fluid>
     <v-row>
-      <v-col cols="12" sm="12" md="12" lg="12">
+      <v-col
+        cols="12"
+        sm="12"
+        md="12"
+        lg="12"
+        @mouseover="setAnnouncer(`Select the date for working time creation currently ${datePicker}`)"
+      >
         <v-menu
           v-model="dateMenu"
           :dark="darkMode"
@@ -24,7 +30,13 @@
           <v-date-picker :dark="darkMode" v-model="datePicker" @input="dateMenu = false"></v-date-picker>
         </v-menu>
       </v-col>
-      <v-col cols="12" sm="12" md="8" lg="6">
+      <v-col
+        cols="12"
+        sm="12"
+        md="8"
+        lg="6"
+        @mouseover="setAnnouncer(`Select the start hour for working time creation currently ${startTime}`)"
+      >
         <v-menu
           ref="startMenu"
           :dark="darkMode"
@@ -55,7 +67,13 @@
           ></v-time-picker>
         </v-menu>
       </v-col>
-      <v-col cols="12" sm="12" md="8" lg="6">
+      <v-col
+        cols="12"
+        sm="12"
+        md="8"
+        lg="6"
+        @mouseover="setAnnouncer(`Select the end hour for working time creation currently ${endTime}`)"
+      >
         <v-menu
           ref="endMenu"
           :dark="darkMode"
@@ -87,7 +105,11 @@
         </v-menu>
       </v-col>
       <v-col cols="12" sm="12" md="12" lg="12">
-        <v-btn :dark="darkMode" @click="handleCreateWorkingTime">Create working time</v-btn>
+        <v-btn
+          @mouseover="setAnnouncer(`Valid the creation of working time the ${datePicker} start at ${startTime} and end at ${endTime}`)"
+          :dark="darkMode"
+          @click="handleCreateWorkingTime"
+        >Create working time</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -113,20 +135,22 @@ export default {
     }
   },
   methods: {
+    setAnnouncer(text) {
+      this.$announcer.set(text);
+    },
     handleCreateWorkingTime() {
       if (this.startTime >= this.endTime) {
         console.log("erreur");
         return;
-
       }
       const start = `${this.datePicker} ${this.startTime}:00`;
       const end = `${this.datePicker} ${this.endTime}:00`;
       const payload = {
-          workingtime: {
-            start: start,
-            end: end,
-            user: this.$store.state.user.id
-          }
+        workingtime: {
+          start: start,
+          end: end,
+          user: this.$store.state.user.id
+        }
       };
       this.$emit("createWorkingTime", payload);
     }

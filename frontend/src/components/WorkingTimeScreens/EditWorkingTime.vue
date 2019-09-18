@@ -6,18 +6,26 @@
         <v-list-item-content>
           <v-container>
             <v-row>
-              <v-col cols="12" sm="4">{{ item.date }}</v-col>
-              <v-col cols="12" sm="4">{{ item.in }}</v-col>
-              <v-col cols="12" sm="4">{{ item.out }}</v-col>
+              <v-col cols="12" sm="4" @mouseover="setAnnouncer(`${item.date}`)">{{ item.date }}</v-col>
+              <v-col cols="12" sm="4" @mouseover="setAnnouncer(`${item.in}`)">{{ item.in }}</v-col>
+              <v-col cols="12" sm="4" @mouseover="setAnnouncer(`${item.out}`)">{{ item.out }}</v-col>
             </v-row>
           </v-container>
         </v-list-item-content>
         <v-list-item-action>
           <div>
-            <v-btn icon @click="updateWorkingTime(item)">
+            <v-btn
+              icon
+              @click="updateWorkingTime(item)"
+              @mouseover="setAnnouncer(`modify the working time of ${item.date} start at ${item.in} and end at ${item.out}`)"
+            >
               <v-icon color="grey lighten-1">fa-pen</v-icon>
             </v-btn>
-            <v-btn icon @click="deleteWorkingTime(item)">
+            <v-btn
+              icon
+              @click="deleteWorkingTime(item)"
+              @mouseover="setAnnouncer(`delete the working time of ${item.date} start at ${item.in} and end at ${item.out}`)"
+            >
               <v-icon color="grey lighten-1">fa-trash</v-icon>
             </v-btn>
           </div>
@@ -54,6 +62,9 @@ export default {
     }
   },
   methods: {
+    setAnnouncer(text) {
+      this.$announcer.set(text);
+    },
     updateWorkingTime(item) {
       this.$emit("updateWorkingTime", item);
     },

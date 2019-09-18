@@ -1,10 +1,10 @@
 <template>
   <v-container>
     <v-row align="center">
-      <v-col cols="12" sm="12" md="6" lg="6">
+      <v-col cols="12" sm="12" md="6" lg="6" @mouseover="setAnnouncer(`Save changes`)">
         <v-btn @click="handleSave">Save</v-btn>
       </v-col>
-      <v-col cols="12" sm="12" md="6" lg="6">
+      <v-col cols="12" sm="12" md="6" lg="6" @mouseover="setAnnouncer(`Default settings`)">
         <v-btn @click="handleReinit">Default Settings</v-btn>
       </v-col>
     </v-row>
@@ -76,6 +76,12 @@ export default {
     }
   },
   methods: {
+    setAnnouncer(text) {
+      this.$announcer.set(text);
+    },
+    handleReinit() {
+      this.$store.commit('reinitCharts');
+    },
     handleSave() {
       localStorage.setItem("areaChart", JSON.stringify(this.areaChart));
       localStorage.setItem("barChart", JSON.stringify(this.barChart));

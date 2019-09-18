@@ -1,6 +1,10 @@
 <template>
   <div>
-    <UpdateInformations :dialog="openUpdateUser" @cancelUpdate="cancelUpdate" @endUpdate="endUpdate"/>
+    <UpdateInformations
+      :dialog="openUpdateUser"
+      @cancelUpdate="cancelUpdate"
+      @endUpdate="endUpdate"
+    />
     <v-navigation-drawer
       :clipped="clipped"
       v-model="drawerCopy"
@@ -21,22 +25,22 @@
 
       <v-list nav dense>
         <v-list-item>
-          <v-switch v-model="darkModeCopy"></v-switch>
+          <v-switch v-model="darkModeCopy"  @mouseover="setAnnouncer(`Switch dark mode ${!darkModeCopy}`)"></v-switch>
           <v-list-item-title>Dark Mode</v-list-item-title>
         </v-list-item>
-        <v-list-item link @click="deleteUser">
+        <v-list-item link @click="deleteUser" @mouseover="setAnnouncer('Delete my account')">
           <v-list-item-icon>
             <v-icon>fa-trash</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Delete my account</v-list-item-title>
         </v-list-item>
-        <v-list-item link @click="updateUser">
+        <v-list-item link @click="updateUser"  @mouseover="setAnnouncer('Update my account')">
           <v-list-item-icon>
             <v-icon>fa-pen</v-icon>
           </v-list-item-icon>
           <v-list-item-title>Update my informations</v-list-item-title>
         </v-list-item>
-        <v-list-item link @click="signOut">
+        <v-list-item link @click="signOut"  @mouseover="setAnnouncer('Sign Out')">
           <v-list-item-icon>
             <v-icon>fa-sign-out-alt</v-icon>
           </v-list-item-icon>
@@ -104,6 +108,9 @@ export default {
     }
   },
   methods: {
+    setAnnouncer(text) {
+      this.$announcer.set(text);
+    },
     endUpdate() {
       this.openUpdateUser = false;
     },
@@ -111,16 +118,16 @@ export default {
     async deleteUser() {
       const response = await this.$store.dispatch("deleteUser", this.id);
       if (response.status === 204) {
-        this.$store.commit(
-          "createSnackBarSuccess",
-          `Accound successfully deleted!`
-        );
+        this.$store.commit("createSnackBarSuccess", {
+          text: `Accound successfully deleted!`,
+          announcer: this.$announcer
+        });
         this.$router.push("/login");
       } else {
-        this.$store.commit(
-          "createSnackBarSuccess",
-          `An error occured while deleting you're account!`
-        );
+        this.$store.commit("createSnackBarSuccess", {
+          text: `An error occured while deleting you're account!`,
+          announcer: this.$announcer
+        });
       }
     },
     updateUser() {

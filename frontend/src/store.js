@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import VueAnnouncer from 'vue-announcer'
 
 Vue.use(VueAxios, axios);
 Vue.use(Vuex)
@@ -51,7 +52,8 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
-    createSnackBarSuccess(state, text) {
+    createSnackBarSuccess(state, {text, announcer}) {
+      announcer.set(text);
       state.snackBar = {
         color: "success",
         displayed: true,

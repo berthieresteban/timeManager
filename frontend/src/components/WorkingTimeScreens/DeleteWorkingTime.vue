@@ -10,8 +10,8 @@
       </v-card-text>
       <v-card-actions>
         <div class="flex-grow-1"></div>
-        <v-btn text @click="handleCancel">Cancel</v-btn>
-        <v-btn @click="handleConfirm">Confirm</v-btn>
+        <v-btn @mouseover="setAnnouncer('cancel')" text @click="handleCancel">Cancel</v-btn>
+        <v-btn @mouseover="setAnnouncer('confirm delete')" @click="handleConfirm">Confirm</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -38,6 +38,9 @@ export default {
     this.item = this.currentItem;
   },
   methods: {
+    setAnnouncer(text) {
+      this.$announcer.set(text);
+    },
     handleConfirm() {
       this.$emit("confirmed", this.item.id);
     },

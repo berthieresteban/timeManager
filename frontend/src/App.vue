@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <vue-announcer />
     <v-app :light="!darkMode" :dark="darkMode" :style="{ backgroundColor: getBackgroundColor}">
       <v-snackbar
         v-model="snackBar.displayed"
@@ -13,17 +14,45 @@
         <User @drawerCopy="drawerCopy" :clipped="clipped" :drawer="drawer" />
         <v-card>
           <v-app-bar fixed app :light="!darkMode" :dark="darkMode">
-            <v-app-bar-nav-icon @click.stop="drawer = !drawer">
+            <v-app-bar-nav-icon
+              @click.stop="drawer = !drawer"
+              @mouseover="setAnnouncer(`${drawer? 'close': 'open'} the sidebar`)"
+            >
               <v-icon>{{ drawer? "fa-caret-left": "fa-bars"}}</v-icon>
             </v-app-bar-nav-icon>
             <v-toolbar-title>Dashboard</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items class="hidden-sm-and-down">
-              <v-btn text link :to="`/workingTimes/${id}`">Working Times</v-btn>
-              <v-btn text link :to="`/workingTime/${id}`">Create Working Time</v-btn>
-              <v-btn text link :to="`/workingTime/${id}/3`">Edit Working Time</v-btn>
-              <v-btn text link :to="`/clock/${username}`">Clock Manager</v-btn>
-              <v-btn text link :to="`/chartManager/${id}`">Chart Manager</v-btn>
+              <v-btn
+                @mouseover="setAnnouncer('Go to Working time overview')"
+                text
+                link
+                :to="`/workingTimes/${id}`"
+              >Working Times</v-btn>
+              <v-btn
+                @mouseover="setAnnouncer('Go to Create working time')"
+                text
+                link
+                :to="`/workingTime/${id}`"
+              >Create Working Time</v-btn>
+              <v-btn
+                @mouseover="setAnnouncer('Go to edit working time')"
+                text
+                link
+                :to="`/workingTime/${id}/3`"
+              >Edit Working Time</v-btn>
+              <v-btn
+                @mouseover="setAnnouncer('Go to clock manager')"
+                text
+                link
+                :to="`/clock/${username}`"
+              >Clock Manager</v-btn>
+              <v-btn
+                @mouseover="setAnnouncer('Go to chart manager')"
+                text
+                link
+                :to="`/chartManager/${id}`"
+              >Chart Manager</v-btn>
             </v-toolbar-items>
           </v-app-bar>
         </v-card>
@@ -57,13 +86,16 @@ export default {
       return this.$store.state.snackBar;
     },
     id() {
-    return this.$store.state.user.id;
+      return this.$store.state.user.id;
     },
     username() {
       return this.$store.state.user.username;
     }
   },
   methods: {
+    setAnnouncer(text) {
+      this.$announcer.set(text);
+    },
     drawerCopy(value) {
       if (value === this.drawer) return;
       this.drawer = value;
