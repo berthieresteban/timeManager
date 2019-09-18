@@ -21,7 +21,12 @@ defmodule TimeManager.JwtAuthPlug do
     end
 
     defp jwt_from_header(conn) do
-        List.last(get_req_header(conn, "session_jwt"))
+        temptoken = List.last(get_req_header(conn, "session_jwt"))
+        if (is_nil(temptoken)) do
+            ""
+        else
+            temptoken
+        end
     end
 
     defp success(conn, token_payload, token) do
