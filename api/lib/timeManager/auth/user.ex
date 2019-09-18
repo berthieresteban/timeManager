@@ -4,7 +4,9 @@ defmodule TimeManager.Auth.User do
 
   schema "users" do
     field :email, :string
+    field :password, :string
     field :username, :string
+    field :roleid, :id, default: 1
 
     timestamps()
   end
@@ -12,10 +14,7 @@ defmodule TimeManager.Auth.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:username, :email])
-    |> validate_required([:username, :email])
-    |> validate_format(:email, ~r/[^@]+@[^\.]+\..+/)
-    |> unique_constraint(:email)
-    |> unique_constraint(:username)
+    |> cast(attrs, [:username, :password, :email, :roleid])
+    |> validate_required([:username, :password, :email])
   end
 end

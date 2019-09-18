@@ -30,7 +30,7 @@ defmodule TimeManagerWeb.WorkingtimeController do
   end
 
   def show(conn, %{"id" => id}) do
-    workingtimes = Auth.get_workingtime_by_user!(id)
+    workingtimes = Auth.get_workingtime_by_user!(id, conn.params)
     render(conn, "index.json", workingtimes: workingtimes)
     #render(conn, "show.json", workingtime: workingtime)
   end
@@ -42,7 +42,10 @@ defmodule TimeManagerWeb.WorkingtimeController do
         render(conn, "show.json", workingtime: workingtime)
       end
     end
-    render(conn, "show.json", workingtime: nil)
+    conn
+    |> put_status(:not_found)
+    |> put_view(TimeManagerWeb.ErrorView)
+    |> render(:"404")
   end
 
   def update(conn, %{"id" => id, "workingtime" => workingtime_params}) do
