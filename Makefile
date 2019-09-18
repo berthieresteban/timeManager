@@ -5,18 +5,22 @@
 ##
 
 build:
-	sudo docker-compose build
+		sudo docker-compose build
 
 run:
-	sudo docker-compose up
+		sudo docker-compose up
 
-api:
-	cd ./api
-	mix phx.server
+build-api:
+		sudo docker-compose build api
 
-front:
-	cd ./frontend
-	npm run server
+run-api:
+		sudo docker-compose up api
+
+build-front:
+		sudo docker-image up front
+
+run-front:
+		sudo docker-compose up front
 
 test:
 	./api/test/test_api.sh

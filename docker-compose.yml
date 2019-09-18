@@ -5,7 +5,8 @@
 #
 version : '3'
 services:
-    phoenix:
+    api:
+        container_name: timemanager_api
         build:
             context: ./api
         environment:
@@ -18,14 +19,14 @@ services:
             - "4000:4000"
         depends_on:
             - db
-        container_name: timemanager_api
-    vuejs:
+    front:
         build:
             context: ./frontend
         ports:
             - "8080:8080"
         container_name: timemanager_front
     db:
+        container_name: timemanager_db
         image: postgres:9.6
         environment:
             POSTGRES_USER: postgres
@@ -35,6 +36,5 @@ services:
         volumes:
             - "/var/run/postgres/postgres.sock:/var/run/postgres/postgres.sock"
             - "dbdata:/var/lib/postgresql/data"
-        container_name: timemanager_db
 volumes:
     dbdata:

@@ -185,4 +185,248 @@ defmodule TimeManager.AuthTest do
       assert %Ecto.Changeset{} = Auth.change_workingtime(workingtime)
     end
   end
+
+  describe "roles" do
+    alias TimeManager.Auth.Role
+
+    @valid_attrs %{name: "some name", permission: 42}
+    @update_attrs %{name: "some updated name", permission: 43}
+    @invalid_attrs %{name: nil, permission: nil}
+
+    def role_fixture(attrs \\ %{}) do
+      {:ok, role} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Auth.create_role()
+
+      role
+    end
+
+    test "list_roles/0 returns all roles" do
+      role = role_fixture()
+      assert Auth.list_roles() == [role]
+    end
+
+    test "get_role!/1 returns the role with given id" do
+      role = role_fixture()
+      assert Auth.get_role!(role.id) == role
+    end
+
+    test "create_role/1 with valid data creates a role" do
+      assert {:ok, %Role{} = role} = Auth.create_role(@valid_attrs)
+      assert role.name == "some name"
+      assert role.permission == 42
+    end
+
+    test "create_role/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Auth.create_role(@invalid_attrs)
+    end
+
+    test "update_role/2 with valid data updates the role" do
+      role = role_fixture()
+      assert {:ok, %Role{} = role} = Auth.update_role(role, @update_attrs)
+      assert role.name == "some updated name"
+      assert role.permission == 43
+    end
+
+    test "update_role/2 with invalid data returns error changeset" do
+      role = role_fixture()
+      assert {:error, %Ecto.Changeset{}} = Auth.update_role(role, @invalid_attrs)
+      assert role == Auth.get_role!(role.id)
+    end
+
+    test "delete_role/1 deletes the role" do
+      role = role_fixture()
+      assert {:ok, %Role{}} = Auth.delete_role(role)
+      assert_raise Ecto.NoResultsError, fn -> Auth.get_role!(role.id) end
+    end
+
+    test "change_role/1 returns a role changeset" do
+      role = role_fixture()
+      assert %Ecto.Changeset{} = Auth.change_role(role)
+    end
+  end
+
+  describe "managing" do
+    alias TimeManager.Auth.Managing
+
+    @valid_attrs %{}
+    @update_attrs %{}
+    @invalid_attrs %{}
+
+    def managing_fixture(attrs \\ %{}) do
+      {:ok, managing} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Auth.create_managing()
+
+      managing
+    end
+
+    test "list_managing/0 returns all managing" do
+      managing = managing_fixture()
+      assert Auth.list_managing() == [managing]
+    end
+
+    test "get_managing!/1 returns the managing with given id" do
+      managing = managing_fixture()
+      assert Auth.get_managing!(managing.id) == managing
+    end
+
+    test "create_managing/1 with valid data creates a managing" do
+      assert {:ok, %Managing{} = managing} = Auth.create_managing(@valid_attrs)
+    end
+
+    test "create_managing/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Auth.create_managing(@invalid_attrs)
+    end
+
+    test "update_managing/2 with valid data updates the managing" do
+      managing = managing_fixture()
+      assert {:ok, %Managing{} = managing} = Auth.update_managing(managing, @update_attrs)
+    end
+
+    test "update_managing/2 with invalid data returns error changeset" do
+      managing = managing_fixture()
+      assert {:error, %Ecto.Changeset{}} = Auth.update_managing(managing, @invalid_attrs)
+      assert managing == Auth.get_managing!(managing.id)
+    end
+
+    test "delete_managing/1 deletes the managing" do
+      managing = managing_fixture()
+      assert {:ok, %Managing{}} = Auth.delete_managing(managing)
+      assert_raise Ecto.NoResultsError, fn -> Auth.get_managing!(managing.id) end
+    end
+
+    test "change_managing/1 returns a managing changeset" do
+      managing = managing_fixture()
+      assert %Ecto.Changeset{} = Auth.change_managing(managing)
+    end
+  end
+
+  describe "user" do
+    alias TimeManager.Auth.Users
+
+    @valid_attrs %{email: "some email", password: "some password", username: "some username"}
+    @update_attrs %{email: "some updated email", password: "some updated password", username: "some updated username"}
+    @invalid_attrs %{email: nil, password: nil, username: nil}
+
+    def users_fixture(attrs \\ %{}) do
+      {:ok, users} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Auth.create_users()
+
+      users
+    end
+
+    test "list_user/0 returns all user" do
+      users = users_fixture()
+      assert Auth.list_user() == [users]
+    end
+
+    test "get_users!/1 returns the users with given id" do
+      users = users_fixture()
+      assert Auth.get_users!(users.id) == users
+    end
+
+    test "create_users/1 with valid data creates a users" do
+      assert {:ok, %Users{} = users} = Auth.create_users(@valid_attrs)
+      assert users.email == "some email"
+      assert users.password == "some password"
+      assert users.username == "some username"
+    end
+
+    test "create_users/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Auth.create_users(@invalid_attrs)
+    end
+
+    test "update_users/2 with valid data updates the users" do
+      users = users_fixture()
+      assert {:ok, %Users{} = users} = Auth.update_users(users, @update_attrs)
+      assert users.email == "some updated email"
+      assert users.password == "some updated password"
+      assert users.username == "some updated username"
+    end
+
+    test "update_users/2 with invalid data returns error changeset" do
+      users = users_fixture()
+      assert {:error, %Ecto.Changeset{}} = Auth.update_users(users, @invalid_attrs)
+      assert users == Auth.get_users!(users.id)
+    end
+
+    test "delete_users/1 deletes the users" do
+      users = users_fixture()
+      assert {:ok, %Users{}} = Auth.delete_users(users)
+      assert_raise Ecto.NoResultsError, fn -> Auth.get_users!(users.id) end
+    end
+
+    test "change_users/1 returns a users changeset" do
+      users = users_fixture()
+      assert %Ecto.Changeset{} = Auth.change_users(users)
+    end
+  end
+
+  describe "users" do
+    alias TimeManager.Auth.User
+
+    @valid_attrs %{email: "some email", password: "some password", username: "some username"}
+    @update_attrs %{email: "some updated email", password: "some updated password", username: "some updated username"}
+    @invalid_attrs %{email: nil, password: nil, username: nil}
+
+    def user_fixture(attrs \\ %{}) do
+      {:ok, user} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Auth.create_user()
+
+      user
+    end
+
+    test "list_users/0 returns all users" do
+      user = user_fixture()
+      assert Auth.list_users() == [user]
+    end
+
+    test "get_user!/1 returns the user with given id" do
+      user = user_fixture()
+      assert Auth.get_user!(user.id) == user
+    end
+
+    test "create_user/1 with valid data creates a user" do
+      assert {:ok, %User{} = user} = Auth.create_user(@valid_attrs)
+      assert user.email == "some email"
+      assert user.password == "some password"
+      assert user.username == "some username"
+    end
+
+    test "create_user/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Auth.create_user(@invalid_attrs)
+    end
+
+    test "update_user/2 with valid data updates the user" do
+      user = user_fixture()
+      assert {:ok, %User{} = user} = Auth.update_user(user, @update_attrs)
+      assert user.email == "some updated email"
+      assert user.password == "some updated password"
+      assert user.username == "some updated username"
+    end
+
+    test "update_user/2 with invalid data returns error changeset" do
+      user = user_fixture()
+      assert {:error, %Ecto.Changeset{}} = Auth.update_user(user, @invalid_attrs)
+      assert user == Auth.get_user!(user.id)
+    end
+
+    test "delete_user/1 deletes the user" do
+      user = user_fixture()
+      assert {:ok, %User{}} = Auth.delete_user(user)
+      assert_raise Ecto.NoResultsError, fn -> Auth.get_user!(user.id) end
+    end
+
+    test "change_user/1 returns a user changeset" do
+      user = user_fixture()
+      assert %Ecto.Changeset{} = Auth.change_user(user)
+    end
+  end
 end
