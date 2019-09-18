@@ -30,7 +30,7 @@ defmodule TimeManagerWeb.WorkingtimeController do
   end
 
   def show(conn, %{"id" => id}) do
-    workingtimes = Auth.get_workingtime_by_user!(id)
+    workingtimes = Auth.get_workingtime_by_user!(id, conn.params)
     render(conn, "index.json", workingtimes: workingtimes)
     #render(conn, "show.json", workingtime: workingtime)
   end

@@ -314,6 +314,22 @@ defmodule TimeManager.Auth do
       query = from w in Workingtime, where: w.user == ^id
       Repo.all(query)
   end
+  
+  def get_workingtime_by_user!(id, params) do
+    if (params["start"]) do
+      if (params["end"]) do
+        Repo.all(from w in Workingtime, where: w.user == ^id, where: w.start >= ^params["start"], where: w.end <= ^params["end"])
+      else
+        Repo.all(from w in Workingtime, where: w.user == ^id, where: w.start >= ^params["start"])
+      end
+    else
+      if (params["end"]) do
+        Repo.all(from w in Workingtime, where: w.user == ^id, where: w.end <= ^params["end"])
+      else
+        Repo.all(from w in Workingtime, where: w.user == ^id)
+      end
+    end
+  end
 
   @doc """
   Creates a workingtime.
