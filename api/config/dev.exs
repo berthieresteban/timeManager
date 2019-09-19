@@ -2,10 +2,10 @@ use Mix.Config
 
 # Configure your database
 config :timeManager, TimeManager.Repo,
-  username: "phoenix",#System.get_env("PGUSER"),
-  password: "phoenix",#System.get_env("PGPASSWORD"),
-  database: "timemanager_dev", #System.get_env("PGDATABASE"),
-  hostname: "localhost", #System.get_env("PGHOST"),
+  username: System.get_env("PGUSER"),
+  password: System.get_env("PGPASSWORD"),
+  database: System.get_env("PGDATABASE"),
+  hostname: System.get_env("PGHOST"),
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
