@@ -12,7 +12,7 @@ defmodule TimeManager.JwtAuthPlug do
             case Token.verify_and_validate(token) do
                 {:ok, claims} ->
                 conn |> success(claims, token)
-                { :error } ->
+                { :error, _error } ->
                 conn |> forbidden
             end
         else
