@@ -42,6 +42,61 @@
     a POST method : http://localhost:4000/api/clocks/:userID 
 	`= POINTAGE : on POST pas de status false, mais forcément TRUE, au bout de 2 TRUE l'API créée automatiquement un workingtimes.
 
+## PERMISSION LIST
+  # 1. employee and more
+    # 2. manager and more
+    # 3. general-manager and more (default id not found)
+    # 4. administrator / webmaster only
+    defp perms do
+        %{
+            #CLOCKS
+            "GET_api_clocks_own" => 1,
+            "GET_api_clocks_id" => 3,
+            "GET_api_clocks_team" => 2,
+            "POST_api_clocks_own" => 1,
+            "POST_api_clocks_id" => 3,
+            "POST_api_clocks_team" => 3,
+            # USERS
+            "GET_api_users" => 3,
+            "GET_api_users_own" => 1,
+            "GET_api_users_team" => 2,
+            "GET_api_users_id" => 3,
+            "POST_api_users" => 3,
+            "PUT_api_users_own" => 1,
+            "PUT_api_users_team" => 3,
+            "PUT_api_users_id" => 3,
+            "DELETE_api_users_own" => 1,
+            "DELETE_api_users_team" => 3,
+            "DELETE_api_users_id" => 3,
+            # WORKINGTIMES
+            "GET_api_workingtimes_own" => 1,
+            "GET_api_workingtimes_own_id" => 1,
+            "GET_api_workingtimes_own_own" => 1,
+            "GET_api_workingtimes_own_team" => 1,
+            "GET_api_workingtimes_team" => 2,
+            "GET_api_workingtimes_id" => 3,
+            "POST_api_workingtimes_own" => 2,
+            "POST_api_workingtimes_team" => 2,
+            "POST_api_workingtimes_id" => 3,
+            "PUT_api_workingtimes_own" => 2,
+            "PUT_api_workingtimes_team" => 2,
+            "PUT_api_workingtimes_id" => 3,
+            "DELETE_api_workingtimes_own" => 2,
+            "DELETE_api_workingtimes_team" => 2,
+            "DELETE_api_workingtimes_id" => 3,
+            #MANAGING (DEFAULT OK : GENERAL MANAGER ONLY)
+            "GET_api_managing_own" => 2,
+            #ROLES
+            "GET_api_roles_own" => 4,
+            "POST_api_roles" => 4,
+            "PUT_api_roles_id" => 4,
+            "PUT_api_roles_team" => 4,
+            "PUT_api_roles_own" => 4,
+            "DELETE_api_roles_id" => 4,
+            "DELETE_api_roles_team" => 4,
+            "DELETE_api_roles_own" => 4
+        }
+
 
 To start your Phoenix server:
 
