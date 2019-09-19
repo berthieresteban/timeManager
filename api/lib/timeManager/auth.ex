@@ -535,7 +535,10 @@ defmodule TimeManager.Auth do
       ** (Ecto.NoResultsError)
 
   """
-  def get_managing!(id), do: Repo.get!(Managing, id)
+  def get_managing!(id) do
+    query=from m in Managing, where: m.fromId == ^id
+    Repo.all(query)
+  end
 
   @doc """
   Creates a managing.
