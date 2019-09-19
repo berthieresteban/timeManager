@@ -40,6 +40,7 @@ defmodule TimeManager.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:gettext, "~> 0.11"},
       {:plug_cowboy, "~> 2.0"},
+      {:cors_plug, "~> 2.0"},
       {:joken, "~> 2.0-rc0"},
       {:poison, "~> 3.1"},
       {:jason, "~> 1.1"}
