@@ -9,10 +9,10 @@ defmodule TimeManager.JwtAuthPlug do
         token = jwt_from_header(conn)
         useropen = List.last(conn.path_info)
         if (useropen != "users") do
-            case TimeManager.Token.verify_and_validate(token) do
+            case Token.verify_and_validate(token) do
                 {:ok, claims} ->
                 conn |> success(claims, token)
-                { :error, error } ->
+                { :error } ->
                 conn |> forbidden
             end
         else

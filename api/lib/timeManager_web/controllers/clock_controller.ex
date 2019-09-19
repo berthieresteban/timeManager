@@ -30,7 +30,7 @@ defmodule TimeManagerWeb.ClockController do
       |> render(:"404")
     else
       with {:ok, %Clock{} = clock} <- Auth.create_clock_for_user(id, clock_params) do
-            workgintime = Auth.check_endclock_create_workingtime(clock)
+            Auth.check_endclock_create_workingtime(clock)
             conn
             |> put_status(:created)
             |> put_resp_header("location", Routes.clock_path(conn, :show, clock))

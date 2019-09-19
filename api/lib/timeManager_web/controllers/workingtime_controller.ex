@@ -6,8 +6,8 @@ defmodule TimeManagerWeb.WorkingtimeController do
 
   action_fallback TimeManagerWeb.FallbackController
 
-  def index(conn, _params) do
-    workingtimes = Auth.list_workingtimes(_params)
+  def index(conn, params) do
+    workingtimes = Auth.list_workingtimes(params)
     render(conn, "index.json", workingtimes: workingtimes)
   end
 
