@@ -2,14 +2,12 @@ defmodule TimeManager.JwtAuthPlug do
     import Plug.Conn
 
     alias TimeManager.Token
-    alias TimeManager.Auth
     alias TimeManager.Permission
 
     def init(opts), do: opts
 
     def call(conn, _opts) do
         token = jwt_from_header(conn)
-        useropen = List.last(conn.path_info)
         case Token.verify_and_validate(token) do
             {:ok, claims} ->
             conn 

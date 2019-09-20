@@ -2,7 +2,6 @@ defmodule TimeManager.Permission do
     import Plug.Conn
 
     alias TimeManager.Auth
-    alias TimeManager.Auth.Managing
 
     def hasPermission(conn) do
         method = conn.method
@@ -30,13 +29,13 @@ defmodule TimeManager.Permission do
     end
 
     defp check_permission(perms_needed, perm) do
-        IO.inspect(perms[perms_needed])
-        if (is_nil(perms[perms_needed])) do
+        IO.inspect(perms()[perms_needed])
+        if (is_nil(perms()[perms_needed])) do
             IO.puts("not found")
             perm == 8
         else
-            IO.puts(" needing : #{perms[perms_needed]}")
-            perm >= perms[perms_needed]
+            IO.puts(" needing : #{perms()[perms_needed]}")
+            perm >= perms()[perms_needed]
         end
     end
 
