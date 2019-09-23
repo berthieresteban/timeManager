@@ -2,6 +2,9 @@
   <div>
     <v-container>
       <v-row>
+        Dashboard of {{ username }}
+      </v-row>
+      <v-row>
         <v-col v-for="chart in charts" :key="chart.position" :cols="getSize(chart)">
           <AreaChart :data="areaData" v-if="checkType(chart, 'areaChart')" />
           <DonutChart :data="donutData" v-if="checkType(chart, 'donutChart')" />
@@ -28,8 +31,11 @@ export default {
     AreaChart
   },
   computed: {
+    username() {
+      return this.$route.params.username;
+    },
     id() {
-      return this.$route.params.userID;
+      return this.$route.params.id;
     },
     areaChart() {
       return this.$store.state.areaChart;

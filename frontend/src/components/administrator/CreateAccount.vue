@@ -10,6 +10,13 @@
             <p class="error" v-for="error in errors" :key="error">{{ error }}</p>
           </div>
           <v-text-field label="Username" required v-model="username"></v-text-field>
+          <v-text-field
+            :append-icon="showPassword ? 'fa-eye' : 'fa-eye-slash'"
+            @click:append="showPassword = !showPassword"
+            :type="showPassword ? 'text' : 'password'"
+            label="Password"
+            v-model="password"
+          ></v-text-field>
           <v-text-field label="Email" required v-model="email"></v-text-field>
         </v-card-text>
         <v-card-actions>
@@ -31,6 +38,8 @@ export default {
     return {
       username: "",
       errors: [],
+      password: "",
+      showPassword: false,
       email: "",
       emailRegex: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     };
@@ -39,6 +48,8 @@ export default {
     cancel() {
       this.username = "";
       this.email = "";
+      this.password = "";
+      this.showPassword = false;
       this.$emit("cancelCreation");
     },
     async emailCheck() {
@@ -84,7 +95,8 @@ export default {
       const payload = {
         user: {
           username: this.username,
-          email: this.email
+          email: this.email,
+          password: this.password
         }
       };
       return this.$store.dispatch("createUser", payload);
@@ -96,6 +108,16 @@ export default {
         return;
       }
       const response = await this.createAccount();
+      const payload = {
+        auth: {
+          username: this.username,
+          password: this.password
+        }
+      };
+      const resp = await this.$store.dispatch("login", payload);
+      await this.$store.commit("setToken", resp.token);
+      localStorage.setItem("token", resp.token);
+      localStorage.setItem("userID", resp.user);
       if (response.status === 201) {
         this.$store.commit("setUser", response.data.data);
         this.$store.commit("setLogged");

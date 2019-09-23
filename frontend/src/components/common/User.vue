@@ -1,10 +1,5 @@
 <template>
   <div>
-    <UpdateInformations
-      :dialog="openUpdateUser"
-      @cancelUpdate="cancelUpdate"
-      @endUpdate="endUpdate"
-    />
     <v-navigation-drawer
       :clipped="clipped"
       v-model="drawerCopy"
@@ -25,22 +20,13 @@
 
       <v-list nav dense>
         <v-list-item>
-          <v-switch v-model="darkModeCopy"  @mouseover="setAnnouncer(`Switch dark mode ${!darkModeCopy}`)"></v-switch>
+          <v-switch
+            v-model="darkModeCopy"
+            @mouseover="setAnnouncer(`Switch dark mode ${!darkModeCopy}`)"
+          ></v-switch>
           <v-list-item-title>Dark Mode</v-list-item-title>
         </v-list-item>
-        <v-list-item link @click="deleteUser" @mouseover="setAnnouncer('Delete my account')">
-          <v-list-item-icon>
-            <v-icon>fa-trash</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Delete my account</v-list-item-title>
-        </v-list-item>
-        <v-list-item link @click="updateUser"  @mouseover="setAnnouncer('Update my account')">
-          <v-list-item-icon>
-            <v-icon>fa-pen</v-icon>
-          </v-list-item-icon>
-          <v-list-item-title>Update my informations</v-list-item-title>
-        </v-list-item>
-        <v-list-item link @click="signOut"  @mouseover="setAnnouncer('Sign Out')">
+        <v-list-item link @click="signOut" @mouseover="setAnnouncer('Sign Out')">
           <v-list-item-icon>
             <v-icon>fa-sign-out-alt</v-icon>
           </v-list-item-icon>
@@ -48,28 +34,22 @@
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
-      <div class="hidden-md-and-up">
-        <v-btn text link to="/workingTimes/1">Working Times</v-btn>
-        <v-btn text link to="/workingTime/1">Create Working Time</v-btn>
-        <v-btn text link to="/workingTime/2/3">Edit Working Time</v-btn>
-        <v-btn text link to="/clock/username">Clock Manager</v-btn>
-        <v-btn text link to="/chartManager/1">Chart Manager</v-btn>
+      <div>
+        <v-btn text link :to="`/${role}/${id}/clock`">Clock Manager</v-btn>
+        <v-btn text link :to="`/${role}/${id}/workingTimes/${id}/${username}`">Working Times</v-btn>
+        <v-btn text link :to="`/${role}/${id}/chartManager`">Chart Manager</v-btn>
+        <v-btn text link :to="`/${role}/${id}/editAccount`">Edit Account</v-btn>
       </div>
     </v-navigation-drawer>
   </div>
 </template>
 
 <script>
-import UpdateInformations from "./UpdateInformations";
-
 export default {
   name: "User",
   props: {
     drawer: Boolean,
     clipped: Boolean
-  },
-  components: {
-    UpdateInformations
   },
   computed: {
     darkMode() {
@@ -83,6 +63,24 @@ export default {
     },
     id() {
       return this.$store.state.user.id;
+    },
+    role() {
+      let role = "";
+      switch (this.$store.state.user.roleid) {
+        case 1:
+          role = "employee";
+          break;
+        case 2:
+          role = "manager";
+          break;
+        case 3:
+          role = "superManager";
+          break;
+        case 4:
+          role = "administrator";
+          break;
+      }
+      return role;
     }
   },
   created() {
@@ -91,8 +89,7 @@ export default {
   data() {
     return {
       drawerCopy: null,
-      darkModeCopy: false,
-      openUpdateUser: false
+      darkModeCopy: false
     };
   },
   watch: {
@@ -111,9 +108,6 @@ export default {
     setAnnouncer(text) {
       this.$announcer.set(text);
     },
-    endUpdate() {
-      this.openUpdateUser = false;
-    },
     createUser() {},
     async deleteUser() {
       const response = await this.$store.dispatch("deleteUser", this.id);
@@ -130,16 +124,11 @@ export default {
         });
       }
     },
-    updateUser() {
-      this.openUpdateUser = true;
-    },
-    cancelUpdate() {
-      this.openUpdateUser = false;
-    },
-    getUser() {},
     signOut() {
       this.$store.commit("unsetLogged");
       this.$store.commit("setUser", {});
+      localStorage.removeItem("token");
+      localStorage.removeItem("userID");
       this.$router.push("/login");
     }
   }

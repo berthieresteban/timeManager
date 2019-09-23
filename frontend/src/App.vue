@@ -7,71 +7,13 @@
         :timeout="2000"
         :color="snackBar.color"
       >{{ snackBar.text }}</v-snackbar>
-      <div v-if="!logged">
-        <router-view />
-      </div>
-      <div v-else>
-        <User @drawerCopy="drawerCopy" :clipped="clipped" :drawer="drawer" />
-        <v-card>
-          <v-app-bar fixed app :light="!darkMode" :dark="darkMode">
-            <v-app-bar-nav-icon
-              @click.stop="drawer = !drawer"
-              @mouseover="setAnnouncer(`${drawer? 'close': 'open'} the sidebar`)"
-            >
-              <v-icon>{{ drawer? "fa-caret-left": "fa-bars"}}</v-icon>
-            </v-app-bar-nav-icon>
-            <v-toolbar-title>Dashboard</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-toolbar-items class="hidden-sm-and-down">
-              <v-btn
-                @mouseover="setAnnouncer('Go to Working time overview')"
-                text
-                link
-                :to="`/workingTimes/${id}`"
-              >Working Times</v-btn>
-              <v-btn
-                @mouseover="setAnnouncer('Go to Create working time')"
-                text
-                link
-                :to="`/workingTime/${id}`"
-              >Create Working Time</v-btn>
-              <v-btn
-                @mouseover="setAnnouncer('Go to edit working time')"
-                text
-                link
-                :to="`/workingTime/${id}/3`"
-              >Edit Working Time</v-btn>
-              <v-btn
-                @mouseover="setAnnouncer('Go to clock manager')"
-                text
-                link
-                :to="`/clock/${username}`"
-              >Clock Manager</v-btn>
-              <v-btn
-                @mouseover="setAnnouncer('Go to chart manager')"
-                text
-                link
-                :to="`/chartManager/${id}`"
-              >Chart Manager</v-btn>
-            </v-toolbar-items>
-          </v-app-bar>
-        </v-card>
-        <v-content>
-          <v-container>
-            <router-view></router-view>
-          </v-container>
-        </v-content>
-      </div>
+      <router-view />
     </v-app>
   </div>
 </template>
 
 <script>
-import User from "./components/User";
 export default {
-  components: {
-    User
-  },
   computed: {
     getBackgroundColor() {
       return this.darkMode ? "#686767" : "#FFFFFF";
@@ -79,33 +21,9 @@ export default {
     darkMode() {
       return this.$store.state.darkMode;
     },
-    logged() {
-      return this.$store.state.logged;
-    },
     snackBar() {
       return this.$store.state.snackBar;
     },
-    id() {
-      return this.$store.state.user.id;
-    },
-    username() {
-      return this.$store.state.user.username;
-    }
-  },
-  methods: {
-    setAnnouncer(text) {
-      this.$announcer.set(text);
-    },
-    drawerCopy(value) {
-      if (value === this.drawer) return;
-      this.drawer = value;
-    }
-  },
-  data() {
-    return {
-      drawer: false,
-      clipped: false
-    };
   },
   beforeCreate() {
     const areaChart = JSON.parse(localStorage.getItem("areaChart"));

@@ -57,8 +57,8 @@ export default {
     userID() {
       return this.$route.params.userID;
     },
-    workingtimeID() {
-      return this.$route.params.workingtimeID;
+    editMode() {
+      return this.$route.params.editMode;
     }
   },
   methods: {
@@ -147,7 +147,9 @@ export default {
     }
   },
   mounted() {
-    if (!this.workingtimeID || this.workingtimeID === undefined) {
+    console.log(this.editMode);
+
+    if (!this.editMode || this.editMode === undefined) {
       this.creationMode = true;
     } else {
       this.creationMode = false;
@@ -156,7 +158,7 @@ export default {
   },
   watch: {
     $route(to, from) {
-      if (!this.workingtimeID || this.workingtimeID === undefined) {
+      if (!this.editMode || this.editMode === undefined) {
         this.creationMode = true;
       } else {
         this.creationMode = false;

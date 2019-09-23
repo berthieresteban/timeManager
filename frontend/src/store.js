@@ -4,6 +4,8 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueAnnouncer from 'vue-announcer'
 
+axios.defaults.headers.common['Content-Type'] = 'application/json';
+
 Vue.use(VueAxios, axios);
 Vue.use(Vuex)
 
@@ -14,12 +16,18 @@ const store = new Vuex.Store({
       displayed: false,
       text: "",
     },
+    // host:"192.168.43.195",
+    host:"localhost",
+    port: "4000",
+    // apiRoute: "http://192.168.43.195:4000/api",
     apiRoute: "http://localhost:4000/api",
     logged: false,
+    token: null,
     user: {
       username: null,
       id: null,
-      email: null
+      email: null,
+      roleid: null
     },
     darkMode: false,
     areaChart: {
@@ -52,6 +60,10 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
+    setToken(state, token) {
+      state.token = token;
+      axios.defaults.headers.common['session_jwt'] = token;
+    },
     createSnackBarSuccess(state, {text, announcer}) {
       announcer.set(text);
       state.snackBar = {
@@ -60,7 +72,8 @@ const store = new Vuex.Store({
         text: text
       }
     },
-    createSnackBarError(state, text) {
+    createSnackBarError(state, {text, announcer}) {
+      announcer.set(text);
       state.snackBar = {
         color: "error",
         displayed: true,
@@ -135,8 +148,22 @@ const store = new Vuex.Store({
         return response;
       });
     },
+    login({state}, payload) {
+      let route = `http://${state.host}:${state.port}/auth`;
+      return axios.post(route, payload
+        ).then(response => {
+          return response.data;
+        });
+    },
+    getUserByID({ state }, id) {
+      let route = `http://${state.host}:${state.port}/api/users/${id}`;
+      return axios.get(route
+      ).then(response => {
+        return response.data;
+      });
+    },
     getUser({ state }, payload) {
-      let route = `${state.apiRoute}/users`;
+      let route = `http://${state.host}:${state.port}/api/users`;
       route += payload.username ? `?username=${payload.username}` : '?';
       route += payload.username && payload.email ? '&' : '';
       route += payload.email ? `email=${payload.email}` : '';
@@ -146,7 +173,7 @@ const store = new Vuex.Store({
       });
     },
     createUser({ state }, payload) {
-      const response = axios.post(`${state.apiRoute}/users`, payload).then(response => {
+      const response = axios.post(`http://${state.host}:${state.port}/api/users`, payload).then(response => {
         return response;
       });
       return response;
