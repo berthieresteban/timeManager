@@ -110,8 +110,8 @@ export default {
   async mounted() {
     const response = await this.$store.dispatch("getWorkingTimes", {
       id: this.id,
-      start: this.today,
-      end: this.lastWeek
+      start: this.lastWeek,
+      end: this.today
     });
     this.workingTimes = response.data.data;
     this.setupDonutData();

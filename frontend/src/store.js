@@ -17,7 +17,7 @@ const store = new Vuex.Store({
       text: "",
     },
     // host:"192.168.43.195",
-    host:"localhost",
+    host: "localhost",
     port: "4000",
     // apiRoute: "http://192.168.43.195:4000/api",
     apiRoute: "http://localhost:4000/api",
@@ -64,7 +64,7 @@ const store = new Vuex.Store({
       state.token = token;
       axios.defaults.headers.common['session_jwt'] = token;
     },
-    createSnackBarSuccess(state, {text, announcer}) {
+    createSnackBarSuccess(state, { text, announcer }) {
       announcer.set(text);
       state.snackBar = {
         color: "success",
@@ -72,7 +72,7 @@ const store = new Vuex.Store({
         text: text
       }
     },
-    createSnackBarError(state, {text, announcer}) {
+    createSnackBarError(state, { text, announcer }) {
       announcer.set(text);
       state.snackBar = {
         color: "error",
@@ -148,15 +148,22 @@ const store = new Vuex.Store({
         return response;
       });
     },
-    login({state}, payload) {
+    login({ state }, payload) {
       let route = `http://${state.host}:${state.port}/auth`;
       return axios.post(route, payload
-        ).then(response => {
-          return response.data;
-        });
+      ).then(response => {
+        return response.data;
+      });
     },
     getUserByID({ state }, id) {
       let route = `http://${state.host}:${state.port}/api/users/${id}`;
+      return axios.get(route
+      ).then(response => {
+        return response.data;
+      });
+    },
+    getAllUsers({ state }) {
+      let route = `http://${state.host}:${state.port}/api/users`;
       return axios.get(route
       ).then(response => {
         return response.data;

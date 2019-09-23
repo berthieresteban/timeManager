@@ -1,7 +1,7 @@
 <template>
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent max-width="600px">
-      <v-card>
+      <v-card :darkMode="darkMode">
         <v-card-title>
           <span class="headline">Account Creation</span>
         </v-card-title>
@@ -18,6 +18,7 @@
             v-model="password"
           ></v-text-field>
           <v-text-field label="Email" required v-model="email"></v-text-field>
+          <v-select required v-model="role" :items="roles" filled label="Select Role"></v-select>
         </v-card-text>
         <v-card-actions>
           <v-btn @click="cancel">Cancel</v-btn>
@@ -34,13 +35,25 @@ export default {
   props: {
     dialog: Boolean
   },
+  computed: {
+    darkMode() {
+      return this.$store.state.darkMode;
+    }
+  },
   data() {
     return {
       username: "",
       errors: [],
+      role: 1,
       password: "",
       showPassword: false,
       email: "",
+      roles: [
+        { value: 1, text: "Employee" },
+        { value: 2, text: "Manager" },
+        { value: 3, text: "Super Manager" },
+        { value: 4, text: "Administrator" }
+      ],
       emailRegex: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     };
   },
@@ -96,31 +109,24 @@ export default {
         user: {
           username: this.username,
           email: this.email,
-          password: this.password
+          password: this.password,
+          roleid: this.role
         }
       };
       return this.$store.dispatch("createUser", payload);
     },
     async confirm() {
+      this.errors = this.errors.filter(
+        err =>
+          err !== "An error occured while creating your account, please retry."
+      );
       await this.emailCheck();
       await this.usernameCheck();
       if (this.errors.length) {
         return;
       }
       const response = await this.createAccount();
-      const payload = {
-        auth: {
-          username: this.username,
-          password: this.password
-        }
-      };
-      const resp = await this.$store.dispatch("login", payload);
-      await this.$store.commit("setToken", resp.token);
-      localStorage.setItem("token", resp.token);
-      localStorage.setItem("userID", resp.user);
       if (response.status === 201) {
-        this.$store.commit("setUser", response.data.data);
-        this.$store.commit("setLogged");
         this.errors = [];
         this.$emit("accountCreated");
       } else {

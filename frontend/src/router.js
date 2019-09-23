@@ -115,13 +115,31 @@ const superManagerGuard = (to, from, next) => {
   if (!authorized) {
     next('/unauthorized');
   }
+  // If Super Manager try to edit his workingTimes
+  if (to.fullPath.includes('editWorkingTimes')) {
+    const userID = to.fullPath.split('/')[4];
+    const currentID = user.id
+    if (currentID !== userID) {
+      next('/unauthorized');
+    }
+  }
   next();
 }
 
 const administratorGuard = (to, from, next) => {
+  const user = store.state.user;
   const authorized = authGuard(4, to);
   if (!authorized) {
     next('/unauthorized');
+  }
+  const currentID = user.id.toString();
+  // If try to access to workingTimes of another user
+  if (to.fullPath.includes('workingTimes')) {
+    const workingTimeID = to.fullPath.split('/')[4];
+    const username = to.fullPath.split('/')[5];
+    if (username !== user.username || workingTimeID !== currentID) {
+      next('/unauthorized');
+    }
   }
   next();
 }
@@ -251,8 +269,32 @@ const router = new Router({
     { // When logged as en Administrator you can access the following routes
       path: '/administrator/:id', component: Administrator,
       children: [
+        { // Auto redirected to his clock page
+          path: '',
+          redirect: 'clock'
+        },
+        { // Access to his clock'in clock'out page
+          path: 'clock',
+          component: Clock,
+          beforeEnter: administratorGuard
+        },
+        { // Access to his dashboard
+          path: 'workingTimes/:id/:username',
+          component: WorkingTimes,
+          beforeEnter: administratorGuard
+        },
+        { // Edit his Account
+          path: 'editAccount',
+          component: EditAccount,
+          beforeEnter: administratorGuard
+        },
+        { // Edit his Charts
+          path: 'chartManager',
+          component: ChartManager,
+          beforeEnter: administratorGuard
+        },
         { // Create accounts
-          path: '/manageAccounts',
+          path: 'manageAccounts',
           component: ManageAccounts,
           beforeEnter: administratorGuard
         },
@@ -260,8 +302,6 @@ const router = new Router({
     },
   ]
 })
-
-
 
 router.beforeEach((to, from, next) => {
   if (to.path !== '/login' && !store.state.logged) {

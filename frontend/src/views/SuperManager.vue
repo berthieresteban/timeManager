@@ -9,7 +9,7 @@
         >
           <v-icon>{{ drawer? "fa-caret-left": "fa-bars"}}</v-icon>
         </v-app-bar-nav-icon>
-        <v-toolbar-title>Administrator TimeManager</v-toolbar-title>
+        <v-toolbar-title>Super Manager TimeManager</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items class="hidden-sm-and-down">
           <v-btn
