@@ -5,12 +5,12 @@ defmodule TimeManagerWeb.ManagingControllerTest do
   alias TimeManager.Auth.Managing
 
   @create_attrs %{
-
+    isManager: true
   }
   @update_attrs %{
-
+    isManager: false
   }
-  @invalid_attrs %{}
+  @invalid_attrs %{isManager: nil}
 
   def fixture(:managing) do
     {:ok, managing} = Auth.create_managing(@create_attrs)
@@ -36,7 +36,8 @@ defmodule TimeManagerWeb.ManagingControllerTest do
       conn = get(conn, Routes.managing_path(conn, :show, id))
 
       assert %{
-               "id" => id
+               "id" => id,
+               "isManager" => true
              } = json_response(conn, 200)["data"]
     end
 
@@ -56,7 +57,8 @@ defmodule TimeManagerWeb.ManagingControllerTest do
       conn = get(conn, Routes.managing_path(conn, :show, id))
 
       assert %{
-               "id" => id
+               "id" => id,
+               "isManager" => false
              } = json_response(conn, 200)["data"]
     end
 

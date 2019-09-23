@@ -10,14 +10,10 @@ defmodule TimeManager.Permission do
         perm = conn.assigns.perm
         paths = for path <- conn.path_info do
             case Integer.parse(path) do
-                {integer, ""} -> if (integer == userid), do: "own", else: if (Enum.find(managedid, fn map -> map.toId == integer end)), do: "team", else: "id"
+                {integer, ""} -> if (integer == userid), do: "own", else: if (Enum.find(managedid, fn map -> map.employeeId == integer end)), do: "team", else: "id"
                 _ -> path
             end
         end
-        #IO.inspect(method)
-        #IO.inspect(userid)
-        #IO.inspect(paths)
-        #IO.inspect(perm)
         
         perms_needed =  method <> "_"  <> Enum.join(paths, "_")
 
@@ -32,7 +28,7 @@ defmodule TimeManager.Permission do
         IO.inspect(perms()[perms_needed])
         if (is_nil(perms()[perms_needed])) do
             IO.puts("not found")
-            perm == 8
+            perm == 4
         else
             IO.puts(" needing : #{perms()[perms_needed]}")
             perm >= perms()[perms_needed]

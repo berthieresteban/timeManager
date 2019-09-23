@@ -22,7 +22,7 @@ defmodule TimeManagerWeb.ManagingController do
 
   def show(conn, %{"id" => id}) do
     managing = Auth.get_managing!(id)
-    render(conn, "index.json", managing: managing)
+    render(conn, "show.json", managing: managing)
   end
 
   def update(conn, %{"id" => id, "managing" => managing_params}) do

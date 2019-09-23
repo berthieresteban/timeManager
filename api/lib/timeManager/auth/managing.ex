@@ -3,8 +3,9 @@ defmodule TimeManager.Auth.Managing do
   import Ecto.Changeset
 
   schema "managing" do
-    field :fromId, :id
-    field :toId, :id
+    field :isManager, :boolean, default: false
+    field :teamId, :id
+    field :employeeId, :id
 
     timestamps()
   end
@@ -12,7 +13,7 @@ defmodule TimeManager.Auth.Managing do
   @doc false
   def changeset(managing, attrs) do
     managing
-    |> cast(attrs, [:fromId, :toId])
-    |> validate_required([:fromId, :toId])
+    |> cast(attrs, [:teamId, :employeeId, :isManager])
+    |> validate_required([:teamId, :employeeId, :isManager])
   end
 end

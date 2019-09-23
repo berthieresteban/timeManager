@@ -21,6 +21,8 @@ defmodule TimeManagerWeb.Router do
     resources "/managing", ManagingController, except: [:new, :edit]
     # ROLES GETTER
     resources "/roles", RoleController, except: [:new, :edit]
+    # TEAMS
+    resources "/teams", TeamController, except: [:new, :edit]
   end
   scope "/auth", TimeManagerWeb do
     post "/", AuthController, :login
