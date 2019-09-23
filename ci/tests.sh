@@ -6,7 +6,7 @@ docker-compose -f ./docker-compose.yml up -d
 
 printf '\nStarting backend\n'
 
-until curl --output /dev/null --silent --head --fail http://localhost:4000/api/users; do
+until curl --output /dev/null --silent --head --fail http://localhost:4000/api/auth; do
   printf '.'
   sleep 5
 done
