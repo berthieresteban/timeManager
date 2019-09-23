@@ -58,8 +58,6 @@ defmodule TimeManager.Auth do
 
   def get_user_login(username, password) do
     password = Base.encode16(:crypto.hash(:sha256,  "#{password}_s3cr3tp4s$xXxX_______try_to_crack_this_lol"))
-    IO.inspect(username)
-    IO.inspect(password)
     query = from u in User, where: u.username == ^username, where: u.password == ^password
     Repo.all(query)
   end
@@ -77,8 +75,8 @@ defmodule TimeManager.Auth do
 
   """
   def create_user(attrs \\ %{}) do
-    password = password = Base.encode16(:crypto.hash(:sha256,  "#{attrs["password"]}_s3cr3tp4s$xXxX_______try_to_crack_this_lol"))
-    IO.inspect(password)
+    npass = is_nil(attrs["password"]) && attrs.password || attrs["password"]
+    password = Base.encode16(:crypto.hash(:sha256,  "#{npass}_s3cr3tp4s$xXxX_______try_to_crack_this_lol"))
     %User{}
     |> User.changeset(attrs)
     |> User.changeset(%{password: password})
@@ -537,7 +535,10 @@ defmodule TimeManager.Auth do
       ** (Ecto.NoResultsError)
 
   """
-  def get_managing!(id), do: Repo.get!(Managing, id)
+  def get_managing!(id) do
+    query=from m in Managing, where: m.fromId == ^id
+    Repo.all(query)
+  end
 
   @doc """
   Creates a managing.
