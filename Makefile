@@ -17,7 +17,7 @@ run-api:
 		sudo docker-compose up api
 
 build-front:
-		sudo docker-image up front
+		sudo docker-image build front
 
 run-front:
 		sudo docker-compose up front
