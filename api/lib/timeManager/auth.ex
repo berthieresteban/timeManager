@@ -96,9 +96,16 @@ defmodule TimeManager.Auth do
 
   """
   def update_user(%User{} = user, attrs) do
+    password = if (!is_nil(attrs["password"])), do: Base.encode16(:crypto.hash(:sha256,  "#{attrs["password"]}_s3cr3tp4s$xXxX_______try_to_crack_this_lol")), else: nil
     user
     |> User.changeset(attrs)
     |> Repo.update()
+    if (!is_nil(password)) do
+      user
+      User
+      |> User.changeset(user, %{password: password})
+      |> Repo.update()
+    end
   end
 
   @doc """
@@ -536,8 +543,17 @@ defmodule TimeManager.Auth do
 
   """
   def get_managing!(id) do
-    query=from m in Managing, where: m.fromId == ^id
-    Repo.all(query)
+    query=from m in Managing, where: m.employeeId == ^id, where: m.isManager == true
+    user = Repo.all(query)
+    IO.inspect(user)
+    if (!is_nil(user)) do
+      teams = for usr <- user, do: usr.teamId
+      query=from m in Managing, where: m.teamId in ^teams, where: m.isManager == false
+      Repo.all(query)
+    else
+      []
+    end
+
   end
 
   @doc """
@@ -604,4 +620,102 @@ defmodule TimeManager.Auth do
   def change_managing(%Managing{} = managing) do
     Managing.changeset(managing, %{})
   end
+
+  alias TimeManager.Auth.Team
+
+  @doc """
+  Returns the list of teams.
+
+  ## Examples
+
+      iex> list_teams()
+      [%Team{}, ...]
+
+  """
+  def list_teams do
+    Repo.all(Team)
+  end
+
+  @doc """
+  Gets a single team.
+
+  Raises `Ecto.NoResultsError` if the Team does not exist.
+
+  ## Examples
+
+      iex> get_team!(123)
+      %Team{}
+
+      iex> get_team!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_team!(id), do: Repo.get!(Team, id)
+
+  @doc """
+  Creates a team.
+
+  ## Examples
+
+      iex> create_team(%{field: value})
+      {:ok, %Team{}}
+
+      iex> create_team(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_team(attrs \\ %{}) do
+    %Team{}
+    |> Team.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a team.
+
+  ## Examples
+
+      iex> update_team(team, %{field: new_value})
+      {:ok, %Team{}}
+
+      iex> update_team(team, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_team(%Team{} = team, attrs) do
+    team
+    |> Team.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Team.
+
+  ## Examples
+
+      iex> delete_team(team)
+      {:ok, %Team{}}
+
+      iex> delete_team(team)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_team(%Team{} = team) do
+    Repo.delete(team)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking team changes.
+
+  ## Examples
+
+      iex> change_team(team)
+      %Ecto.Changeset{source: %Team{}}
+
+  """
+  def change_team(%Team{} = team) do
+    Team.changeset(team, %{})
+  end
 end
+
+
