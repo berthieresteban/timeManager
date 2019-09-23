@@ -26,10 +26,17 @@ defmodule TimeManagerWeb.UserController do
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
-    user = Auth.get_user!(id)
+    if (is_nil(user_params["roleid"])) do
+      user = Auth.get_user!(id)
 
-    with {:ok, %User{} = user} <- Auth.update_user(user, user_params) do
-      render(conn, "show.json", user: user)
+      with {:ok, %User{} = user} <- Auth.update_user(user, user_params) do
+        render(conn, "show.json", user: user)
+      end
+    else
+      conn
+        |> put_status(:unauthorized)
+        |> put_view(TimeManagerWeb.ErrorView)
+        |> render(:"401")
     end
   end
 

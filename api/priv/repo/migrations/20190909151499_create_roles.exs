@@ -9,6 +9,5 @@ defmodule TimeManager.Repo.Migrations.CreateRoles do
     execute "INSERT INTO roles (name, permission) VALUES ('employee', 1)"
     execute "INSERT INTO roles (name, permission) VALUES ('manager', 2)"
     execute "INSERT INTO roles (name, permission) VALUES ('general-manager', 3)"
-    execute "INSERT INTO roles (name, permission) VALUES ('admin', 99)"
   end
 end
