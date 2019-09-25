@@ -6,7 +6,7 @@
 version : '3'
 services:
     api:
-        container_name: berthieresteban/timemanager_api
+        container_name: timemanager_api
         build:
             context: ./api
         environment:
