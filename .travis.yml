@@ -33,7 +33,7 @@ jobs:
         secret_access_key: $AWS_SECRET_ACCESS_KEY
         bucket: timemanager
         skip_cleanup: true
-        region: eu-central-1
+        region: eu-west-3
         local_dir: dist
         cache_control: max-age=604800
         # - aws s3 sync ./dist/ s3://timemanager --region eu-west-3c --delete
