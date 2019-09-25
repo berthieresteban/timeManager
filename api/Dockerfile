@@ -22,6 +22,8 @@ WORKDIR /api
 RUN mix local.hex --force
 #RUN npm install
 
+RUN mix deps.get
+RUN mix local.rebar --force
 RUN mix do compile
 
 CMD ["/api/entrypoint.sh"]

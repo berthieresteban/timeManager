@@ -1,17 +1,18 @@
 <template>
   <v-card :dark="darkMode">
+    <v-card-title>Last Month (Worked Hours)</v-card-title>
     <area-chart
+      v-if="data.length"
       id="area"
-      :data="areaData"
-      xkey="year"
-      :ykeys="[ 'b' ]"
-      :labels="[ 'Serie B' ]"
+      :data="data"
+      xkey="date"
+      :ykeys="[ 'value' ]"
+      :labels="[ 'Worked hours' ]"
       :line-colors="colors"
       grid="true"
       grid-text-weight="bold"
-      resize="true"
-      hide-hover="always"
     />
+    <v-card-text v-else>Havn't worked last month !</v-card-text>
   </v-card>
 </template>
 
@@ -22,6 +23,9 @@ export default {
   components: {
     AreaChart
   },
+  props: {
+    data: Array
+  },
   computed: {
     colors() {
       return this.$store.state.areaChart.colors;
@@ -31,14 +35,7 @@ export default {
     }
   },
   data() {
-    return {
-      areaData: [
-        { year: "2013", b: 5 },
-        { year: "2014", b: 15 },
-        { year: "2015", b: 25 },
-        { year: "2016", b: 20 }
-      ]
-    };
+    return {};
   }
 };
 </script>

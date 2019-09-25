@@ -5,6 +5,8 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@fortawesome/fontawesome-free/css/all.css'
+import VueAnnouncer from 'vue-announcer'
+Vue.use(VueAnnouncer, {}, router);
 
 import Raphael from 'raphael/raphael'
 global.Raphael = Raphael

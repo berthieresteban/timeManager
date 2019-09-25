@@ -19,12 +19,6 @@ services:
             - "4000:4000"
         depends_on:
             - db
-    front:
-        build:
-            context: ./frontend
-        ports:
-            - "8080:8080"
-        container_name: timemanager_front
     db:
         container_name: timemanager_db
         image: postgres:9.6

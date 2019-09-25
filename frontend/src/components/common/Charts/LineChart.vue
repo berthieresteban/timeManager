@@ -1,15 +1,19 @@
 <template>
   <v-card :dark="darkMode">
+    <v-card-title>Last Month (Clock'In / Clock'Out)</v-card-title>
     <line-chart
+      v-if="data.length"
       id="line"
-      :data="lineData"
-      xkey="year"
-      :ykeys="[ 'b' ]"
+      :data="data"
+      xkey="date"
+      :ykeys="[ 'start', 'end' ]"
+      :labels="['Clock\'in', 'Clock\'out']"
       :line-colors="colors"
       grid="true"
       grid-text-weight="bold"
       resize="true"
     />
+    <v-card-text v-else>Havn't worked last month !</v-card-text>
   </v-card>
 </template>
 
@@ -20,6 +24,9 @@ export default {
   components: {
     LineChart
   },
+  props: {
+    data: Array
+  },
   computed: {
     colors() {
       return this.$store.state.lineChart.colors;
@@ -29,14 +36,7 @@ export default {
     }
   },
   data() {
-    return {
-      lineData: [
-        { year: "2013", b: 5 },
-        { year: "2014", b: 15 },
-        { year: "2015", b: 25 },
-        { year: "2016", b: 20 }
-      ]
-    };
+    return {};
   }
 };
 </script>
