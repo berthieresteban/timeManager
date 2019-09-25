@@ -34,11 +34,15 @@
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
-      <div>
+      <div >
         <v-btn text link :to="`/${role}/${id}/clock`">Clock Manager</v-btn>
         <v-btn text link :to="`/${role}/${id}/workingTimes/${id}/${username}`">Working Times</v-btn>
         <v-btn text link :to="`/${role}/${id}/chartManager`">Chart Manager</v-btn>
         <v-btn text link :to="`/${role}/${id}/editAccount`">Edit Account</v-btn>
+      </div>
+      <v-divider></v-divider>
+      <div class="hidden-md-and-up">
+        <v-btn v-for="btn in roleButtons" :key="btn.text" text link :to="btn.to">{{btn.text}}</v-btn>
       </div>
     </v-navigation-drawer>
   </div>
@@ -50,6 +54,29 @@ export default {
   props: {
     drawer: Boolean,
     clipped: Boolean
+  },
+  data() {
+    return {
+      drawerCopy: null,
+      darkModeCopy: false,
+      roleButtons: []
+    };
+  },
+  mounted() {
+    switch (this.role) {
+      case "manager":
+        this.roleButtons.push({text: 'Manage Team', to: `/manager/${this.id}/manageTeam` });
+        break;
+      case "superManager":
+        this.roleButtons.push({text: 'Manage Employees', to: `/superManager/${this.id}/manageAllEmployees` });
+        this.roleButtons.push({text: 'Manage Teams', to: `/superManager/${this.id}/manageAllTeams` });
+        break;
+      case "administrator":
+        this.roleButtons.push({text: 'Manage Acounts', to: `/administrator/${this.id}/manageAccounts` });
+        break;
+      default:
+        break;
+    }
   },
   computed: {
     darkMode() {
@@ -85,12 +112,6 @@ export default {
   },
   created() {
     this.drawerCopy = this.drawer;
-  },
-  data() {
-    return {
-      drawerCopy: null,
-      darkModeCopy: false
-    };
   },
   watch: {
     darkModeCopy() {

@@ -29,9 +29,6 @@
                   <v-btn icon link :to="`/manager/${id}/workingTimes/${e.id}/${e.username}`">
                     <v-icon color="grey lighten-1">fa-chart-bar</v-icon>
                   </v-btn>
-                  <v-btn icon @click="deleteMemberFromTeam(i, e)">
-                    <v-icon color="grey lighten-1">fa-times-circle</v-icon>
-                  </v-btn>
                 </v-col>
               </v-row>
             </v-container>
@@ -49,24 +46,6 @@ export default {
     },
     id() {
       return this.$store.state.user.id;
-    }
-  },
-  methods: {
-    deleteMemberFromTeam(i, e) {
-      // TODO CALL API
-      console.log("delete member from team", i, e);
-      const idx = this.teams.findIndex(t => t.name === i.name)
-      this.teams[idx].employee = this.teams[idx].employee.filter(em => em.id !== e.id)
-    },
-    addMember(i) {
-      // TODO CALL API
-      console.log("add member", i);
-
-    },
-    deleteTeam(i) {
-      // TODO CALL API
-      console.log("delete Team", i);
-      this.teams = this.teams.filter(t=> t.name !== i.name)
     }
   },
   mounted() {

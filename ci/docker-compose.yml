@@ -7,8 +7,7 @@ version : '3'
 services:
     api:
         container_name: berthieresteban/timemanager_api
-        build:
-            context: ./api
+        image: berthieresteban/timemanager_api
         environment:
             PGUSER: postgres
             PGPASSWORD: postgres
@@ -20,8 +19,7 @@ services:
         depends_on:
             - db
     front:
-        build:
-            context: ./frontend
+        image: berthieresteban/timemanager_front
         ports:
             - "8080:8080"
         container_name: berthieresteban/timemanager_front
@@ -34,7 +32,6 @@ services:
             PGDATA: /var/lib/postgresql/data/pgdata
         restart: always
         volumes:
-            - "/var/run/postgres/postgres.sock:/var/run/postgres/postgres.sock"
             - "dbdata:/var/lib/postgresql/data"
 volumes:
     dbdata:
