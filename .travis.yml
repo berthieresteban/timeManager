@@ -15,12 +15,12 @@ jobs:
     #     - docker login -u $DOCKERUSERNAME -p $DOCKERPASSWORD
     #     - docker build
     #     - docker push berthieresteban/timemanager_api:latest
-    # - stage: Deploy Front
-    #   if: type = push AND branch = master
-    #   script:
-    #     - cd ./frontend
-    #     - npm run build
-
-    #     - docker login -u $DOCKERUSERNAME -p $DOCKERPASSWORD
-    #     - docker build
-    #     - docker push berthieresteban/timemanager_api:latest
+    - stage: Deploy Front
+      if: type = push AND branch = master
+      install:
+        - pip install awscli --upgrade --user
+      script:
+        - cd ./frontend
+        - npm install
+        - npm run build
+        - aws s3 sync ./dist/ s3://timemanager
