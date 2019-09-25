@@ -245,16 +245,6 @@ export default {
         daysOfMonth = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
       for (i of Object.keys(test)) {
-        // console.log(i);
-        // const date = i.split("-");
-        // if (date[2] - 1 <= daysOfMonth[date[1] - 1]) {
-        //   const yes = `${date[0]}-${date[1]}-${date[2] - 1}`;
-        //   if (!test[yes] && j !== 1) {
-        //     console.log('okkkkkkkk');
-
-        //     arr.push({ start: 0, end:0, date: yes });
-        //   }
-        // }
         arr.push({
           date: test[i].date,
           start: test[i].start,
@@ -262,7 +252,6 @@ export default {
         });
         j++;
       }
-      console.log(arr, this.lineData);
 
       this.lineData = arr;
     },

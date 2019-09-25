@@ -147,8 +147,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.editMode);
-
     if (!this.editMode || this.editMode === undefined) {
       this.creationMode = true;
     } else {

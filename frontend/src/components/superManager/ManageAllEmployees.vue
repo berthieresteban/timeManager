@@ -57,14 +57,6 @@ export default {
       this.dialog = false;
     },
     confirmUpdateRole(value) {
-      console.log(
-        "changing role of ",
-        this.employee.username,
-        " from ",
-        this.employee.roleid,
-        " to ",
-        value
-      );
       this.employee = null;
       this.dialog = false;
     },

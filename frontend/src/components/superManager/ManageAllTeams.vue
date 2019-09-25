@@ -63,18 +63,14 @@ export default {
     },
     deleteMemberFromTeam(i, e) {
       // TODO CALL API
-      console.log("delete member from team", i, e);
       const idx = this.teams.findIndex(t => t.name === i.name)
       this.teams[idx].employee = this.teams[idx].employee.filter(em => em.id !== e.id)
     },
     addMember(i) {
       // TODO CALL API
-      console.log("add member", i);
-
     },
     deleteTeam(i) {
       // TODO CALL API
-      console.log("delete Team", i);
       this.teams = this.teams.filter(t=> t.name !== i.name)
     }
   },

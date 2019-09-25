@@ -55,7 +55,6 @@ export default {
     let role = this.getRole(resp2.data.roleid);
 
     this.$router.push(`/${role}/${this.$store.state.user.id}`).catch(e => {
-      console.log(e);
     });
   },
   methods: {
@@ -102,8 +101,6 @@ export default {
         announcer: this.$announcer
       });
       let role = this.getRole(resp2.data.roleid);
-      console.log('role', role);
-
       this.$router.push(`/${role}/${this.$store.state.user.id}`);
     }
   }

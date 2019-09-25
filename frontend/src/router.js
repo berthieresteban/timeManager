@@ -45,20 +45,17 @@ const authGuard = (roleid, to) => {
   }
   // If user tried to access to another an interface of another role
   if (!to.fullPath.includes(role)) {
-    console.log('error1');
     return false;
   }
   // If user not logged or user not haven't the good roleid
   if (!user.roleid || !user.id || user.roleid !== roleid) {
-    console.log('error2', roleid, user.roleid);
     return false;
   }
   const employeeID = to.fullPath.split('/')[2];
   const currentID = user.id.toString();
   // If try to access to interface of another user
   if (employeeID !== currentID) {
-    console.log('error3');
-    return false;
+s    return false;
   }
   return true;
 }

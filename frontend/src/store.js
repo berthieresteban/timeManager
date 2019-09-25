@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import VueAnnouncer from 'vue-announcer'
 
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 
@@ -16,11 +15,10 @@ const store = new Vuex.Store({
       displayed: false,
       text: "",
     },
-    // host:"192.168.43.195",
-    host: "localhost",
+    host: "15.188.8.203",
     port: "4000",
-    // apiRoute: "http://192.168.43.195:4000/api",
-    apiRoute: "http://localhost:4000/api",
+    // apiRoute: "http://localhost:4000/api",
+    apiRoute: "http://15.188.8.203:4000/api",
     logged: false,
     token: null,
     user: {

@@ -140,7 +140,6 @@ export default {
     },
     handleCreateWorkingTime() {
       if (this.startTime >= this.endTime) {
-        console.log("erreur");
         return;
       }
       const start = `${this.datePicker} ${this.startTime}:00`;
