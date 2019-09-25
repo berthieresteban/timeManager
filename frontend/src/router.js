@@ -55,7 +55,7 @@ const authGuard = (roleid, to) => {
   const currentID = user.id.toString();
   // If try to access to interface of another user
   if (employeeID !== currentID) {
-s    return false;
+    return false;
   }
   return true;
 }
