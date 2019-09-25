@@ -27,13 +27,13 @@ jobs:
         - cd ./frontend
         - npm install
         - npm run build
-      deploy:
-        provider: s3
-        access_key_id: $AWS_ACCESS_KEY_ID
-        secret_access_key: $AWS_SECRET_ACCESS_KEY
-        bucket: timemanager
-        skip_cleanup: true
-        region: eu-west-3
-        local_dir: dist
-        cache_control: max-age=604800
-        # - aws s3 sync ./dist/ s3://timemanager --region eu-west-3c --delete
+        - aws s3 sync ./dist/ s3://timemanager --delete
+      # deploy:
+      #   provider: s3
+      #   access_key_id: $AWS_ACCESS_KEY_ID
+      #   secret_access_key: $AWS_SECRET_ACCESS_KEY
+      #   bucket: timemanager
+      #   skip_cleanup: true
+      #   region: eu-west-3
+      #   local_dir: dist
+      #   cache_control: max-age=604800
