@@ -9,3 +9,18 @@ jobs:
       script:
         - ./ci/tests.sh
         - ./api/test/test_api.sh
+    # - stage: Deploy Back
+    #   if: type = push AND branch = master
+    #   script:
+    #     - docker login -u $DOCKERUSERNAME -p $DOCKERPASSWORD
+    #     - docker build
+    #     - docker push berthieresteban/timemanager_api:latest
+    # - stage: Deploy Front
+    #   if: type = push AND branch = master
+    #   script:
+    #     - cd ./frontend
+    #     - npm run build
+
+    #     - docker login -u $DOCKERUSERNAME -p $DOCKERPASSWORD
+    #     - docker build
+    #     - docker push berthieresteban/timemanager_api:latest
