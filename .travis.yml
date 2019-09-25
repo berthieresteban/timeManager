@@ -5,10 +5,9 @@ services:
 jobs:
   include:
     - stage: Tests API
-      if: type = pull_request OR type = push AND branch = master
+      if: type = pull_request AND branch = master
       script:
         - ./ci/tests.sh
-        - ./api/test/test_api.sh
     # - stage: Deploy Back
     #   if: type = push AND branch = master
     #   script:
