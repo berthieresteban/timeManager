@@ -12,7 +12,7 @@ jobs:
       if: type = push AND branch = master
       script:
         - docker login -u $DOCKERUSERNAME -p $DOCKERPASSWORD
-        - docker build
+        - docker-compose build
         - docker push berthieresteban/timemanager_api:latest
     - stage: Deploy Front
       if: type = push AND branch = master
