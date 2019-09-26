@@ -8,12 +8,12 @@ jobs:
       if: type = pull_request AND branch = master
       script:
         - ./ci/tests.sh
-    # - stage: Deploy Back
-    #   if: type = push AND branch = master
-    #   script:
-    #     - docker login -u $DOCKERUSERNAME -p $DOCKERPASSWORD
-    #     - docker build
-    #     - docker push berthieresteban/timemanager_api:latest
+    - stage: Deploy Back
+      if: type = push AND branch = master
+      script:
+        - docker login -u $DOCKERUSERNAME -p $DOCKERPASSWORD
+        - docker build
+        - docker push berthieresteban/timemanager_api:latest
     - stage: Deploy Front
       if: type = push AND branch = master
       addons:
@@ -28,12 +28,3 @@ jobs:
         - npm install
         - npm run build
         - aws s3 sync ./dist/ s3://timemanager --delete
-      # deploy:
-      #   provider: s3
-      #   access_key_id: $AWS_ACCESS_KEY_ID
-      #   secret_access_key: $AWS_SECRET_ACCESS_KEY
-      #   bucket: timemanager
-      #   skip_cleanup: true
-      #   region: eu-west-3
-      #   local_dir: dist
-      #   cache_control: max-age=604800
