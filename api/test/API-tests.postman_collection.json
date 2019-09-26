@@ -1,291 +1,199 @@
 {
 	"info": {
-		"_postman_id": "41ca4c03-9d0f-4ecc-9d2f-4fece6d45864",
+		"_postman_id": "369b3645-e8fa-4eff-8366-47184bd3df63",
 		"name": "API tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "user",
+			"name": "Set Environment",
 			"item": [
 				{
-					"name": "userCreation",
-					"item": [
+					"name": "Admin auth",
+					"event": [
 						{
-							"name": "Create user",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
-										"exec": [
-											"pm.test(\"Successful POST request\", function () {",
-											"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
-											"});",
-											"",
-											"pm.test(\"email\", function () {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"    pm.expect(jsonData.data.email).to.eql(\"user1@test.com\");",
-											"});",
-											"",
-											"pm.test(\"email\", function () {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"    pm.expect(jsonData.data.username).to.eql(\"user1\");",
-											"});",
-											"",
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"user_id\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
+							"listen": "test",
+							"script": {
+								"id": "350d2dc2-27a1-46d5-82bf-9584b77617f0",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+									"});",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"admin_token\", jsonData.token);"
 								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"user1\",\n\t\t\"email\": \"user1@test.com\"\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users"
-									],
-									"query": [
-										{
-											"key": "email",
-											"value": "test",
-											"disabled": true
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete user created",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "833deea9-b4c1-4e5f-a62d-f3e7abc0cd97",
-										"exec": [
-											"pm.test(\"Successful DELETE request\", function () {",
-											"    pm.expect(pm.response.code).to.be.oneOf([204]);",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
+								"type": "text/javascript"
+							}
 						}
 					],
-					"_postman_isSubFolder": true
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"auth\": {\n\t\t\"username\": \"admin\",\n\t\t\"password\": \"admin\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4000/auth",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
 				},
 				{
-					"name": "userUpdate",
+					"name": "Create Employee",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});",
+									"",
+									"var jsonData = JSON.parse(responseBody);",
+									"pm.environment.set(\"employee_id\", jsonData.user);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "session_jwt",
+								"type": "text",
+								"value": "{{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"user\": {\n\t\t\"username\": \"employee\",\n\t\t\"email\": \"employee@employee.com\",\n\t\t\"password\": \"employee\",\n\t\t\"roleid\": \"1\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Manager",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "session_jwt",
+								"type": "text",
+								"value": "{{admin_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"user\": {\n\t\t\"username\": \"manager\",\n\t\t\"email\": \"manager@manager.com\",\n\t\t\"password\": \"manager\",\n\t\t\"roleid\": \"2\"\n\t}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Employee",
+			"item": [
+				{
+					"name": "auth & get",
 					"item": [
 						{
-							"name": "Create user",
+							"name": "Employee auth",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
-										"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
+										"id": "67c2d97b-624a-44a0-b337-50985ad16d9c",
 										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"user_id\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"user1\",\n\t\t\"email\": \"user1@test.com\"\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users?",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users"
-									],
-									"query": [
-										{
-											"key": "username",
-											"value": "test",
-											"disabled": true
-										},
-										{
-											"key": "email",
-											"value": "test",
-											"disabled": true
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Update user created",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "c347d178-9dc2-4f5a-93df-9409d87e44be",
-										"exec": [
-											"pm.test(\"Successful PUT request\", function () {",
+											"pm.test(\"Successful POST request\", function () {",
 											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
 											"});",
 											"",
-											"pm.test(\"email_test\", function () {",
+											"pm.test(\"token\", function () {",
 											"    var jsonData = JSON.parse(responseBody);",
-											"    pm.expect(jsonData.data.email).to.eql(\"user2@test.com\");",
+											"    pm.expect(jsonData.token).to.not.eql(null);",
 											"});",
 											"",
-											"pm.test(\"username_test\", function () {",
+											"pm.test(\"status\", function () {",
 											"    var jsonData = JSON.parse(responseBody);",
-											"    pm.expect(jsonData.data.username).to.eql(\"user2\");",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "PUT",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"user2\",\n\t\t\"email\": \"user2@test.com\"\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete user created",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "833deea9-b4c1-4e5f-a62d-f3e7abc0cd97",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"_postman_isSubFolder": true
-				},
-				{
-					"name": "userDelete",
-					"item": [
-						{
-							"name": "Create user",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
-										"exec": [
+											"    pm.expect(jsonData.status).to.eql(true);",
+											"});",
+											"",
 											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"user_id\", jsonData.data.id);"
+											"pm.environment.set(\"employee_token\", jsonData.token);",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"employee_id\", jsonData.user);"
 										],
 										"type": "text/javascript"
 									}
@@ -303,138 +211,24 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"user1\",\n\t\t\"email\": \"user1@test.com\"\n\t}\n}"
+									"raw": "{\n\t\"auth\": {\n\t\t\"username\": \"employee\",\n\t\t\"password\": \"employee\"\n\t}\n}"
 								},
 								"url": {
-									"raw": "http://localhost:4000/api/users",
+									"raw": "http://localhost:4000/auth",
 									"protocol": "http",
 									"host": [
 										"localhost"
 									],
 									"port": "4000",
 									"path": [
-										"api",
-										"users"
-									],
-									"query": [
-										{
-											"key": "username",
-											"value": "test",
-											"disabled": true
-										},
-										{
-											"key": "email",
-											"value": "test",
-											"disabled": true
-										}
+										"auth"
 									]
 								}
 							},
 							"response": []
 						},
 						{
-							"name": "Delete user created",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "833deea9-b4c1-4e5f-a62d-f3e7abc0cd97",
-										"exec": [
-											"pm.test(\"Successful DELETE request\", function () {",
-											"    pm.expect(pm.response.code).to.be.oneOf([204]);",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"_postman_isSubFolder": true
-				},
-				{
-					"name": "userGet",
-					"item": [
-						{
-							"name": "Create user",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"user_id\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"user1\",\n\t\t\"email\": \"user1@test.com\"\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users"
-									],
-									"query": [
-										{
-											"key": "username",
-											"value": "test",
-											"disabled": true
-										},
-										{
-											"key": "email",
-											"value": "test",
-											"disabled": true
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get user created by id",
+							"name": "Get current employee",
 							"event": [
 								{
 									"listen": "test",
@@ -447,230 +241,17 @@
 											"",
 											"pm.test(\"email_test\", function () {",
 											"    var jsonData = JSON.parse(responseBody);",
-											"    pm.expect(jsonData.data.email).to.eql(\"user1@test.com\");",
+											"    pm.expect(jsonData.data.email).to.eql(\"employee@employee.com\");",
 											"});",
 											"",
 											"pm.test(\"username_test\", function () {",
 											"    var jsonData = JSON.parse(responseBody);",
-											"    pm.expect(jsonData.data.username).to.eql(\"user1\");",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "GET",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete user created",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "833deea9-b4c1-4e5f-a62d-f3e7abc0cd97",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"_postman_isSubFolder": true
-				},
-				{
-					"name": "userGetAll",
-					"item": [
-						{
-							"name": "Create user",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"user_id\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"user1\",\n\t\t\"email\": \"user1@test.com\"\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users"
-									],
-									"query": [
-										{
-											"key": "username",
-											"value": "test",
-											"disabled": true
-										},
-										{
-											"key": "email",
-											"value": "test",
-											"disabled": true
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create user bis",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"user_id2\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"user2\",\n\t\t\"email\": \"user2@test.com\"\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users"
-									],
-									"query": [
-										{
-											"key": "username",
-											"value": "test",
-											"disabled": true
-										},
-										{
-											"key": "email",
-											"value": "test",
-											"disabled": true
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get all users",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "be63ec3f-6379-4464-89b5-1f17ff7c9088",
-										"exec": [
-											"pm.test(\"Successful GET request\", function () {",
-											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"    pm.expect(jsonData.data.username).to.eql(\"employee\");",
 											"});",
 											"",
-											"pm.test(\"email_test\", function () {",
+											"pm.test(\"role_test\", function () {",
 											"    var jsonData = JSON.parse(responseBody);",
-											"    const found = jsonData.data.find(el => el.email === \"user1@test.com\")",
-											"    pm.expect(found).not.equal(undefined);",
-											"});",
-											"",
-											"pm.test(\"username_test\", function () {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"    const found = jsonData.data.find(el => el.username === \"user1\")",
-											"    pm.expect(found).not.equal(undefined);",
-											"});",
-											"",
-											"pm.test(\"email_test\", function () {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"    const found = jsonData.data.find(el => el.email === \"user2@test.com\")",
-											"    pm.expect(found).not.equal(undefined);",
-											"});",
-											"",
-											"pm.test(\"username_test\", function () {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"    const found = jsonData.data.find(el => el.username === \"user2\")",
-											"    pm.expect(found).not.equal(undefined);",
+											"    pm.expect(jsonData.data.roleid).to.eql(1);",
 											"});",
 											""
 										],
@@ -680,286 +261,24 @@
 							],
 							"request": {
 								"method": "GET",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users"
-									],
-									"query": [
-										{
-											"key": "email",
-											"value": "email",
-											"disabled": true
-										},
-										{
-											"key": "username",
-											"value": "username",
-											"disabled": true
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete user created",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "833deea9-b4c1-4e5f-a62d-f3e7abc0cd97",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete user created bis",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "833deea9-b4c1-4e5f-a62d-f3e7abc0cd97",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users/{{user_id2}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users",
-										"{{user_id2}}"
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"_postman_isSubFolder": true
-				}
-			]
-		},
-		{
-			"name": "workingtime",
-			"item": [
-				{
-					"name": "workingtimeCreation",
-					"item": [
-						{
-							"name": "Create user",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"user_id\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
 								"header": [
 									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"user1\",\n\t\t\"email\": \"user1@test.com\"\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create working time",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "fd7b33a2-f19e-4b4b-bee4-b1ad2a97023b",
-										"exec": [
-											"pm.test(\"Successful POST request\", function () {",
-											"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
-											"});",
-											"",
-											"pm.test(\"start_test\", function () {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"    pm.expect(jsonData.data.start).to.eql(\"2019-09-09T09:30:27Z\");",
-											"});",
-											"",
-											"pm.test(\"end_test\", function () {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"    pm.expect(jsonData.data.end).to.eql(\"2019-09-09T17:30:27Z\");",
-											"});",
-											"",
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"workingtime_id\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
+										"key": "session_jwt",
+										"value": "{{employee_token}}",
+										"type": "text"
+									},
 									{
 										"key": "Content-Type",
-										"name": "Content-Type",
 										"value": "application/json",
 										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"workingtime\": {\n\t\t\"start\": \"2019-09-09 09:30:27\",\n\t\t\"end\": \"2019-09-09 17:30:27\",\n\t\t\"user\": {{user_id}}\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"workingtimes",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete working time",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "79be2d0a-7d65-4778-a867-d15db2d3e559",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
 									"raw": ""
 								},
 								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{workingtime_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"workingtimes",
-										"{{workingtime_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete user created",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "833deea9-b4c1-4e5f-a62d-f3e7abc0cd97",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users/{{user_id}}",
+									"raw": "http://localhost:4000/api/users/{{employee_id}}",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -968,7 +287,7 @@
 									"path": [
 										"api",
 										"users",
-										"{{user_id}}"
+										"{{employee_id}}"
 									]
 								}
 							},
@@ -978,1098 +297,8 @@
 					"_postman_isSubFolder": true
 				},
 				{
-					"name": "workingtimeUpdate",
+					"name": "employee clock",
 					"item": [
-						{
-							"name": "Create user",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"user_id\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"user1\",\n\t\t\"email\": \"user1@test.com\"\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create working time",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "fd7b33a2-f19e-4b4b-bee4-b1ad2a97023b",
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"workingtime_id\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"workingtime\": {\n\t\t\"start\": \"2019-09-09 09:30:27\",\n\t\t\"end\": \"2019-09-09 17:30:27\",\n\t\t\"user\": {{user_id}}\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"workingtimes",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Update working time",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "0f8484eb-079d-4fd0-8324-15ea6b825c12",
-										"exec": [
-											"pm.test(\"Successful PUT request\", function () {",
-											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
-											"});",
-											"",
-											"pm.test(\"start_test\", function () {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"    pm.expect(jsonData.data.start).to.eql(\"2019-09-09T09:42:27Z\");",
-											"});",
-											"",
-											"pm.test(\"end_test\", function () {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"    pm.expect(jsonData.data.end).to.eql(\"2019-09-09T17:42:27Z\");",
-											"});",
-											"",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "PUT",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"workingtime\": {\n\t\t\"start\": \"2019-09-09 09:42:27\",\n\t\t\"end\": \"2019-09-09 17:42:27\",\n\t\t\"user\": {{user_id}}\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{workingtime_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"workingtimes",
-										"{{workingtime_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete working time",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "79be2d0a-7d65-4778-a867-d15db2d3e559",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{workingtime_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"workingtimes",
-										"{{workingtime_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete user created",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "833deea9-b4c1-4e5f-a62d-f3e7abc0cd97",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"_postman_isSubFolder": true
-				},
-				{
-					"name": "workingTimeDelete",
-					"item": [
-						{
-							"name": "Create user",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"user_id\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"user1\",\n\t\t\"email\": \"user1@test.com\"\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create working time",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "fd7b33a2-f19e-4b4b-bee4-b1ad2a97023b",
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"workingtime_id\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"workingtime\": {\n\t\t\"start\": \"2019-09-09 09:30:27\",\n\t\t\"end\": \"2019-09-09 17:30:27\",\n\t\t\"user\": {{user_id}}\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"workingtimes",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete working time",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "79be2d0a-7d65-4778-a867-d15db2d3e559",
-										"exec": [
-											"pm.test(\"Successful DELETE request\", function () {",
-											"    pm.expect(pm.response.code).to.be.oneOf([204]);",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{workingtime_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"workingtimes",
-										"{{workingtime_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete user created",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "833deea9-b4c1-4e5f-a62d-f3e7abc0cd97",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"_postman_isSubFolder": true
-				},
-				{
-					"name": "workingtimeGetByStartEnd",
-					"item": [
-						{
-							"name": "Create user",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"user_id\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"user1\",\n\t\t\"email\": \"user1@test.com\"\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create working time",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "fd7b33a2-f19e-4b4b-bee4-b1ad2a97023b",
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"workingtime_id\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"workingtime\": {\n\t\t\"start\": \"2019-09-09 09:30:27\",\n\t\t\"end\": \"2019-09-09 17:30:27\",\n\t\t\"user\": {{user_id}}\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"workingtimes",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create working time bis",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "fd7b33a2-f19e-4b4b-bee4-b1ad2a97023b",
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"workingtime_id_bis\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"workingtime\": {\n\t\t\"start\": \"2019-09-10 09:30:27\",\n\t\t\"end\": \"2019-09-10 17:30:27\",\n\t\t\"user\": {{user_id}}\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"workingtimes",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create working time ter",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "fd7b33a2-f19e-4b4b-bee4-b1ad2a97023b",
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"workingtime_id_ter\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"workingtime\": {\n\t\t\"start\": \"2019-09-11 09:30:27\",\n\t\t\"end\": \"2019-09-11 17:30:27\",\n\t\t\"user\": {{user_id}}\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"workingtimes",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get working time by id",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "c5133a99-1533-487a-b61a-f1745c716289",
-										"exec": [
-											"pm.test(\"Successful GET request\", function () {",
-											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
-											"});",
-											"",
-											"pm.test(\"start_test\", function () {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"    const found = jsonData.data.find(el => el.start === \"2019-09-10T09:30:27Z\");",
-											"    pm.expect(found).not.equal(undefined);",
-											"});",
-											"",
-											"pm.test(\"end_test\", function () {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"    const found = jsonData.data.find(el => el.end === \"2019-09-10T17:30:27Z\");",
-											"    pm.expect(found).not.equal(undefined);",
-											"});",
-											"",
-											"",
-											"",
-											"pm.test(\"start_test\", function () {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"    const found = jsonData.data.find(el => el.start === \"2019-09-09T09:30:27Z\");",
-											"    pm.expect(found).equal(undefined);",
-											"});",
-											"",
-											"pm.test(\"end_test\", function () {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"    const found = jsonData.data.find(el => el.end === \"2019-09-09T17:30:27Z\");",
-											"    pm.expect(found).equal(undefined);",
-											"});",
-											"",
-											"",
-											"",
-											"pm.test(\"start_test\", function () {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"    const found = jsonData.data.find(el => el.start === \"2019-09-11T09:30:27Z\");",
-											"    pm.expect(found).equal(undefined);",
-											"});",
-											"",
-											"pm.test(\"end_test\", function () {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"    const found = jsonData.data.find(el => el.end === \"2019-09-11T17:30:27Z\");",
-											"    pm.expect(found).equal(undefined);",
-											"});",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "GET",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{user_id}}?start=2019-09-10 09:00:27&end=2019-09-10 18:00:27",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"workingtimes",
-										"{{user_id}}"
-									],
-									"query": [
-										{
-											"key": "start",
-											"value": "2019-09-10 09:00:27"
-										},
-										{
-											"key": "end",
-											"value": "2019-09-10 18:00:27"
-										}
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete working time",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "79be2d0a-7d65-4778-a867-d15db2d3e559",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{workingtime_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"workingtimes",
-										"{{workingtime_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete working time bis",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "79be2d0a-7d65-4778-a867-d15db2d3e559",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{workingtime_id_bis}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"workingtimes",
-										"{{workingtime_id_bis}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete working time ter",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "79be2d0a-7d65-4778-a867-d15db2d3e559",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{workingtime_id_ter}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"workingtimes",
-										"{{workingtime_id_ter}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete user created",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "833deea9-b4c1-4e5f-a62d-f3e7abc0cd97",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"_postman_isSubFolder": true
-				},
-				{
-					"name": "workingtimeGetById",
-					"item": [
-						{
-							"name": "Create user",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"user_id\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"user1\",\n\t\t\"email\": \"user1@test.com\"\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create working time",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "fd7b33a2-f19e-4b4b-bee4-b1ad2a97023b",
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"workingtime_id\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"workingtime\": {\n\t\t\"start\": \"2019-09-09 09:30:27\",\n\t\t\"end\": \"2019-09-09 17:30:27\",\n\t\t\"user\": {{user_id}}\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"workingtimes",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get working time by ids",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "b5d0e902-78f9-472e-84de-d12333c6d3eb",
-										"exec": [
-											"pm.test(\"Successful GET request\", function () {",
-											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
-											"});",
-											"",
-											"pm.test(\"start_test\", function () {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"    pm.expect(jsonData.data.start).to.eql(\"2019-09-09T09:30:27Z\");",
-											"});",
-											"",
-											"pm.test(\"end_test\", function () {",
-											"    var jsonData = JSON.parse(responseBody);",
-											"    pm.expect(jsonData.data.end).to.eql(\"2019-09-09T17:30:27Z\");",
-											"});",
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "GET",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{user_id}}/{{workingtime_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"workingtimes",
-										"{{user_id}}",
-										"{{workingtime_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete working time",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "79be2d0a-7d65-4778-a867-d15db2d3e559",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{workingtime_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"workingtimes",
-										"{{workingtime_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete user created",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "833deea9-b4c1-4e5f-a62d-f3e7abc0cd97",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"_postman_isSubFolder": true
-				}
-			]
-		},
-		{
-			"name": "clock",
-			"item": [
-				{
-					"name": "clockCreate",
-					"item": [
-						{
-							"name": "Create user",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"user_id\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"username_test\",\n\t\t\"email\": \"email@test.com\"\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users"
-									]
-								}
-							},
-							"response": []
-						},
 						{
 							"name": "Create clock",
 							"event": [
@@ -2090,98 +319,7 @@
 											"pm.test(\"status_test\", function () {",
 											"    var jsonData = JSON.parse(responseBody);",
 											"    pm.expect(jsonData.data.status).to.eql(true);",
-											"});",
-											"",
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"clock_id\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"clock\": {\n\t\t\"time\": \"2019-09-09 09:42:27\",\n\t\t\"status\": true,\n\t\t\"user\": {{user_id}}\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/clocks/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"clocks",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete user created",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "833deea9-b4c1-4e5f-a62d-f3e7abc0cd97",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"_postman_isSubFolder": true
-				},
-				{
-					"name": "clockGet",
-					"item": [
-						{
-							"name": "Create user",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"user_id\", jsonData.data.id);"
+											"});"
 										],
 										"type": "text/javascript"
 									}
@@ -2195,14 +333,19 @@
 										"name": "Content-Type",
 										"type": "text",
 										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"value": "{{employee_token}}",
+										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"user1\",\n\t\t\"email\": \"user1@test.com\"\n\t}\n}"
+									"raw": "{\n\t\"clock\": {\n\t\t\"time\": \"2019-09-09 09:42:27\",\n\t\t\"status\": true,\n\t\t\"user\": {{employee_id}}\n\t}\n}"
 								},
 								"url": {
-									"raw": "http://localhost:4000/api/users",
+									"raw": "http://localhost:4000/api/clocks/{{employee_id}}",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -2210,7 +353,8 @@
 									"port": "4000",
 									"path": [
 										"api",
-										"users"
+										"clocks",
+										"{{employee_id}}"
 									]
 								}
 							},
@@ -2224,8 +368,10 @@
 									"script": {
 										"id": "4fa4a837-dcdd-4d41-a3d2-05418bbad590",
 										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"clock_id\", jsonData.data.id);"
+											"pm.test(\"Successful POST request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
+											"});",
+											""
 										],
 										"type": "text/javascript"
 									}
@@ -2239,14 +385,19 @@
 										"name": "Content-Type",
 										"type": "text",
 										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"value": "{{employee_token}}",
+										"type": "text"
 									}
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"clock\": {\n\t\t\"time\": \"2019-09-09 09:42:27\",\n\t\t\"status\": true,\n\t\t\"user\": {{user_id}}\n\t}\n}"
+									"raw": "{\n\t\"clock\": {\n\t\t\"time\": \"2019-09-09 10:42:27\",\n\t\t\"status\": false,\n\t\t\"user\": {{employee_id}}\n\t}\n}"
 								},
 								"url": {
-									"raw": "http://localhost:4000/api/clocks/{{user_id}}",
+									"raw": "http://localhost:4000/api/clocks/{{employee_id}}",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -2255,7 +406,7 @@
 									"path": [
 										"api",
 										"clocks",
-										"{{user_id}}"
+										"{{employee_id}}"
 									]
 								}
 							},
@@ -2298,6 +449,11 @@
 										"name": "Content-Type",
 										"type": "text",
 										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "session_jwt",
+										"value": "{{employee_token}}",
+										"type": "text"
 									}
 								],
 								"body": {
@@ -2305,7 +461,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "http://localhost:4000/api/clocks/{{user_id}}",
+									"raw": "http://localhost:4000/api/clocks/{{employee_id}}",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -2314,44 +470,7 @@
 									"path": [
 										"api",
 										"clocks",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Delete user created",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "833deea9-b4c1-4e5f-a62d-f3e7abc0cd97",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": ""
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users",
-										"{{user_id}}"
+										"{{employee_id}}"
 									]
 								}
 							},
@@ -2361,142 +480,10 @@
 					"_postman_isSubFolder": true
 				},
 				{
-					"name": "clockCreateWorkingTime",
+					"name": "employee workingtime",
 					"item": [
 						{
-							"name": "Create user",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "6158a90a-6a01-4148-afbb-d7f9657aebe4",
-										"exec": [
-											"var jsonData = JSON.parse(responseBody);",
-											"pm.environment.set(\"user_id\", jsonData.data.id);"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"username_test\",\n\t\t\"email\": \"email@test.com\"\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/users",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"users"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create clock",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "4fa4a837-dcdd-4d41-a3d2-05418bbad590",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"value": "application/json",
-										"type": "text"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"clock\": {\n\t\t\"time\": \"2019-09-09 09:42:27\",\n\t\t\"status\": true,\n\t\t\"user\": {{user_id}}\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/clocks/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"clocks",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Create clock",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"id": "4fa4a837-dcdd-4d41-a3d2-05418bbad590",
-										"exec": [
-											""
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"name": "Content-Type",
-										"type": "text",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n\t\"clock\": {\n\t\t\"time\": \"2019-09-09 10:42:27\",\n\t\t\"status\": true,\n\t\t\"user\": {{user_id}}\n\t}\n}"
-								},
-								"url": {
-									"raw": "http://localhost:4000/api/clocks/{{user_id}}",
-									"protocol": "http",
-									"host": [
-										"localhost"
-									],
-									"port": "4000",
-									"path": [
-										"api",
-										"clocks",
-										"{{user_id}}"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "Get working time by id Copy",
+							"name": "Get working time by id",
 							"event": [
 								{
 									"listen": "test",
@@ -2509,14 +496,82 @@
 											"",
 											"pm.test(\"start_test\", function () {",
 											"    var jsonData = JSON.parse(responseBody);",
-											"    const found = jsonData.data.find(el => el.start === \"2019-09-09T09:42:27Z\");",
+											"    const found = jsonData.data.find(el => el.start === \"2019-09-10T09:42:27Z\");",
 											"    pm.expect(found).not.equal(undefined);",
 											"});",
 											"",
 											"pm.test(\"end_test\", function () {",
 											"    var jsonData = JSON.parse(responseBody);",
-											"    const found = jsonData.data.find(el => el.end === \"2019-09-09T10:42:27Z\");",
+											"    const found = jsonData.data.find(el => el.end === \"2019-09-10T10:42:27Z\");",
 											"    pm.expect(found).not.equal(undefined);",
+											"});",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"workingtime_id\", jsonData.data[0].id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{employee_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/workingtimes/{{employee_id}}?start=2019-09-09T08:42:27Z&end=2019-09-09T11:42:27Z",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"workingtimes",
+										"{{employee_id}}"
+									],
+									"query": [
+										{
+											"key": "start",
+											"value": "2019-09-09T08:42:27Z"
+										},
+										{
+											"key": "end",
+											"value": "2019-09-09T11:42:27Z"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get working time by ids",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b5d0e902-78f9-472e-84de-d12333c6d3eb",
+										"exec": [
+											"pm.test(\"Successful GET request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"start_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.start).to.eql(\"2019-09-09T09:42:27Z\");",
+											"});",
+											"",
+											"pm.test(\"end_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.end).to.eql(\"2019-09-09T10:42:27Z\");",
 											"});",
 											""
 										],
@@ -2526,13 +581,19 @@
 							],
 							"request": {
 								"method": "GET",
-								"header": [],
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{employee_token}}",
+										"type": "text"
+									}
+								],
 								"body": {
 									"mode": "raw",
 									"raw": ""
 								},
 								"url": {
-									"raw": "http://localhost:4000/api/workingtimes/{{user_id}}?start=2019-09-09 09:00:27&end=2019-09-09 18:00:27",
+									"raw": "http://localhost:4000/api/workingtimes/{{employee_id}}/{{workingtime_id}}",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -2541,30 +602,45 @@
 									"path": [
 										"api",
 										"workingtimes",
-										"{{user_id}}"
-									],
-									"query": [
-										{
-											"key": "start",
-											"value": "2019-09-09 09:00:27"
-										},
-										{
-											"key": "end",
-											"value": "2019-09-09 18:00:27"
-										}
+										"{{employee_id}}",
+										"{{workingtime_id}}"
 									]
 								}
 							},
 							"response": []
-						},
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "update employee",
+					"item": [
 						{
-							"name": "Delete user created",
+							"name": "Update username",
 							"event": [
 								{
 									"listen": "test",
 									"script": {
-										"id": "833deea9-b4c1-4e5f-a62d-f3e7abc0cd97",
+										"id": "c347d178-9dc2-4f5a-93df-9409d87e44be",
 										"exec": [
+											"pm.test(\"Successful PUT request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"email_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.email).to.eql(\"employee@employee.com\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.username).to.eql(\"employee2\");",
+											"});",
+											"",
+											"pm.test(\"role_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.roleid).to.eql(1);",
+											"});",
 											""
 										],
 										"type": "text/javascript"
@@ -2572,14 +648,26 @@
 								}
 							],
 							"request": {
-								"method": "DELETE",
-								"header": [],
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"type": "text",
+										"value": "{{employee_token}}"
+									}
+								],
 								"body": {
 									"mode": "raw",
-									"raw": ""
+									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"employee2\"\n\t}\n}"
 								},
 								"url": {
-									"raw": "http://localhost:4000/api/users/{{user_id}}",
+									"raw": "http://localhost:4000/api/users/{{employee_id}}",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -2588,8 +676,2591 @@
 									"path": [
 										"api",
 										"users",
-										"{{user_id}}"
+										"{{employee_id}}"
 									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c347d178-9dc2-4f5a-93df-9409d87e44be",
+										"exec": [
+											"pm.test(\"Successful PUT request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"email_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.email).to.eql(\"employee2@employee2.com\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.username).to.eql(\"employee2\");",
+											"});",
+											"",
+											"pm.test(\"role_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.roleid).to.eql(1);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"type": "text",
+										"value": "{{employee_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"user\": {\n\t\t\"email\": \"employee2@employee2.com\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/{{employee_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"{{employee_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c347d178-9dc2-4f5a-93df-9409d87e44be",
+										"exec": [
+											"pm.test(\"Successful PUT request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"email_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.email).to.eql(\"employee2@employee2.com\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.username).to.eql(\"employee2\");",
+											"});",
+											"",
+											"pm.test(\"role_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.roleid).to.eql(1);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"type": "text",
+										"value": "{{employee_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"user\": {\n\t\t\"password\": \"employee2\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/{{employee_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"{{employee_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Employee auth verify password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "67c2d97b-624a-44a0-b337-50985ad16d9c",
+										"exec": [
+											"pm.test(\"Successful GET request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"token\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.token).to.not.eql(null);",
+											"});",
+											"",
+											"pm.test(\"status\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.status).to.eql(true);",
+											"});",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"employee_token\", jsonData.token);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"auth\": {\n\t\t\"username\": \"employee2\",\n\t\t\"password\": \"employee2\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/auth",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"auth"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		},
+		{
+			"name": "Manager",
+			"item": [
+				{
+					"name": "auth & get",
+					"item": [
+						{
+							"name": "Manager auth",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "67c2d97b-624a-44a0-b337-50985ad16d9c",
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"status\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.status).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"token\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.token).to.not.eql(null);",
+											"});",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"manager_token\", jsonData.token);",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"manager_id\", jsonData.user);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"auth\": {\n\t\t\"username\": \"manager\",\n\t\t\"password\": \"manager\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/auth",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"auth"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get current manager",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2869598f-c505-4f7b-99b7-356f00801a4a",
+										"exec": [
+											"pm.test(\"Successful GET request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"email_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.email).to.eql(\"manager@manager.com\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.username).to.eql(\"manager\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.roleid).to.eql(2);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "manager clock",
+					"item": [
+						{
+							"name": "Create clock",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "4fa4a837-dcdd-4d41-a3d2-05418bbad590",
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+											"});",
+											"",
+											"pm.test(\"time_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.time).to.eql(\"2019-09-09T09:42:27Z\");",
+											"});",
+											"",
+											"pm.test(\"status_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.status).to.eql(true);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"clock\": {\n\t\t\"time\": \"2019-09-09 09:42:27\",\n\t\t\"status\": true,\n\t\t\"user\": {{manager_id}}\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/clocks/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"clocks",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create clock",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "4fa4a837-dcdd-4d41-a3d2-05418bbad590",
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"clock\": {\n\t\t\"time\": \"2019-09-09 10:42:27\",\n\t\t\"status\": false,\n\t\t\"user\": {{manager_id}}\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/clocks/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"clocks",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get clock",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "0f570a36-b77f-4fa8-b1b7-bc8c8de7ad2f",
+										"exec": [
+											"pm.test(\"Successful GET request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"time\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    const found = jsonData.data.find(el => el.time === \"2019-09-09T09:42:27Z\");",
+											"    pm.expect(found).not.equal(undefined);",
+											"    ",
+											"});",
+											"",
+											"pm.test(\"status\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    const found = jsonData.data.find(el => el.status === true);",
+											"    pm.expect(found).not.equal(undefined);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/clocks/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"clocks",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "manager workingtime",
+					"item": [
+						{
+							"name": "Get working time by id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c5133a99-1533-487a-b61a-f1745c716289",
+										"exec": [
+											"pm.test(\"Successful GET request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"start_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    const found = jsonData.data.find(el => el.start === \"2019-09-10T09:42:27Z\");",
+											"    pm.expect(found).not.equal(undefined);",
+											"});",
+											"",
+											"pm.test(\"end_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    const found = jsonData.data.find(el => el.end === \"2019-09-10T10:42:27Z\");",
+											"    pm.expect(found).not.equal(undefined);",
+											"});",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"workingtime_id\", jsonData.data[0].id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/workingtimes/{{manager_id}}?start=2019-09-09T08:42:27Z&end=2019-09-09T11:42:27Z",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"workingtimes",
+										"{{manager_id}}"
+									],
+									"query": [
+										{
+											"key": "start",
+											"value": "2019-09-09T08:42:27Z"
+										},
+										{
+											"key": "end",
+											"value": "2019-09-09T11:42:27Z"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get working time by ids",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b5d0e902-78f9-472e-84de-d12333c6d3eb",
+										"exec": [
+											"pm.test(\"Successful GET request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"start_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.start).to.eql(\"2019-09-09T09:42:27Z\");",
+											"});",
+											"",
+											"pm.test(\"end_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.end).to.eql(\"2019-09-09T10:42:27Z\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/workingtimes/{{manager_id}}/{{workingtime_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"workingtimes",
+										"{{manager_id}}",
+										"{{workingtime_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "manager teams workingtime",
+					"item": [
+						{
+							"name": "get employee WT",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create employee WT",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update employee WT",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "update manager",
+					"item": [
+						{
+							"name": "Update username",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c347d178-9dc2-4f5a-93df-9409d87e44be",
+										"exec": [
+											"pm.test(\"Successful PUT request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"email_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.email).to.eql(\"manager@manager.com\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.username).to.eql(\"manager2\");",
+											"});",
+											"",
+											"pm.test(\"role_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.roleid).to.eql(2);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"type": "text",
+										"value": "{{manager_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"manager2\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c347d178-9dc2-4f5a-93df-9409d87e44be",
+										"exec": [
+											"pm.test(\"Successful PUT request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"email_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.email).to.eql(\"manager2@manager2.com\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.username).to.eql(\"manager2\");",
+											"});",
+											"",
+											"pm.test(\"role_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.roleid).to.eql(2);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"type": "text",
+										"value": "{{manager_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"user\": {\n\t\t\"email\": \"manager2@manager2.com\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c347d178-9dc2-4f5a-93df-9409d87e44be",
+										"exec": [
+											"pm.test(\"Successful PUT request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"email_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.email).to.eql(\"manager2@manager2.com\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.username).to.eql(\"manager2\");",
+											"});",
+											"",
+											"pm.test(\"role_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.roleid).to.eql(2);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"type": "text",
+										"value": "{{manager_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"user\": {\n\t\t\"password\": \"manager2\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Manager auth verify password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "67c2d97b-624a-44a0-b337-50985ad16d9c",
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"status\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.status).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"token\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.token).to.not.eql(null);",
+											"});",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"manager_token\", jsonData.token);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"auth\": {\n\t\t\"username\": \"manager2\",\n\t\t\"password\": \"manager2\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/auth",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"auth"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		},
+		{
+			"name": "SuperManager",
+			"item": [
+				{
+					"name": "auth & get",
+					"item": [
+						{
+							"name": "Manager auth",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "67c2d97b-624a-44a0-b337-50985ad16d9c",
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"status\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.status).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"token\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.token).to.not.eql(null);",
+											"});",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"manager_token\", jsonData.token);",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"manager_id\", jsonData.user);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"auth\": {\n\t\t\"username\": \"manager\",\n\t\t\"password\": \"manager\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/auth",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"auth"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get current manager",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2869598f-c505-4f7b-99b7-356f00801a4a",
+										"exec": [
+											"pm.test(\"Successful GET request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"email_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.email).to.eql(\"manager@manager.com\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.username).to.eql(\"manager\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.roleid).to.eql(2);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "supermanager clock",
+					"item": [
+						{
+							"name": "Create clock",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "4fa4a837-dcdd-4d41-a3d2-05418bbad590",
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+											"});",
+											"",
+											"pm.test(\"time_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.time).to.eql(\"2019-09-09T09:42:27Z\");",
+											"});",
+											"",
+											"pm.test(\"status_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.status).to.eql(true);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"clock\": {\n\t\t\"time\": \"2019-09-09 09:42:27\",\n\t\t\"status\": true,\n\t\t\"user\": {{manager_id}}\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/clocks/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"clocks",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create clock",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "4fa4a837-dcdd-4d41-a3d2-05418bbad590",
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"clock\": {\n\t\t\"time\": \"2019-09-09 10:42:27\",\n\t\t\"status\": false,\n\t\t\"user\": {{manager_id}}\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/clocks/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"clocks",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get clock",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "0f570a36-b77f-4fa8-b1b7-bc8c8de7ad2f",
+										"exec": [
+											"pm.test(\"Successful GET request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"time\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    const found = jsonData.data.find(el => el.time === \"2019-09-09T09:42:27Z\");",
+											"    pm.expect(found).not.equal(undefined);",
+											"    ",
+											"});",
+											"",
+											"pm.test(\"status\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    const found = jsonData.data.find(el => el.status === true);",
+											"    pm.expect(found).not.equal(undefined);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/clocks/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"clocks",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "supermanager workingtime",
+					"item": [
+						{
+							"name": "Get working time by id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c5133a99-1533-487a-b61a-f1745c716289",
+										"exec": [
+											"pm.test(\"Successful GET request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"start_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    const found = jsonData.data.find(el => el.start === \"2019-09-10T09:42:27Z\");",
+											"    pm.expect(found).not.equal(undefined);",
+											"});",
+											"",
+											"pm.test(\"end_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    const found = jsonData.data.find(el => el.end === \"2019-09-10T10:42:27Z\");",
+											"    pm.expect(found).not.equal(undefined);",
+											"});",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"workingtime_id\", jsonData.data[0].id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/workingtimes/{{manager_id}}?start=2019-09-09T08:42:27Z&end=2019-09-09T11:42:27Z",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"workingtimes",
+										"{{manager_id}}"
+									],
+									"query": [
+										{
+											"key": "start",
+											"value": "2019-09-09T08:42:27Z"
+										},
+										{
+											"key": "end",
+											"value": "2019-09-09T11:42:27Z"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get working time by ids",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b5d0e902-78f9-472e-84de-d12333c6d3eb",
+										"exec": [
+											"pm.test(\"Successful GET request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"start_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.start).to.eql(\"2019-09-09T09:42:27Z\");",
+											"});",
+											"",
+											"pm.test(\"end_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.end).to.eql(\"2019-09-09T10:42:27Z\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/workingtimes/{{manager_id}}/{{workingtime_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"workingtimes",
+										"{{manager_id}}",
+										"{{workingtime_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "update supermanager",
+					"item": [
+						{
+							"name": "Update username",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c347d178-9dc2-4f5a-93df-9409d87e44be",
+										"exec": [
+											"pm.test(\"Successful PUT request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"email_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.email).to.eql(\"manager@manager.com\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.username).to.eql(\"manager2\");",
+											"});",
+											"",
+											"pm.test(\"role_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.roleid).to.eql(2);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"type": "text",
+										"value": "{{manager_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"manager2\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c347d178-9dc2-4f5a-93df-9409d87e44be",
+										"exec": [
+											"pm.test(\"Successful PUT request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"email_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.email).to.eql(\"manager2@manager2.com\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.username).to.eql(\"manager2\");",
+											"});",
+											"",
+											"pm.test(\"role_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.roleid).to.eql(2);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"type": "text",
+										"value": "{{manager_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"user\": {\n\t\t\"email\": \"manager2@manager2.com\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c347d178-9dc2-4f5a-93df-9409d87e44be",
+										"exec": [
+											"pm.test(\"Successful PUT request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"email_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.email).to.eql(\"manager2@manager2.com\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.username).to.eql(\"manager2\");",
+											"});",
+											"",
+											"pm.test(\"role_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.roleid).to.eql(2);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"type": "text",
+										"value": "{{manager_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"user\": {\n\t\t\"password\": \"manager2\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Manager auth verify password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "67c2d97b-624a-44a0-b337-50985ad16d9c",
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"status\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.status).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"token\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.token).to.not.eql(null);",
+											"});",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"manager_token\", jsonData.token);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"auth\": {\n\t\t\"username\": \"manager2\",\n\t\t\"password\": \"manager2\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/auth",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"auth"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "teams",
+					"item": [
+						{
+							"name": "create team",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update team",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete team",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "employees workingtimes",
+					"item": [
+						{
+							"name": "get employee WT",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create employee WT",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update employee WT",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete employee WT",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "employees update",
+					"item": [
+						{
+							"name": "get all users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update user roleid",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		},
+		{
+			"name": "Administrator",
+			"item": [
+				{
+					"name": "auth & get",
+					"item": [
+						{
+							"name": "Manager auth",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "67c2d97b-624a-44a0-b337-50985ad16d9c",
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"status\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.status).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"token\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.token).to.not.eql(null);",
+											"});",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"manager_token\", jsonData.token);",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"manager_id\", jsonData.user);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"auth\": {\n\t\t\"username\": \"manager\",\n\t\t\"password\": \"manager\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/auth",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"auth"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get current manager",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "2869598f-c505-4f7b-99b7-356f00801a4a",
+										"exec": [
+											"pm.test(\"Successful GET request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"email_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.email).to.eql(\"manager@manager.com\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.username).to.eql(\"manager\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.roleid).to.eql(2);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "admin clock",
+					"item": [
+						{
+							"name": "Create clock",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "4fa4a837-dcdd-4d41-a3d2-05418bbad590",
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+											"});",
+											"",
+											"pm.test(\"time_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.time).to.eql(\"2019-09-09T09:42:27Z\");",
+											"});",
+											"",
+											"pm.test(\"status_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.status).to.eql(true);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"clock\": {\n\t\t\"time\": \"2019-09-09 09:42:27\",\n\t\t\"status\": true,\n\t\t\"user\": {{manager_id}}\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/clocks/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"clocks",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create clock",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "4fa4a837-dcdd-4d41-a3d2-05418bbad590",
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"clock\": {\n\t\t\"time\": \"2019-09-09 10:42:27\",\n\t\t\"status\": false,\n\t\t\"user\": {{manager_id}}\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/clocks/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"clocks",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get clock",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "0f570a36-b77f-4fa8-b1b7-bc8c8de7ad2f",
+										"exec": [
+											"pm.test(\"Successful GET request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"time\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    const found = jsonData.data.find(el => el.time === \"2019-09-09T09:42:27Z\");",
+											"    pm.expect(found).not.equal(undefined);",
+											"    ",
+											"});",
+											"",
+											"pm.test(\"status\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    const found = jsonData.data.find(el => el.status === true);",
+											"    pm.expect(found).not.equal(undefined);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/x-www-form-urlencoded"
+									},
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/clocks/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"clocks",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "admin workingtime",
+					"item": [
+						{
+							"name": "Get working time by id",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c5133a99-1533-487a-b61a-f1745c716289",
+										"exec": [
+											"pm.test(\"Successful GET request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"start_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    const found = jsonData.data.find(el => el.start === \"2019-09-10T09:42:27Z\");",
+											"    pm.expect(found).not.equal(undefined);",
+											"});",
+											"",
+											"pm.test(\"end_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    const found = jsonData.data.find(el => el.end === \"2019-09-10T10:42:27Z\");",
+											"    pm.expect(found).not.equal(undefined);",
+											"});",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"workingtime_id\", jsonData.data[0].id);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/workingtimes/{{manager_id}}?start=2019-09-09T08:42:27Z&end=2019-09-09T11:42:27Z",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"workingtimes",
+										"{{manager_id}}"
+									],
+									"query": [
+										{
+											"key": "start",
+											"value": "2019-09-09T08:42:27Z"
+										},
+										{
+											"key": "end",
+											"value": "2019-09-09T11:42:27Z"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get working time by ids",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "b5d0e902-78f9-472e-84de-d12333c6d3eb",
+										"exec": [
+											"pm.test(\"Successful GET request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"start_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.start).to.eql(\"2019-09-09T09:42:27Z\");",
+											"});",
+											"",
+											"pm.test(\"end_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.end).to.eql(\"2019-09-09T10:42:27Z\");",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{manager_token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/workingtimes/{{manager_id}}/{{workingtime_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"workingtimes",
+										"{{manager_id}}",
+										"{{workingtime_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "update admin",
+					"item": [
+						{
+							"name": "Update username",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c347d178-9dc2-4f5a-93df-9409d87e44be",
+										"exec": [
+											"pm.test(\"Successful PUT request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"email_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.email).to.eql(\"manager@manager.com\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.username).to.eql(\"manager2\");",
+											"});",
+											"",
+											"pm.test(\"role_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.roleid).to.eql(2);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"type": "text",
+										"value": "{{manager_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"user\": {\n\t\t\"username\": \"manager2\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c347d178-9dc2-4f5a-93df-9409d87e44be",
+										"exec": [
+											"pm.test(\"Successful PUT request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"email_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.email).to.eql(\"manager2@manager2.com\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.username).to.eql(\"manager2\");",
+											"});",
+											"",
+											"pm.test(\"role_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.roleid).to.eql(2);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"type": "text",
+										"value": "{{manager_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"user\": {\n\t\t\"email\": \"manager2@manager2.com\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "c347d178-9dc2-4f5a-93df-9409d87e44be",
+										"exec": [
+											"pm.test(\"Successful PUT request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"email_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.email).to.eql(\"manager2@manager2.com\");",
+											"});",
+											"",
+											"pm.test(\"username_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.username).to.eql(\"manager2\");",
+											"});",
+											"",
+											"pm.test(\"role_test\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.roleid).to.eql(2);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "session_jwt",
+										"type": "text",
+										"value": "{{manager_token}}"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"user\": {\n\t\t\"password\": \"manager2\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/api/users/{{manager_id}}",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"api",
+										"users",
+										"{{manager_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Manager auth verify password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"id": "67c2d97b-624a-44a0-b337-50985ad16d9c",
+										"exec": [
+											"pm.test(\"Successful POST request\", function () {",
+											"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+											"});",
+											"",
+											"pm.test(\"status\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.status).to.eql(true);",
+											"});",
+											"",
+											"pm.test(\"token\", function () {",
+											"    var jsonData = JSON.parse(responseBody);",
+											"    pm.expect(jsonData.data.token).to.not.eql(null);",
+											"});",
+											"",
+											"var jsonData = JSON.parse(responseBody);",
+											"pm.environment.set(\"manager_token\", jsonData.token);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"auth\": {\n\t\t\"username\": \"manager2\",\n\t\t\"password\": \"manager2\"\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/auth",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"auth"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "accounts",
+					"item": [
+						{
+							"name": "create user",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get all users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete user",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": ""
 								}
 							},
 							"response": []
