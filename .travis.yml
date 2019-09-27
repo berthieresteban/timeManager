@@ -6,15 +6,17 @@ jobs:
   include:
     - stage: Tests Frontend
       if: type IN (push, pull_request) AND branch = master
+      install: 
+        - cd frontend
+        - npm install
       script:
         - ./ci/tests.sh
-        - cd frontend
-        - npm run serve &
+        - ./ci/run_front.sh
         - npm run test
     - stage: Tests API
       if: type IN (push, pull_request) AND branch = master
       script:
-        - ./ci/tests.sh
+        - ./ci/run_api.sh
         - ./api/test/test_api.sh
     - stage: Deploy Back
       if: type = push AND branch = master
