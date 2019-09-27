@@ -4,7 +4,7 @@ services:
 
 jobs:
   include:
-  - stage: Tests Frontend
+    - stage: Tests Frontend
       if: type IN (push, pull_request) AND branch = master
       script:
         - ./ci/tests.sh
