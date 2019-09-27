@@ -1,5 +1,8 @@
 
 describe('administrator tests', () => {
+  beforeEach(()=> {
+    cy.clearLocalStorage()
+  });
 
   it('should log in', function () {
         cy.fixture(`administrator.json`).as('fixt')

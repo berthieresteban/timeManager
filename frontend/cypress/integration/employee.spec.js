@@ -2,9 +2,12 @@
 describe('employee tests', () => {
 
   before(() => {
-    cy.createUser('employee')
+    cy.clearLocalStorage()
   });
 
+  beforeEach(()=> {
+    cy.clearLocalStorage()
+  });
 
   it('should log in', function () {
     cy.fixture(`employee.json`).as('fixt')

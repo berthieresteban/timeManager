@@ -5,6 +5,9 @@ describe('superManager tests', () => {
     cy.createUser('superManager')
   });
 
+  beforeEach(()=> {
+    cy.clearLocalStorage()
+  });
 
   it('should log in', function () {
     cy.fixture(`superManager.json`).as('fixt')

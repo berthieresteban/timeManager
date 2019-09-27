@@ -5,6 +5,9 @@ describe('manager tests', () => {
     cy.createUser('manager')
   });
 
+  beforeEach(()=> {
+    cy.clearLocalStorage()
+  });
 
   it('should log in', function () {
     cy.fixture(`manager.json`).as('fixt')
