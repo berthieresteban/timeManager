@@ -4,10 +4,18 @@ services:
 
 jobs:
   include:
-    - stage: Tests API
-      if: type = pull_request AND branch = master
+    - stage: Tests Frontend
+      if: type IN (push, pull_request) AND branch = master
+      install: 
+        - npm install --prefix ./frontend
       script:
-        - ./ci/tests.sh
+        - ./ci/run_api.sh
+        - ./ci/run_front.sh
+        - npm run test --prefix ./frontend
+    - stage: Tests API
+      if: type IN (push, pull_request) AND branch = master
+      script:
+        - ./ci/run_api.sh
         - ./api/test/test_api.sh
     - stage: Deploy Back
       if: type = push AND branch = master

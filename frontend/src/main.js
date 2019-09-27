@@ -12,6 +12,7 @@ import Raphael from 'raphael/raphael'
 global.Raphael = Raphael
 Vue.config.productionTip = false
 
+
 new Vue({
   router,
   store,
