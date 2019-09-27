@@ -1,0 +1,1315 @@
+{
+	"info": {
+		"_postman_id": "110ddec6-c6d8-4074-8ee4-6feea39eaa4f",
+		"name": "Documentation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": {{username}},\n\t\"password\": {{password}}\n\t\n}"
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/auth",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"username\": \"employee\",\n\t\"password\": \"employee\"\n\t\n}"
+								},
+								"url": {
+									"raw": "http://localhost:4000/auth",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "4000",
+									"path": [
+										"auth"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"status\": true,\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJKb2tlbiIsImV4cCI6MTU2OTMzNjEzMiwiaWF0IjoxNTY5MzI4OTMyLCJpc3MiOiJKb2tlbiIsImp0aSI6IjJuM2xtbzB0ZnRqNG81M2EwNDAwMDVyMSIsIm5iZiI6MTU2OTMyODkzMiwicGVybSI6NCwidXNlciI6MX0.lr_aiyL2bEN7hqBFwGyeNhrVK5kyBCjpgndkuo8bsRE\",\n    \"user\": 2\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "/api",
+			"item": [
+				{
+					"name": "/users",
+					"item": [
+						{
+							"name": "Get All Users",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{administrator_jwt}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/api/users",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"users"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Get All Users",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "session_jwt",
+												"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJKb2tlbiIsImV4cCI6MTU2OTMyNjc3NiwiaWF0IjoxNTY5MzE5NTc2LCJpc3MiOiJKb2tlbiIsImp0aSI6IjJuM2xmbG85cjg2ajNubmE1MDAwMDVmMSIsIm5iZiI6MTU2OTMxOTU3NiwicGVybSI6NCwidXNlciI6MX0.8sQOT1euWDVhcIl4xXnxduU0Zsjb4zt3Y32n2uB4LB0",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "http://localhost:4000/api/users",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "4000",
+											"path": [
+												"api",
+												"users"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": "{\n    \"data\": [\n        {\n            \"email\": \"admin@admin.fr\",\n            \"id\": 1,\n            \"roleid\": 4,\n            \"username\": \"admin\"\n        },\n        {\n            \"email\": \"email@example.com\",\n            \"id\": 2,\n            \"roleid\": 1,\n            \"username\": \"username_example\"\n        }\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Get User by Id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{user_jwt}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/api/users/{{user_id}}",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"users",
+										"{{user_id}}"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Get User by Id",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "session_jwt",
+												"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJKb2tlbiIsImV4cCI6MTU2OTMyNjc3NiwiaWF0IjoxNTY5MzE5NTc2LCJpc3MiOiJKb2tlbiIsImp0aSI6IjJuM2xmbG85cjg2ajNubmE1MDAwMDVmMSIsIm5iZiI6MTU2OTMxOTU3NiwicGVybSI6NCwidXNlciI6MX0.8sQOT1euWDVhcIl4xXnxduU0Zsjb4zt3Y32n2uB4LB0",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "http://localhost:4000/api/users/2",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "4000",
+											"path": [
+												"api",
+												"users",
+												"2"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"email\": \"email@example.com\",\n        \"id\": 2,\n        \"roleid\": 1,\n        \"username\": \"username_example\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Create User",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "session_jwt",
+										"value": "{{administrator_jwt}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"user\": {\n\t\t\"username\": {{username}},\n\t\t\"password\": {{password}},\n\t\t\"email\": {{email}},\n\t\t\"roleid\": {{roleid}}\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/api/users",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"users"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Create User",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "session_jwt",
+												"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJKb2tlbiIsImV4cCI6MTU2OTMyNjc3NiwiaWF0IjoxNTY5MzE5NTc2LCJpc3MiOiJKb2tlbiIsImp0aSI6IjJuM2xmbG85cjg2ajNubmE1MDAwMDVmMSIsIm5iZiI6MTU2OTMxOTU3NiwicGVybSI6NCwidXNlciI6MX0.8sQOT1euWDVhcIl4xXnxduU0Zsjb4zt3Y32n2uB4LB0",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"user\": {\n\t\t\"username\": \"username_example\",\n\t\t\"password\": \"password_example\",\n\t\t\"email\": \"email@example.com\",\n\t\t\"roleid\": 1\n\t}\n}"
+										},
+										"url": {
+											"raw": "http://localhost:4000/api/users",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "4000",
+											"path": [
+												"api",
+												"users"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"email\": \"email@example.com\",\n        \"id\": 2,\n        \"roleid\": 1,\n        \"username\": \"username_example\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Update User",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{user_jwt}}",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"user\": {\n\t\t\"username\": {{username}},\n\t\t\"email\":{{email}},\n\t\t\"password\": {{password}},\n\t\t\"roleid\": {{roleid}}\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/api/users/{{user_id}}",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"users",
+										"{{user_id}}"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Update User",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "session_jwt",
+												"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJKb2tlbiIsImV4cCI6MTU2OTMyNjc3NiwiaWF0IjoxNTY5MzE5NTc2LCJpc3MiOiJKb2tlbiIsImp0aSI6IjJuM2xmbG85cjg2ajNubmE1MDAwMDVmMSIsIm5iZiI6MTU2OTMxOTU3NiwicGVybSI6NCwidXNlciI6MX0.8sQOT1euWDVhcIl4xXnxduU0Zsjb4zt3Y32n2uB4LB0",
+												"type": "text"
+											},
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"user\": {\n\t\t\"username\": \"username_updated\",\n\t\t\"email\":\"email@updated.com\",\n\t\t\"password\": \"password_updated\",\n\t\t\"roleid\": 2\n\t}\n}"
+										},
+										"url": {
+											"raw": "http://localhost:4000/api/users/2",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "4000",
+											"path": [
+												"api",
+												"users",
+												"2"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"email\": \"email@updated.com\",\n        \"id\": 2,\n        \"roleid\": 2,\n        \"username\": \"username_updated\"\n    }\n}"
+								}
+							]
+						},
+						{
+							"name": "Delete User",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{administrator_jwt}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/api/users/{{user_id}}",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"users",
+										"{{user_id}}"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Delete User",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "session_jwt",
+												"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJKb2tlbiIsImV4cCI6MTU2OTMyNjc3NiwiaWF0IjoxNTY5MzE5NTc2LCJpc3MiOiJKb2tlbiIsImp0aSI6IjJuM2xmbG85cjg2ajNubmE1MDAwMDVmMSIsIm5iZiI6MTU2OTMxOTU3NiwicGVybSI6NCwidXNlciI6MX0.8sQOT1euWDVhcIl4xXnxduU0Zsjb4zt3Y32n2uB4LB0",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "http://localhost:4000/api/users/2",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "4000",
+											"path": [
+												"api",
+												"users",
+												"2"
+											]
+										}
+									},
+									"status": "No Content",
+									"code": 204,
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": "empty"
+								}
+							]
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "/clocks",
+					"item": [
+						{
+							"name": "Get Clock by userId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/api/clocks/{{user_id}}",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"clocks",
+										"{{user_id}}"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Get Clock by userId",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "session_jwt",
+												"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJKb2tlbiIsImV4cCI6MTU2OTMyNjc3NiwiaWF0IjoxNTY5MzE5NTc2LCJpc3MiOiJKb2tlbiIsImp0aSI6IjJuM2xmbG85cjg2ajNubmE1MDAwMDVmMSIsIm5iZiI6MTU2OTMxOTU3NiwicGVybSI6NCwidXNlciI6MX0.8sQOT1euWDVhcIl4xXnxduU0Zsjb4zt3Y32n2uB4LB0",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "http://localhost:4000/api/clocks/2",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "4000",
+											"path": [
+												"api",
+												"clocks",
+												"2"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"status\": true,\n            \"time\": \"2019-09-09T09:42:27Z\"\n        },\n        {\n            \"id\": 2,\n            \"status\": true,\n            \"time\": \"2019-09-09T18:42:27Z\"\n        }\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Create Clock",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "session_jwt",
+										"value": "{{user_jwt}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"clock\": {\n\t\t\"time\": {{time}},\n\t\t\"status\": {{status}},\n\t\t\"user\": {{user_id}}\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/api/clocks/{{user_id}}",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"clocks",
+										"{{user_id}}"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Create Clock",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "session_jwt",
+												"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJKb2tlbiIsImV4cCI6MTU2OTMyNjc3NiwiaWF0IjoxNTY5MzE5NTc2LCJpc3MiOiJKb2tlbiIsImp0aSI6IjJuM2xmbG85cjg2ajNubmE1MDAwMDVmMSIsIm5iZiI6MTU2OTMxOTU3NiwicGVybSI6NCwidXNlciI6MX0.8sQOT1euWDVhcIl4xXnxduU0Zsjb4zt3Y32n2uB4LB0",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"clock\": {\n\t\t\"time\": \"2019-09-09 09:42:27\",\n\t\t\"status\": true,\n\t\t\"user\": 2\n\t}\n}"
+										},
+										"url": {
+											"raw": "http://localhost:4000/api/clocks/2",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "4000",
+											"path": [
+												"api",
+												"clocks",
+												"2"
+											]
+										}
+									},
+									"status": "Created",
+									"code": 201,
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": "{\n    \"data\": {\n        \"id\": 1,\n        \"status\": true,\n        \"time\": \"2019-09-09T09:42:27Z\"\n    }\n}"
+								}
+							]
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "/workingtimes",
+					"item": [
+						{
+							"name": "Get WorkingTimes by userId and start/end",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{user_jwt}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/api/workingtimes/{{user_id}}?start={{start_time}}&end={{end_time}}",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"workingtimes",
+										"{{user_id}}"
+									],
+									"query": [
+										{
+											"key": "start",
+											"value": "{{start_time}}"
+										},
+										{
+											"key": "end",
+											"value": "{{end_time}}"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Get WorkingTimes by userId and start/end",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "session_jwt",
+												"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJKb2tlbiIsImV4cCI6MTU2OTMyNjc3NiwiaWF0IjoxNTY5MzE5NTc2LCJpc3MiOiJKb2tlbiIsImp0aSI6IjJuM2xmbG85cjg2ajNubmE1MDAwMDVmMSIsIm5iZiI6MTU2OTMxOTU3NiwicGVybSI6NCwidXNlciI6MX0.8sQOT1euWDVhcIl4xXnxduU0Zsjb4zt3Y32n2uB4LB0",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "http://localhost:4000/api/workingtimes/2?start=2019-09-09 08:42:27&end=2019-09-09 19:42:27",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "4000",
+											"path": [
+												"api",
+												"workingtimes",
+												"2"
+											],
+											"query": [
+												{
+													"key": "start",
+													"value": "2019-09-09 08:42:27"
+												},
+												{
+													"key": "end",
+													"value": "2019-09-09 19:42:27"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": "{\n    \"data\": [\n    \t{\n    \t\t\"start\": \"2019-09-09 09:42:27\",\n    \t\t\"end\": \"2019-09-09 18:42:27\",\n    \t\t\"user\": 2\n    \t}\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Get WorkingTime by userId and workingTimeId",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{user_jwt}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/api/workingtimes/{{user_id}}/{{workingtime_id}}",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"workingtimes",
+										"{{user_id}}",
+										"{{workingtime_id}}"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Get WorkingTime by userId and workingTimeId",
+									"originalRequest": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "session_jwt",
+												"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJKb2tlbiIsImV4cCI6MTU2OTMyNjc3NiwiaWF0IjoxNTY5MzE5NTc2LCJpc3MiOiJKb2tlbiIsImp0aSI6IjJuM2xmbG85cjg2ajNubmE1MDAwMDVmMSIsIm5iZiI6MTU2OTMxOTU3NiwicGVybSI6NCwidXNlciI6MX0.8sQOT1euWDVhcIl4xXnxduU0Zsjb4zt3Y32n2uB4LB0",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "http://localhot:4000/api/workingtimes/2/1",
+											"protocol": "http",
+											"host": [
+												"localhot"
+											],
+											"port": "4000",
+											"path": [
+												"api",
+												"workingtimes",
+												"2",
+												"1"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": null,
+									"cookie": [],
+									"body": "{\n    \"data\": [\n        {\n            \"start\": \"2019-09-09 09:42:27\",\n            \"end\": \"2019-09-09 18:42:27\",\n            \"user\": 2\n        }\n    ]\n}"
+								}
+							]
+						},
+						{
+							"name": "Create WorkingTime for User",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{user_jwt}}",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"workingtime\": {\n\t\t\"start\": {{start}},\n\t\t\"end\": {{end}},\n\t\t\"user\": {{user_id}}\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/api/workingtimes/{{user_id}}",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"workingtimes",
+										"{{user_id}}"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Create WorkingTime for User",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "session_jwt",
+												"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJKb2tlbiIsImV4cCI6MTU2OTMyNjc3NiwiaWF0IjoxNTY5MzE5NTc2LCJpc3MiOiJKb2tlbiIsImp0aSI6IjJuM2xmbG85cjg2ajNubmE1MDAwMDVmMSIsIm5iZiI6MTU2OTMxOTU3NiwicGVybSI6NCwidXNlciI6MX0.8sQOT1euWDVhcIl4xXnxduU0Zsjb4zt3Y32n2uB4LB0",
+												"type": "text"
+											},
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"workingtime\": {\n\t\t\"start\": \"2019-09-09 09:42:27\",\n\t\t\"end\": \"2019-09-09 18:42:27\",\n\t\t\"user\": 2\n\t}\n}"
+										},
+										"url": {
+											"raw": "http://localhost:4000/api/workingtimes/2",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "4000",
+											"path": [
+												"api",
+												"workingtimes",
+												"2"
+											]
+										}
+									},
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "Update WorkingTime",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{user_jwt}}",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"workingtime\": {\n\t\t\"start\": {{start}},\n\t\t\"end\": {{end}},\n\t\t\"user\": {{user_id}}\n\t\t\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/api/workingtimes/{{workingtime_id}}",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"workingtimes",
+										"{{workingtime_id}}"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Update WorkingTime",
+									"originalRequest": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "session_jwt",
+												"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJKb2tlbiIsImV4cCI6MTU2OTMyNjc3NiwiaWF0IjoxNTY5MzE5NTc2LCJpc3MiOiJKb2tlbiIsImp0aSI6IjJuM2xmbG85cjg2ajNubmE1MDAwMDVmMSIsIm5iZiI6MTU2OTMxOTU3NiwicGVybSI6NCwidXNlciI6MX0.8sQOT1euWDVhcIl4xXnxduU0Zsjb4zt3Y32n2uB4LB0",
+												"type": "text"
+											},
+											{
+												"key": "Content-Type",
+												"name": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\n\t\"workingtime\": {\n\t\t\"start\": \"2019-09-09 09:30:27\",\n\t\t\"end\": \"2019-09-09 18:30:27\",\n\t\t\"user\": 2\n\t}\n}"
+										},
+										"url": {
+											"raw": "http://localhost:4000/api/workingtimes/1",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "4000",
+											"path": [
+												"api",
+												"workingtimes",
+												"1"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": null,
+									"cookie": [],
+									"body": "{\n\t\"data\": {\n\t\t\"start\": \"2019-09-09 09:30:27\",\n\t\t\"end\": \"2019-09-09 18:30:27\",\n\t\t\"user\": 2\t\n\t}\n}"
+								}
+							]
+						},
+						{
+							"name": "Delete WorkingTime",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/api/workingtimes/{{workingtime_id}}",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"api",
+										"workingtimes",
+										"{{workingtime_id}}"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Delete WorkingTime",
+									"originalRequest": {
+										"method": "DELETE",
+										"header": [
+											{
+												"key": "session_jwt",
+												"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJKb2tlbiIsImV4cCI6MTU2OTMyNjc3NiwiaWF0IjoxNTY5MzE5NTc2LCJpc3MiOiJKb2tlbiIsImp0aSI6IjJuM2xmbG85cjg2ajNubmE1MDAwMDVmMSIsIm5iZiI6MTU2OTMxOTU3NiwicGVybSI6NCwidXNlciI6MX0.8sQOT1euWDVhcIl4xXnxduU0Zsjb4zt3Y32n2uB4LB0",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": ""
+										},
+										"url": {
+											"raw": "http://localhost:4000/api/workingtimes/1",
+											"protocol": "http",
+											"host": [
+												"localhost"
+											],
+											"port": "4000",
+											"path": [
+												"api",
+												"workingtimes",
+												"1"
+											]
+										}
+									},
+									"status": "No Content",
+									"code": 204,
+									"_postman_previewlanguage": null,
+									"header": null,
+									"cookie": [],
+									"body": "empty"
+								}
+							]
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "/managing",
+					"item": [
+						{
+							"name": "Get All Managing",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{user_jwt}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/managing",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"managing"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Managing by managingId",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{user_jwt}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/managing/{{managing_id}}",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"managing",
+										"{{managing_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Managing",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "session_jwt",
+										"value": "{{user_jwt}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"managing\": {\n\t\t\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/managing",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"managing"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Managing",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{user_jwt}}",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"managing\": {\n\t\t\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/managing/{{managing_id}}",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"managing",
+										"{{managing_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Managing",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{user_jwt}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/managing/{{managing_id}}",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"managing",
+										"{{managing_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "/roles",
+					"item": [
+						{
+							"name": "Get All Roles",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{user_jwt}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/roles",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"roles"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Role by id",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{user_jwt}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/roles/{{role_id}}",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"roles",
+										"{{role_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Role",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{user_jwt}}",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"role\": {\n\t\t\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/roles",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"roles"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Role",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{user_jwt}}",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"role\": {\n\t\t\n\t}\n}"
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/roles/{{role_id}}",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"roles",
+										"{{role_id}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Role",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "session_jwt",
+										"value": "{{user_jwt}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "http://{{host}}:{{port}}/roles/{{role_id}}",
+									"protocol": "http",
+									"host": [
+										"{{host}}"
+									],
+									"port": "{{port}}",
+									"path": [
+										"roles",
+										"{{role_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		}
+	]
+}
