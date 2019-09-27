@@ -2,7 +2,7 @@
 describe('employee tests', () => {
 
   before(() => {
-    cy.createUser('superManager');
+    cy.createUser('employee');
     cy.wait(2000);
   });
 
