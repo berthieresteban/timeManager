@@ -9,7 +9,7 @@ jobs:
       install: 
         - npm install --prefix ./frontend
       script:
-        - ./ci/tests.sh
+        - ./ci/run_api.sh
         - ./ci/run_front.sh
         - npm run test --prefix ./frontend
     - stage: Tests API

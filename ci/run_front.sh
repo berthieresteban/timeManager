@@ -8,6 +8,8 @@ echo " ### TimeManager App End to End tests ###"
 echo "     ==============================="
 echo
 
+set -e
+
 npm run serve --prefix ./frontend
 
 echo " Waiting for App to be up at http://$appHost:$appPort"
