@@ -4,5 +4,5 @@
   "videoUploadOnPasses": false,
   "viewportWidth": 1400,
   "viewportHeight": 900,
-  "defaultCommandTimeout": 5000
+  "defaultCommandTimeout": 10000
 }

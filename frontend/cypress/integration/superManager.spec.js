@@ -7,6 +7,7 @@ describe('superManager tests', () => {
 
   beforeEach(()=> {
     cy.clearLocalStorage()
+    cy.wait(2000);
   });
 
   it('should log in', function () {

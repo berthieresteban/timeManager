@@ -2,11 +2,12 @@
 describe('employee tests', () => {
 
   before(() => {
-    cy.clearLocalStorage()
+    cy.createUser('superManager');
   });
 
   beforeEach(()=> {
     cy.clearLocalStorage()
+    cy.wait(2000);
   });
 
   it('should log in', function () {
