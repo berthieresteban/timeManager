@@ -10,7 +10,7 @@ echo
 
 set -e
 
-npm run serve --prefix ./frontend
+npm run serve --prefix ./frontend &
 
 echo " Waiting for App to be up at http://$appHost:$appPort"
 echo
