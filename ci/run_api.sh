@@ -7,12 +7,13 @@ apiPort="4000"
 
 set -e
 
-docker-compose -f ./docker-compose.yml up -d
 
 echo
-echo " ### TimeManager Api tests ###"
+echo " ### TimeManager Lanch API###"
 echo "     ==============================="
 echo
+
+docker-compose -f ./docker-compose.yml up -d
 
 echo " Waiting for App to be up at http://$appHost:$appPort"
 echo
