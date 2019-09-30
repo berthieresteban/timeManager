@@ -17,7 +17,6 @@ const store = new Vuex.Store({
     },
     host: "15.188.8.203",
     port: "4000",
-    // apiRoute: "http://localhost:4000/api",
     apiRoute: "http://15.188.8.203:4000/api",
     logged: false,
     token: null,
@@ -228,6 +227,13 @@ const store = new Vuex.Store({
       return response;
     },
     createClock({ state }, payload) {
+      const route = `${state.apiRoute}/clocks/${payload.id}`
+      const response = axios.post(route, payload.data).then(response => {
+        return response;
+      });
+      return response;
+    },
+    getTeams({ state }, payload) {
       const route = `${state.apiRoute}/clocks/${payload.id}`
       const response = axios.post(route, payload.data).then(response => {
         return response;
