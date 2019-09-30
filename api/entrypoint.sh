@@ -1,8 +1,6 @@
 #!/bin/bash
 # EPITECH 2019 - Julien LEGAY
 
-RESETDB=1
-
 command -v pg_isready
 
 if [ -z ".env" ]; then
@@ -25,11 +23,15 @@ if [[ -z `psql -Atqc "\\list $PGDATABASE"` ]]; then
   mix run priv/repo/seeds.exs
   echo "Database $PGDATABASE created."
 else
+  source .env
   if [[ $RESETDB == 1 ]]; then
-    # mix ecto.drop
-    # mix ecto.reset
+    echo "Database $PGDATABASE is being reseted becauge you have specified RESETDB !! /!\ "
+    mix ecto.reset
+    echo "Database $PGDATABASE reseted !"
+    export RESETDB=0
+  else
     mix ecto.migrate
-    echo "Database $PGDATABASE upgraded !"
   fi
 fi
+echo "RUNNING API SERVER PHOENIX || LET'S GET READY TO RUMBLE !!"
 exec mix phx.server

@@ -11,6 +11,7 @@ defmodule TimeManagerWeb.ManagingView do
   end
 
   def render("managing.json", %{managing: managing}) do
-    %{fromId: managing.fromId, toId: managing.toId}
+    %{id: managing.id,
+      isManager: managing.isManager}
   end
 end
