@@ -5,24 +5,27 @@ services:
 jobs:
   include:
     - stage: Tests Frontend
-      if: type IN (push, pull_request) AND branch = master
+      if: type = pull_request AND branch = master
       install: 
         - npm install --prefix ./frontend
       script:
         - ./ci/run_api.sh
         - ./ci/run_front.sh
         - npm run test --prefix ./frontend
+
     - stage: Tests API
-      if: type IN (push, pull_request) AND branch = master
+      if: type = pull_request AND branch = master
       script:
         - ./ci/run_api.sh
         - ./api/test/test_api.sh
+
     - stage: Deploy Back
       if: type = push AND branch = master
       script:
         - docker login -u $DOCKERUSERNAME -p $DOCKERPASSWORD
         - docker-compose build
         - docker push berthieresteban/timemanager_api:latest
+        
     - stage: Deploy Front
       if: type = push AND branch = master
       addons:
