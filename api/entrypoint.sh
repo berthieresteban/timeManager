@@ -25,16 +25,11 @@ if [[ -z `psql -Atqc "\\list $PGDATABASE"` ]]; then
 else
   source .env
   if [[ $RESETDB == 1 ]]; then
-<<<<<<< HEAD
-    # mix ecto.drop
-    # mix ecto.reset
-=======
     echo "Database $PGDATABASE is being reseted becauge you have specified RESETDB !! /!\ "
     mix ecto.reset
     echo "Database $PGDATABASE reseted !"
     export RESETDB=0
   else
->>>>>>> Docker & entrypoint update
     mix ecto.migrate
   fi
 fi

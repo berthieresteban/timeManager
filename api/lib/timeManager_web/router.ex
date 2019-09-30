@@ -19,6 +19,9 @@ defmodule TimeManagerWeb.Router do
     post "/workingtimes/:id", WorkingtimeController, :create_for_user
     # MANAGER TO EMPLOYEE
     resources "/managing", ManagingController, except: [:new, :edit]
+    get "/managing/team/:teamId", ManagingController, :show_team
+    get "/managing/user/:userId", ManagingController, :show_user
+    get "/managing/manager/:managerId", ManagingController, :show_manager
     # ROLES GETTER
     resources "/roles", RoleController, except: [:new, :edit]
     # TEAMS

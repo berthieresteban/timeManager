@@ -102,7 +102,6 @@ defmodule TimeManager.Auth do
     |> Repo.update()
     if (!is_nil(password)) do
       user
-      User
       |> User.changeset(user, %{password: password})
       |> Repo.update()
     end
@@ -526,6 +525,21 @@ defmodule TimeManager.Auth do
   """
   def list_managing do
     Repo.all(Managing)
+  end
+
+  def list_managing_user(userId) do 
+    query=from m in Managing, where: m.employeeId == ^userId, where: m.isManager == false
+    Repo.all(query)
+  end
+
+  def list_managing_manager(managerId) do
+    query=from m in Managing, where: m.employeeId == ^managerId, where: m.isManager == true
+    Repo.all(query)
+  end
+
+  def list_managing_team(teamId) do
+    query=from m in Managing, where: m.teamId == ^teamId
+    Repo.all(query)
   end
 
   @doc """
