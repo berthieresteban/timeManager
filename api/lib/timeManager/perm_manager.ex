@@ -28,7 +28,7 @@ defmodule TimeManager.Permission do
         IO.inspect(perms()[perms_needed])
         if (is_nil(perms()[perms_needed])) do
             IO.puts("not found")
-            perm == 4
+            perm == 3
         else
             IO.puts(" needing : #{perms()[perms_needed]}")
             perm >= perms()[perms_needed]
@@ -96,7 +96,11 @@ defmodule TimeManager.Permission do
             "PUT_api_roles_own" => 4,
             "DELETE_api_roles_id" => 4,
             "DELETE_api_roles_team" => 4,
-            "DELETE_api_roles_own" => 4
+            "DELETE_api_roles_own" => 4,
+            #TEAMS
+            "GET_api_teams" => 2,
+            "GET_api_teams_id" => 2,
+            "GET_api_teams_own" => 2
         }
     end
 
