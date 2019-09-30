@@ -79,6 +79,15 @@ defmodule TimeManager.Permission do
             "DELETE_api_workingtimes_id" => 3,
             #MANAGING (DEFAULT OK : GENERAL MANAGER ONLY)
             "GET_api_managing_own" => 2,
+            "GET_api_managing_team_id" => 1,
+            "GET_api_managing_team_own" => 1,
+            "GET_api_managing_team_team" => 1,
+            "GET_api_managing_user_id" => 3,
+            "GET_api_managing_user_own" => 1,
+            "GET_api_managing_user_team" => 2,
+            "GET_api_managing_manager_id" => 3,
+            "GET_api_managing_manager_team" => 2,
+            "GET_api_managing_manager_own" => 1,
             #ROLES
             "GET_api_roles_own" => 4,
             "POST_api_roles" => 4,
