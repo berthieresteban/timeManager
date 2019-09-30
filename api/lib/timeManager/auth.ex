@@ -166,7 +166,7 @@ defmodule TimeManager.Auth do
 
   """
   def get_clock!(id), do: Repo.get!(Clock, id)
-  def get_clock_by_user!(id) do 
+  def get_clock_by_user!(id) do
     #Repo.get_by!(Clock, [user: id])
     query = from c in Clock, where: c.user == ^id
     Repo.all(query)
@@ -318,7 +318,7 @@ defmodule TimeManager.Auth do
       query = from w in Workingtime, where: w.user == ^id
       Repo.all(query)
   end
-  
+
   def get_workingtime_by_user!(id, params) do
     if (params["start"]) do
       if (params["end"]) do
@@ -527,7 +527,7 @@ defmodule TimeManager.Auth do
     Repo.all(Managing)
   end
 
-  def list_managing_user(userId) do 
+  def list_managing_user(userId) do
     query=from m in Managing, where: m.employeeId == ^userId, where: m.isManager == false
     Repo.all(query)
   end
@@ -731,5 +731,3 @@ defmodule TimeManager.Auth do
     Team.changeset(team, %{})
   end
 end
-
-
