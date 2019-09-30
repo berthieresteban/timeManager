@@ -8,6 +8,9 @@ axios.defaults.headers.common['Content-Type'] = 'application/json';
 Vue.use(VueAxios, axios);
 Vue.use(Vuex)
 
+process.env.NODE_ENV
+
+
 const store = new Vuex.Store({
   state: {
     snackBar: {
@@ -15,7 +18,7 @@ const store = new Vuex.Store({
       displayed: false,
       text: "",
     },
-    host: "15.188.8.203",
+    host: process.env.NODE_ENV === 'development'? 'localhost':"15.188.8.203",
     port: "4000",
     apiRoute: "http://15.188.8.203:4000/api",
     logged: false,
@@ -141,7 +144,7 @@ const store = new Vuex.Store({
   },
   actions: {
     updateUser({ state }, payload) {
-      return axios.put(`${state.apiRoute}/users/${state.user.id}`, payload).then(response => {
+      return axios.put(`http://${state.host}:${state.port}/api/users/${state.user.id}`, payload).then(response => {
         return response;
       });
     },
@@ -187,47 +190,47 @@ const store = new Vuex.Store({
         commit("setUser", {});
         commit("unsetLogged");
       }
-      return axios.delete(`${state.apiRoute}/users/${id}`).then(response => {
+      return axios.delete(`http://${state.host}:${state.port}/api/users/${id}`).then(response => {
         return response;
       });
     },
     getWorkingTimes({ state }, payload) {
-      const route = `${state.apiRoute}/workingtimes/${payload.id}?start=${payload.start}&end=${payload.end}`
+      const route = `http://${state.host}:${state.port}/api/workingtimes/${payload.id}?start=${payload.start}&end=${payload.end}`
       const response = axios.get(route, payload.data).then(response => {
         return response;
       });
       return response;
     },
     createWorkingTime({ state }, payload) {
-      const route = `${state.apiRoute}/workingtimes/${payload.workingtime.user}`
+      const route = `http://${state.host}:${state.port}/api/workingtimes/${payload.workingtime.user}`
       const response = axios.post(route, payload).then(response => {
         return response;
       });
       return response;
     },
     updateWorkingTime({ state }, payload) {
-      const route = `${state.apiRoute}/workingtimes/${payload.id}`
+      const route = `http://${state.host}:${state.port}/api/workingtimes/${payload.id}`
       const response = axios.put(route, payload.data).then(response => {
         return response;
       });
       return response;
     },
     deleteWorkingTime({ state }, id) {
-      const route = `${state.apiRoute}/workingtimes/${id}`
+      const route = `http://${state.host}:${state.port}/api/workingtimes/${id}`
       const response = axios.delete(route).then(response => {
         return response;
       });
       return response;
     },
     getClocks({ state }, id) {
-      const route = `${state.apiRoute}/clocks/${id}`
+      const route = `http://${state.host}:${state.port}/api/clocks/${id}`
       const response = axios.get(route).then(response => {
         return response;
       });
       return response;
     },
     createClock({ state }, payload) {
-      const route = `${state.apiRoute}/clocks/${payload.id}`
+      const route = `http://${state.host}:${state.port}/api/clocks/${payload.id}`
       const response = axios.post(route, payload.data).then(response => {
         return response;
       });
