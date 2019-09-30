@@ -1,0 +1,22 @@
+{
+    "teams": [
+        {
+            "team": {
+                "name": "PHP",
+                "color": "blue"
+            }
+        },
+        {
+            "team": {
+                "name": "JS",
+                "color": "green"
+            }
+        },
+        {
+            "team": {
+                "name": "C++",
+                "color": "yellow"
+            }
+        }
+    ]
+}

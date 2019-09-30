@@ -18,7 +18,7 @@ const store = new Vuex.Store({
       displayed: false,
       text: "",
     },
-    host: process.env.NODE_ENV === 'development'? 'localhost':"15.188.8.203",
+    host: process.env.NODE_ENV === 'development' ? 'localhost' : "15.188.8.203",
     port: "4000",
     apiRoute: "http://15.188.8.203:4000/api",
     logged: false,
@@ -29,7 +29,7 @@ const store = new Vuex.Store({
       email: null,
       roleid: null
     },
-    darkMode: false,
+    darkMode: true,
     areaChart: {
       size: 6,
       position: 1,
@@ -143,6 +143,16 @@ const store = new Vuex.Store({
     }
   },
   actions: {
+    deleteMemberFromTeam({ state }, payload) {
+      return axios.delete(`http://${state.host}:${state.port}/api/managing/${payload.id}`).then(response => {
+        return response;
+      });
+    },
+    updateUserSuperManager({ state }, payload) {
+      return axios.put(`http://${state.host}:${state.port}/api/users/${payload.id}`, payload.user).then(response => {
+        return response;
+      });
+    },
     updateUser({ state }, payload) {
       return axios.put(`http://${state.host}:${state.port}/api/users/${state.user.id}`, payload).then(response => {
         return response;
@@ -195,7 +205,7 @@ const store = new Vuex.Store({
       });
     },
     getWorkingTimes({ state }, payload) {
-      const route = `http://${state.host}:${state.port}/api/workingtimes/${payload.id}?start=${payload.start}&end=${payload.end}`
+      const route = `http://${state.host}:${state.port}/api/workingtimes/${payload.id}`
       const response = axios.get(route, payload.data).then(response => {
         return response;
       });
@@ -236,13 +246,62 @@ const store = new Vuex.Store({
       });
       return response;
     },
-    getTeams({ state }, payload) {
-      const route = `${state.apiRoute}/clocks/${payload.id}`
-      const response = axios.post(route, payload.data).then(response => {
+    getManagerTeams({ state }, payload) {
+      const route = `http://${state.host}:${state.port}/api/managing/manager/${payload.id}`
+      const response = axios.get(route).then(response => {
         return response;
       });
       return response;
-    }
+    },
+    getTeams({ state }) {
+      const route = `http://${state.host}:${state.port}/api/teams`
+      const response = axios.get(route).then(response => {
+        return response;
+      });
+      return response;
+    },
+    getTeam({ state }, payload) {
+      const route = `http://${state.host}:${state.port}/api/teams/${payload.id}`
+      const response = axios.get(route).then(response => {
+        return response;
+      });
+      return response;
+    },
+    getTeamMembers({ state }, payload) {
+      const route = `http://${state.host}:${state.port}/api/managing/team/${payload.id}`
+      const response = axios.get(route).then(response => {
+        return response;
+      });
+      return response;
+    },
+    createManaging({ state }, payload) {
+      const route = `http://${state.host}:${state.port}/api/managing`
+      const response = axios.post(route, payload).then(response => {
+        return response;
+      });
+      return response;
+    },
+    createTeam({ state }, payload) {
+      const route = `http://${state.host}:${state.port}/api/teams`
+      const response = axios.post(route, payload).then(response => {
+        return response;
+      });
+      return response;
+    },
+    deleteTeam({ state }, payload) {
+      const route = `http://${state.host}:${state.port}/api/teams/${payload.id}`
+      const response = axios.delete(route).then(response => {
+        return response;
+      });
+      return response;
+    },
+    getTeamUser({ state }, payload) {
+      const route = `http://${state.host}:${state.port}/api/managing/user/${payload.id}`
+      const response = axios.get(route).then(response => {
+        return response;
+      });
+      return response;
+    },
   }
 })
 

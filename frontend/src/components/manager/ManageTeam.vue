@@ -2,14 +2,14 @@
   <v-container>
     <v-row>
       <v-col cols="12" sm="12" md="12" lg="12" v-for="i in teams" :key="i.name">
-        <v-card :dark="darkMode">
+        <v-card :dark="darkMode" :color="i.color">
           <v-card-title>
             <v-row>
               <v-col cols="12" sm="12" md="12" lg="6">
                 Team:
                 <h3>{{ i.name }}</h3>
               </v-col>
-              <v-col cols="12" sm="12" md="12" lg="6">Manager: {{i.manager}}</v-col>
+              <!-- <v-col cols="12" sm="12" md="12" lg="6">Manager: {{i.manager}}</v-col> -->
             </v-row>
           </v-card-title>
           <v-card-text>
@@ -18,7 +18,7 @@
                 <h3>Employees:</h3>
               </v-row>
               <v-row>
-                <v-col cols="12" sm="12" md="12" lg="4" v-for="e in i.employee" :key="e.id">
+                <v-col cols="12" sm="12" md="12" lg="4" v-for="e in i.members" :key="e.id">
                   {{e.username}} (n°{{e.id}})
                   <v-btn icon link :to="`/manager/${id}/editWorkingTimes/${e.id}`">
                     <v-icon color="grey lighten-1">fa-plus</v-icon>
@@ -48,95 +48,41 @@ export default {
       return this.$store.state.user.id;
     }
   },
-  mounted() {
-    // TODO CALL API TO FETCH TEAMS
+  async created() {
+    try {
+      let resp = null,
+        resp2 = null,
+        teamss = {};
+      resp = await this.$store.dispatch("getManagerTeams", { id: this.id });
+      for (let i of resp.data.data) {
+        teamss[i.id] = { members: [] };
+      }
+
+      for (let i of Object.keys(teamss)) {
+        resp = await this.$store.dispatch("getTeam", { id: i });
+        teamss[i].color = resp.data.data.color;
+        teamss[i].name = resp.data.data.name;
+      }
+      for (let i of Object.keys(teamss)) {
+        resp = await this.$store.dispatch("getTeamMembers", { id: i });
+        for (let j of resp.data.data) {
+          resp2 = await this.$store.dispatch("getUserByID", j.employeeId);
+          if (resp2.data.id !== this.id) {
+            teamss[i].members.push(resp2.data);
+          }
+        }
+      }
+      this.teams = teamss;
+    } catch (error) {
+      this.$store.commit("createSnackBarError", {
+        text: "An error occured while fetching teams.",
+        announcer: this.$announcer
+      });
+    }
   },
   data() {
     return {
-      teams: [
-        {
-          name: "JS",
-          manager: "manager",
-          employee: [
-            {
-              id: 1,
-              username: "Claude"
-            },
-            {
-              id: 12,
-              username: "Gilles"
-            },
-            {
-              id: 10,
-              username: "Sophie"
-            },
-            {
-              id: 4,
-              username: "Jacques"
-            }
-          ]
-        },
-        {
-          name: "C++",
-          manager: "manager",
-          employee: [
-            {
-              id: 2,
-              username: "Jean-Mi"
-            },
-            {
-              id: 7,
-              username: "Damien"
-            },
-            {
-              id: 3,
-              username: "Caroline"
-            },
-            {
-              id: 8,
-              username: "Julie"
-            }
-          ]
-        },
-        {
-          name: "PHPLOL",
-          manager: "manager",
-          employee: [
-            {
-              id: 5,
-              username: "Yves"
-            },
-            {
-              id: 6,
-              username: "Jean"
-            },
-            {
-              id: 9,
-              username: "Yoann"
-            },
-            {
-              id: 13,
-              username: "Arnaud"
-            },
-            {
-              id: 15,
-              username: "Maxime"
-            },
-            {
-              id: 14,
-              username: "Antoine"
-            },
-            {
-              id: 20,
-              username: "Karim"
-            },
-            {
-              id: 19,
-              username: "Matthieu"
-            }
-          ]
-        }
-      ]
+      teams: {}
     };
   }
 };

@@ -1,38 +1,36 @@
 <template>
-  <v-row justify="center" >
+  <v-row justify="center">
     <v-card large :dark="darkMode">
-    <v-card-title >
-      Update Account Informations
-    </v-card-title>
-    <v-card-text>
-      <div v-if="errors.length">
-        <p class="error" v-for="error in errors" :key="error">{{ error }}</p>
-      </div>
-      <v-text-field label="Username" required v-model="username"></v-text-field>
-      <v-text-field label="Email" required v-model="email"></v-text-field>
-      <v-switch label="Update password" v-model="updatePassword"></v-switch>
-      <v-text-field
-        :append-icon="showPassword1 ? 'fa-eye' : 'fa-eye-slash'"
-        @click:append="showPassword1 = !showPassword1"
-        :type="showPassword1 ? 'text' : 'password'"
-        v-if="updatePassword"
-        label="Password"
-        required
-        v-model="password1"
-      ></v-text-field>
-      <v-text-field
-        :append-icon="showPassword2 ? 'fa-eye' : 'fa-eye-slash'"
-        @click:append="showPassword2 = !showPassword2"
-        :type="showPassword2 ? 'text' : 'password'"
-        v-if="updatePassword"
-        label="Confirm password"
-        required
-        v-model="password2"
-      ></v-text-field>
-    </v-card-text>
-    <v-card-actions>
-      <v-btn @click="confirm">Confirm</v-btn>
-    </v-card-actions>
+      <v-card-title>Update Account Informations</v-card-title>
+      <v-card-text>
+        <div v-if="errors.length">
+          <p class="error" v-for="error in errors" :key="error">{{ error }}</p>
+        </div>
+        <v-text-field label="Username" required v-model="username"></v-text-field>
+        <v-text-field label="Email" required v-model="email"></v-text-field>
+        <v-switch label="Update password" v-model="updatePassword"></v-switch>
+        <v-text-field
+          :append-icon="showPassword1 ? 'fa-eye' : 'fa-eye-slash'"
+          @click:append="showPassword1 = !showPassword1"
+          :type="showPassword1 ? 'text' : 'password'"
+          v-if="updatePassword"
+          label="Password"
+          required
+          v-model="password1"
+        ></v-text-field>
+        <v-text-field
+          :append-icon="showPassword2 ? 'fa-eye' : 'fa-eye-slash'"
+          @click:append="showPassword2 = !showPassword2"
+          :type="showPassword2 ? 'text' : 'password'"
+          v-if="updatePassword"
+          label="Confirm password"
+          required
+          v-model="password2"
+        ></v-text-field>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn @click="confirm">Confirm</v-btn>
+      </v-card-actions>
     </v-card>
   </v-row>
 </template>
@@ -78,39 +76,54 @@ export default {
       } else {
         this.errors = this.errors.filter(err => err !== "Wrong email format.");
       }
-      const resp = await this.$store.dispatch("getUser", {
-        email: this.email
-      });
-      let userExists = resp.data.length;
-      if (resp.data[0].email === this.currentEmail) {
-        userExists = false;
-      }
-      if (userExists) {
-        if (!this.errors.find(err => err === "Email already exists.")) {
-          this.errors.push("Email already exists.");
+      try {
+        const resp = await this.$store.dispatch("getUser", {
+          email: this.email
+        });
+
+        let userExists = resp.data.length;
+        if (resp.data[0].email === this.currentEmail) {
+          userExists = false;
         }
-      } else {
-        this.errors = this.errors.filter(
-          err => err !== "Email already exists."
-        );
+        if (userExists) {
+          if (!this.errors.find(err => err === "Email already exists.")) {
+            this.errors.push("Email already exists.");
+          }
+        } else {
+          this.errors = this.errors.filter(
+            err => err !== "Email already exists."
+          );
+        }
+      } catch (error) {
+        this.$store.commit("createSnackBarError", {
+          text: "An error occured while verifying email.",
+          announcer: this.$announcer
+        });
       }
     },
     async usernameCheck() {
-      const resp = await this.$store.dispatch("getUser", {
-        username: this.username
-      });
-      let userExists = resp.data.length;
-      if (resp.data[0].username === this.currentUsername) {
-        userExists = false;
-      }
-      if (userExists) {
-        if (!this.errors.find(err => err === "Username already exists.")) {
-          this.errors.push("Username already exists.");
+      try {
+        const resp = await this.$store.dispatch("getUser", {
+          username: this.username
+        });
+        let userExists = resp.data.length;
+        if (resp.data[0].username === this.currentUsername) {
+          userExists = false;
         }
-      } else {
-        this.errors = this.errors.filter(
-          err => err !== "Username already exists."
-        );
+        if (userExists) {
+          if (!this.errors.find(err => err === "Username already exists.")) {
+            this.errors.push("Username already exists.");
+          }
+        } else {
+          this.errors = this.errors.filter(
+            err => err !== "Username already exists."
+          );
+        }
+      } catch (error) {
+        this.$store.commit("createSnackBarError", {
+          text: "An error occured while verifying username.",
+          announcer: this.$announcer
+        });
       }
     },
     passwordCheck() {
@@ -131,9 +144,13 @@ export default {
     },
     async confirm() {
       let payload = {};
-      if (this.currentUsername === this.username && this.currentEmail === this.email && !this.updatePassword) {
+      if (
+        this.currentUsername === this.username &&
+        this.currentEmail === this.email &&
+        !this.updatePassword
+      ) {
         this.$store.commit("createSnackBarError", {
-          text: 'Nothing to update!',
+          text: "Nothing to update!",
           announcer: this.$announcer
         });
         return;
@@ -153,8 +170,8 @@ export default {
       if (this.updatePassword) {
         payload.user.password = this.password1;
       }
-      const response = await this.$store.dispatch("updateUser", payload);
-      if (response.status === 200) {
+      try {
+        const response = await this.$store.dispatch("updateUser", payload);
         this.$store.commit("setUser", {
           username: this.username,
           email: this.email,
@@ -165,7 +182,7 @@ export default {
           text: `Account successfully updated!`,
           announcer: this.$announcer
         });
-      } else {
+      } catch (error) {
         this.$store.commit("createSnackBarError", {
           text: `An error occured while updating you're account!`,
           announcer: this.$announcer

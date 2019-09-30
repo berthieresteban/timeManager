@@ -3,10 +3,10 @@
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card :dark="darkMode">
         <v-card-title>
-          <span class="headline">Change role of {{employee.username}}</span>
+          <span class="headline">Add member</span>
         </v-card-title>
         <v-card-text>
-          <v-select v-model="value" :items="roles" filled label="Select Role"></v-select>
+          <v-select v-model="value" :items="employees" filled label="Select Member"></v-select>
           <v-card-actions>
             <v-btn @click="cancel">Cancel</v-btn>
             <v-spacer/>
@@ -22,7 +22,7 @@
 export default {
   props: {
     dialog: Boolean,
-    employee: Object
+    currentEmployees: Array
   },
   computed: {
     darkMode() {
@@ -31,24 +31,33 @@ export default {
   },
   methods: {
     cancel() {
-      this.$emit("cancelUpdateRole");
+      this.$emit("cancelAddMember");
     },
     confirm() {
-      this.$emit("confirmUpdateRole", this.value);
+      this.$emit("confirmAddMember", this.value);
+    },
+    alreadyInTeam(employee) {
+      for (let i in this.currentEmployees) {
+        if (employee.id === this.currentEmployees[i].id) {
+          return true;
+        }
+      }
+      return false;
     }
   },
-  mounted() {
-    this.value = this.employee.roleid;
+  async mounted() {
+    this.value = null;
+    const resp = await this.$store.dispatch("getAllUsers");
+    this.employees = resp.data
+      .filter(em => {
+        return em.roleid === 1 && !this.alreadyInTeam(em);
+      })
+      .map(em => ({ value: em, text: em.username }));
   },
   data() {
     return {
       value: null,
-      roles: [
-        { value: 1, text: "Employee" },
-        { value: 2, text: "Manager" },
-        { value: 3, text: "Super Manager" },
-        { value: 4, text: "Administrator" }
-      ]
+      employees: []
     };
   }
 };

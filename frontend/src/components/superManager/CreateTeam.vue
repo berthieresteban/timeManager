@@ -3,10 +3,11 @@
     <v-dialog v-model="dialog" persistent max-width="600px">
       <v-card :dark="darkMode">
         <v-card-title>
-          <span class="headline">Change role of {{employee.username}}</span>
+          <span class="headline">Create New Team</span>
         </v-card-title>
         <v-card-text>
-          <v-select v-model="value" :items="roles" filled label="Select Role"></v-select>
+          <v-text-field label="Name" v-model="name"></v-text-field>
+          <v-color-picker label="Color" hide-inputs :dark="darkMode" v-model="color"></v-color-picker>
           <v-card-actions>
             <v-btn @click="cancel">Cancel</v-btn>
             <v-spacer/>
@@ -21,8 +22,7 @@
 <script>
 export default {
   props: {
-    dialog: Boolean,
-    employee: Object
+    dialog: Boolean
   },
   computed: {
     darkMode() {
@@ -31,24 +31,16 @@ export default {
   },
   methods: {
     cancel() {
-      this.$emit("cancelUpdateRole");
+      this.$emit("cancelCreateTeam");
     },
     confirm() {
-      this.$emit("confirmUpdateRole", this.value);
+      this.$emit("confirmCreateTeam", {name: this.name, color: this.color});
     }
-  },
-  mounted() {
-    this.value = this.employee.roleid;
   },
   data() {
     return {
-      value: null,
-      roles: [
-        { value: 1, text: "Employee" },
-        { value: 2, text: "Manager" },
-        { value: 3, text: "Super Manager" },
-        { value: 4, text: "Administrator" }
-      ]
+      name: "",
+      color: ""
     };
   }
 };

@@ -1,0 +1,76 @@
+{
+    "users": [
+        {
+            "user": {
+                "username": "employee1",
+                "password": "employee1",
+                "email": "employee1@employee1.com",
+                "roleid": 1
+            }
+        },
+        {
+            "user": {
+                "username": "employee2",
+                "password": "employee2",
+                "email": "employee2@employee2.com",
+                "roleid": 1
+            }
+        },
+        {
+            "user": {
+                "username": "employee3",
+                "password": "employee3",
+                "email": "employee3@employee3.com",
+                "roleid": 1
+            }
+        },
+        {
+            "user": {
+                "username": "employee4",
+                "password": "employee4",
+                "email": "employee4@employee4.com",
+                "roleid": 1
+            }
+        },
+        {
+            "user": {
+                "username": "employee5",
+                "password": "employee5",
+                "email": "employee5@employee5.com",
+                "roleid": 1
+            }
+        },
+        {
+            "user": {
+                "username": "manager1",
+                "password": "manager1",
+                "email": "manager1@manager1.com",
+                "roleid": 2
+            }
+        },
+        {
+            "user": {
+                "username": "manager2",
+                "password": "manager2",
+                "email": "manager2@manager2.com",
+                "roleid": 2
+            }
+        },
+        {
+            "user": {
+                "username": "superManager1",
+                "password": "superManager1",
+                "email": "superManager1@superManager1.com",
+                "roleid": 3
+            }
+        },
+        {
+            "user": {
+                "username": "useless",
+                "password": "useless",
+                "email": "useless@useless.com",
+                "roleid": 1
+            }
+        }
+    ]
+}

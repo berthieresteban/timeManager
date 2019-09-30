@@ -117,6 +117,9 @@
 
 <script>
 export default {
+  props: {
+    userID: String,
+  },
   data() {
     return {
       datePicker: null,
@@ -148,7 +151,7 @@ export default {
         workingtime: {
           start: start,
           end: end,
-          user: this.$store.state.user.id
+          user: this.userID
         }
       };
       this.$emit("createWorkingTime", payload);

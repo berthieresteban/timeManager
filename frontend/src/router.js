@@ -100,7 +100,7 @@ const managerGuard = (to, from, next) => {
   if (to.fullPath.includes('editWorkingTimes')) {
     const userID = to.fullPath.split('/')[4];
     const currentID = user.id
-    if (currentID !== userID) {
+    if (currentID === userID) {
       next('/unauthorized');
     }
   }
@@ -108,6 +108,8 @@ const managerGuard = (to, from, next) => {
 }
 
 const superManagerGuard = (to, from, next) => {
+  const user = store.state.user;
+
   const authorized = authGuard(3, to);
   if (!authorized) {
     next('/unauthorized');
@@ -116,7 +118,7 @@ const superManagerGuard = (to, from, next) => {
   if (to.fullPath.includes('editWorkingTimes')) {
     const userID = to.fullPath.split('/')[4];
     const currentID = user.id
-    if (currentID !== userID) {
+    if (currentID === userID) {
       next('/unauthorized');
     }
   }
@@ -250,6 +252,16 @@ const router = new Router({
           path: 'chartManager',
           component: ChartManager,
           beforeEnter: superManagerGuard
+        },
+        { // Create the workingTime of an employee of his team
+          beforeEnter: superManagerGuard,
+          path: 'editWorkingTimes/:userID',
+          component: WorkingTime,
+        },
+        { // Edit workingTimes of an employee of his team
+          beforeEnter: superManagerGuard,
+          path: 'editWorkingTimes/:userID/:editMode',
+          component: WorkingTime,
         },
         { // Manage all teams
           path: 'manageAllTeams',

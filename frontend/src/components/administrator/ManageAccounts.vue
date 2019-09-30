@@ -90,16 +90,16 @@ export default {
       this.dialog = false;
     },
     async deleteAccount(employee) {
-      const response = await this.$store.dispatch("deleteUser", employee.id);
-      if (response.status !== 204) {
-        this.$store.commit("createSnackBarError", {
-          text: `An error occured while deleting account !`,
-          announcer: this.$announcer
-        });
-      } else {
+      try {
+        const response = await this.$store.dispatch("deleteUser", employee.id);
         this.employees = this.employees.filter(e => e.id !== employee.id);
         this.$store.commit("createSnackBarSuccess", {
           text: `Account deleted successfully !`,
+          announcer: this.$announcer
+        });
+      } catch (error) {
+        this.$store.commit("createSnackBarError", {
+          text: `An error occured while deleting account !`,
           announcer: this.$announcer
         });
       }
@@ -117,8 +117,15 @@ export default {
       }
     },
     async fetchUsers() {
-      const resp = await this.$store.dispatch("getAllUsers");
-      this.employees = resp.data;
+      try {
+        const resp = await this.$store.dispatch("getAllUsers");
+        this.employees = resp.data;
+      } catch (error) {
+        this.$store.commit("createSnackBarError", {
+          text: `An error occured while fetching accounts !`,
+          announcer: this.$announcer
+        });
+      }
     }
   },
   mounted() {
