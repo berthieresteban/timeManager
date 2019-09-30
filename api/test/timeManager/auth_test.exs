@@ -429,4 +429,124 @@ defmodule TimeManager.AuthTest do
       assert %Ecto.Changeset{} = Auth.change_user(user)
     end
   end
+
+  describe "teams" do
+    alias TimeManager.Auth.Team
+
+    @valid_attrs %{color: "some color", name: "some name"}
+    @update_attrs %{color: "some updated color", name: "some updated name"}
+    @invalid_attrs %{color: nil, name: nil}
+
+    def team_fixture(attrs \\ %{}) do
+      {:ok, team} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Auth.create_team()
+
+      team
+    end
+
+    test "list_teams/0 returns all teams" do
+      team = team_fixture()
+      assert Auth.list_teams() == [team]
+    end
+
+    test "get_team!/1 returns the team with given id" do
+      team = team_fixture()
+      assert Auth.get_team!(team.id) == team
+    end
+
+    test "create_team/1 with valid data creates a team" do
+      assert {:ok, %Team{} = team} = Auth.create_team(@valid_attrs)
+      assert team.color == "some color"
+      assert team.name == "some name"
+    end
+
+    test "create_team/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Auth.create_team(@invalid_attrs)
+    end
+
+    test "update_team/2 with valid data updates the team" do
+      team = team_fixture()
+      assert {:ok, %Team{} = team} = Auth.update_team(team, @update_attrs)
+      assert team.color == "some updated color"
+      assert team.name == "some updated name"
+    end
+
+    test "update_team/2 with invalid data returns error changeset" do
+      team = team_fixture()
+      assert {:error, %Ecto.Changeset{}} = Auth.update_team(team, @invalid_attrs)
+      assert team == Auth.get_team!(team.id)
+    end
+
+    test "delete_team/1 deletes the team" do
+      team = team_fixture()
+      assert {:ok, %Team{}} = Auth.delete_team(team)
+      assert_raise Ecto.NoResultsError, fn -> Auth.get_team!(team.id) end
+    end
+
+    test "change_team/1 returns a team changeset" do
+      team = team_fixture()
+      assert %Ecto.Changeset{} = Auth.change_team(team)
+    end
+  end
+
+  describe "managing" do
+    alias TimeManager.Auth.Managing
+
+    @valid_attrs %{isManager: true}
+    @update_attrs %{isManager: false}
+    @invalid_attrs %{isManager: nil}
+
+    def managing_fixture(attrs \\ %{}) do
+      {:ok, managing} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Auth.create_managing()
+
+      managing
+    end
+
+    test "list_managing/0 returns all managing" do
+      managing = managing_fixture()
+      assert Auth.list_managing() == [managing]
+    end
+
+    test "get_managing!/1 returns the managing with given id" do
+      managing = managing_fixture()
+      assert Auth.get_managing!(managing.id) == managing
+    end
+
+    test "create_managing/1 with valid data creates a managing" do
+      assert {:ok, %Managing{} = managing} = Auth.create_managing(@valid_attrs)
+      assert managing.isManager == true
+    end
+
+    test "create_managing/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Auth.create_managing(@invalid_attrs)
+    end
+
+    test "update_managing/2 with valid data updates the managing" do
+      managing = managing_fixture()
+      assert {:ok, %Managing{} = managing} = Auth.update_managing(managing, @update_attrs)
+      assert managing.isManager == false
+    end
+
+    test "update_managing/2 with invalid data returns error changeset" do
+      managing = managing_fixture()
+      assert {:error, %Ecto.Changeset{}} = Auth.update_managing(managing, @invalid_attrs)
+      assert managing == Auth.get_managing!(managing.id)
+    end
+
+    test "delete_managing/1 deletes the managing" do
+      managing = managing_fixture()
+      assert {:ok, %Managing{}} = Auth.delete_managing(managing)
+      assert_raise Ecto.NoResultsError, fn -> Auth.get_managing!(managing.id) end
+    end
+
+    test "change_managing/1 returns a managing changeset" do
+      managing = managing_fixture()
+      assert %Ecto.Changeset{} = Auth.change_managing(managing)
+    end
+  end
 end
