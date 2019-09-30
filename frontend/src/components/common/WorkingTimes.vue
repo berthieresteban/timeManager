@@ -1,15 +1,13 @@
 <template>
   <div>
     <v-container>
-      <v-row>
-        Dashboard of {{ username }}
-      </v-row>
+      <v-row>Dashboard of {{ username }}</v-row>
       <v-row>
         <v-col v-for="chart in charts" :key="chart.position" :cols="getSize(chart)">
-          <AreaChart :data="areaData" v-if="checkType(chart, 'areaChart')" />
-          <DonutChart :data="donutData" v-if="checkType(chart, 'donutChart')" />
-          <BarChart :data="barData" v-if="checkType(chart, 'barChart')" />
-          <LineChart :data="lineData" v-if="checkType(chart, 'lineChart')" />
+          <AreaChart :data="areaData" v-if="checkType(chart, 'areaChart')"/>
+          <DonutChart :data="donutData" v-if="checkType(chart, 'donutChart')"/>
+          <BarChart :data="barData" v-if="checkType(chart, 'barChart')"/>
+          <LineChart :data="lineData" v-if="checkType(chart, 'lineChart')"/>
         </v-col>
       </v-row>
     </v-container>
@@ -108,12 +106,19 @@ export default {
     };
   },
   async mounted() {
-    const response = await this.$store.dispatch("getWorkingTimes", {
-      id: this.id,
-      start: this.lastWeek,
-      end: this.today
-    });
-    this.workingTimes = response.data.data;
+    try {
+      const response = await this.$store.dispatch("getWorkingTimes", {
+        id: this.id,
+        start: this.lastWeek,
+        end: this.today
+      });
+      this.workingTimes = response.data.data;
+    } catch (error) {
+      this.$store.commit("createSnackBarError", {
+        text: "An error occured while fetching working times.",
+        announcer: this.$announcer
+      });
+    }
     this.setupDonutData();
     this.setupBarData();
     this.setupLineData();
@@ -190,7 +195,7 @@ export default {
         return;
       }
       const hoursDone = this.getWorkedHours(workedYesterday);
-      const hoursToDo = 9;
+      const hoursToDo = 12;
       const remainingHours = hoursToDo - hoursDone;
       this.donutData = [
         { label: "Hours done", value: hoursDone },

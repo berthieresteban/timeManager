@@ -84,28 +84,28 @@ export default {
       return ("0" + number).slice(-2);
     },
     async getLastClock() {
-      const response = await this.$store.dispatch("getClocks", this.id);
-      if (response.status !== 200) {
+      try {
+        const response = await this.$store.dispatch("getClocks", this.id);
+        response.data.data.sort((d1, d2) => {
+          return new Date(d2.time) - new Date(d1.time);
+        });
+        const todayClock = response.data.data.find(
+          d =>
+            d.time.split("T")[0] === this.todayStart.split(" ")[0] &&
+            d.status === true
+        );
+        if (!todayClock || !todayClock.status) {
+          return;
+        }
+        const date = new Date(todayClock.time);
+        // Remove 2 hours because receive as gmt+2
+        this.clock(date.valueOf() - 3600000 * 2, false);
+      } catch (error) {
         this.$store.commit("createSnackBarError", {
           text: "An error occured while searching last clock!",
           announcer: this.$announcer
         });
-        return;
       }
-      response.data.data.sort((d1, d2) => {
-        return new Date(d2.time) - new Date(d1.time);
-      });
-      const todayClock = response.data.data.find(
-        d =>
-          d.time.split("T")[0] === this.todayStart.split(" ")[0] &&
-          d.status === true
-      );
-      if (!todayClock || !todayClock.status) {
-        return;
-      }
-      const date = new Date(todayClock.time);
-      // Remove 2 hours because receive as gmt+2
-      this.clock(date.valueOf() - 3600000 * 2, false);
     },
     formateDate(time, mode) {
       const date = new Date(time);
@@ -151,13 +151,13 @@ export default {
           }
         }
       };
-      const response = await this.$store.dispatch("createClock", payload);
-      if (response.status !== 201) {
+      try {
+        const response = await this.$store.dispatch("createClock", payload);
+      } catch (error) {
         this.$store.commit("createSnackBarError", {
           text: "An error occured while creating clock!",
           announcer: this.$announcer
         });
-        return;
       }
     },
     refresh() {},

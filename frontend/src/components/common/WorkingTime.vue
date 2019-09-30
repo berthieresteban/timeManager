@@ -15,10 +15,11 @@
       @cancelled="cancelledDelete"
     />
     <div v-if="creationMode">
-      <CreateWorkingTime @createWorkingTime="createWorkingTime" />
+      <CreateWorkingTime :userID="userID" @createWorkingTime="createWorkingTime"/>
     </div>
     <div v-else>
       <EditWorkingTime
+        :userID="userID"
         :workingTimes="workingTimes"
         @deleteWorkingTime="deleteWorkingTime"
         @updateWorkingTime="updateWorkingTime"
@@ -66,14 +67,14 @@ export default {
       this.openedDeleteDialog = false;
     },
     async confirmedDelete(id) {
-      const response = await this.$store.dispatch("deleteWorkingTime", id);
-      if (response.status === 204) {
+      try {
+        const response = await this.$store.dispatch("deleteWorkingTime", id);
         this.fetchWorkingTimes();
         this.$store.commit("createSnackBarSuccess", {
           text: "Working time successfully deleted!",
           announcer: this.$announcer
         });
-      } else {
+      } catch (error) {
         this.$store.commit("createSnackBarError", {
           text: "An error occured while deleting working time!",
           announcer: this.$announcer
@@ -85,14 +86,17 @@ export default {
       this.openedUpdateDialog = false;
     },
     async confirmedUpdate(payload) {
-      const response = await this.$store.dispatch("updateWorkingTime", payload);
-      if (response.status === 200) {
+      try {
+        const response = await this.$store.dispatch(
+          "updateWorkingTime",
+          payload
+        );
         this.fetchWorkingTimes();
         this.$store.commit("createSnackBarSuccess", {
           text: "Working time successfully updated!",
           announcer: this.$announcer
         });
-      } else {
+      } catch (error) {
         this.$store.commit("createSnackBarError", {
           text: "An error occured while updating working time!",
           announcer: this.$announcer
@@ -101,13 +105,16 @@ export default {
       this.openedUpdateDialog = false;
     },
     async createWorkingTime(payload) {
-      const response = await this.$store.dispatch("createWorkingTime", payload);
-      if (response.status === 201) {
+      try {
+        const response = await this.$store.dispatch(
+          "createWorkingTime",
+          payload
+        );
         this.$store.commit("createSnackBarSuccess", {
           text: "Working time successfully created!",
           announcer: this.$announcer
         });
-      } else {
+      } catch (error) {
         this.$store.commit("createSnackBarError", {
           text: "An error occured while creating working time!",
           announcer: this.$announcer
@@ -126,24 +133,31 @@ export default {
       this.workingTimes = [];
       const start = "2019-10-03 09:30:27";
       const end = "2019-08-03 09:30:27";
-      const response = await this.$store.dispatch("getWorkingTimes", {
-        id: this.$store.state.user.id,
-        start: start,
-        end: end
-      });
-      response.data.data.sort((d1, d2) => {
-        return new Date(d1.start) - new Date(d2.start);
-      });
-      response.data.data.reverse();
-      this.workingTimes = response.data.data.map(d => {
-        return {
-          user: this.$store.state.user.username,
-          date: d.start.split("T")[0],
-          in: d.start.split("T")[1].split("Z")[0],
-          out: d.end.split("T")[1].split("Z")[0],
-          id: d.id
-        };
-      });
+      try {
+        const response = await this.$store.dispatch("getWorkingTimes", {
+          id: this.userID,
+          start: start,
+          end: end
+        });
+        response.data.data.sort((d1, d2) => {
+          return new Date(d1.start) - new Date(d2.start);
+        });
+        response.data.data.reverse();
+        this.workingTimes = await response.data.data.map(d => {
+          return {
+            user: this.$store.state.user.username,
+            date: d.start.split("T")[0],
+            in: d.start.split("T")[1].split("Z")[0],
+            out: d.end.split("T")[1].split("Z")[0],
+            id: d.id
+          };
+        });
+      } catch (error) {
+        this.$store.commit("createSnackBarError", {
+          text: "An error occured while fetching working times.",
+          announcer: this.$announcer
+        });
+      }
     }
   },
   mounted() {

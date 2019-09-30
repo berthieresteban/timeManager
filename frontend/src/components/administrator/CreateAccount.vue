@@ -22,7 +22,7 @@
         </v-card-text>
         <v-card-actions>
           <v-btn @click="cancel">Cancel</v-btn>
-          <v-spacer />
+          <v-spacer/>
           <v-btn @click="confirm">Confirm</v-btn>
         </v-card-actions>
       </v-card>
@@ -66,42 +66,60 @@ export default {
       this.$emit("cancelCreation");
     },
     async emailCheck() {
-      const regexTest = this.emailRegex.test(this.email);
+      try {
+        const regexTest = this.emailRegex.test(this.email);
 
-      if (!regexTest) {
-        if (!this.errors.find(err => err === "Wrong email format.")) {
-          this.errors.push("Wrong email format.");
+        if (!regexTest) {
+          if (!this.errors.find(err => err === "Wrong email format.")) {
+            this.errors.push("Wrong email format.");
+          }
+        } else {
+          this.errors = this.errors.filter(
+            err => err !== "Wrong email format."
+          );
         }
-      } else {
-        this.errors = this.errors.filter(err => err !== "Wrong email format.");
-      }
-      const resp = await this.$store.dispatch("getUser", {
-        email: this.email
-      });
-      const userExists = resp.data.length;
-      if (userExists) {
-        if (!this.errors.find(err => err === "Email already exists.")) {
-          this.errors.push("Email already exists.");
+        const resp = await this.$store.dispatch("getUser", {
+          email: this.email
+        });
+
+        const userExists = resp.data.length;
+        if (userExists) {
+          if (!this.errors.find(err => err === "Email already exists.")) {
+            this.errors.push("Email already exists.");
+          }
+        } else {
+          this.errors = this.errors.filter(
+            err => err !== "Email already exists."
+          );
         }
-      } else {
-        this.errors = this.errors.filter(
-          err => err !== "Email already exists."
-        );
+      } catch (error) {
+        this.$store.commit("createSnackBarError", {
+          text: `An error occured while verifying email.`,
+          announcer: this.$announcer
+        });
       }
     },
     async usernameCheck() {
-      const resp = await this.$store.dispatch("getUser", {
-        username: this.username
-      });
-      const userExists = resp.data.length;
-      if (userExists) {
-        if (!this.errors.find(err => err === "Username already exists.")) {
-          this.errors.push("Username already exists.");
+      try {
+        const resp = await this.$store.dispatch("getUser", {
+          username: this.username
+        });
+
+        const userExists = resp.data.length;
+        if (userExists) {
+          if (!this.errors.find(err => err === "Username already exists.")) {
+            this.errors.push("Username already exists.");
+          }
+        } else {
+          this.errors = this.errors.filter(
+            err => err !== "Username already exists."
+          );
         }
-      } else {
-        this.errors = this.errors.filter(
-          err => err !== "Username already exists."
-        );
+      } catch (error) {
+        this.$store.commit("createSnackBarError", {
+          text: `An error occured while verifying username.`,
+          announcer: this.$announcer
+        });
       }
     },
     createAccount() {
@@ -125,14 +143,21 @@ export default {
       if (this.errors.length) {
         return;
       }
-      const response = await this.createAccount();
-      if (response.status === 201) {
-        this.errors = [];
-        this.$emit("accountCreated");
-      } else {
-        this.errors.push(
-          "An error occured while creating your account, please retry."
-        );
+      try {
+        const response = await this.createAccount();
+        if (response.status === 201) {
+          this.errors = [];
+          this.$emit("accountCreated");
+        } else {
+          this.errors.push(
+            "An error occured while creating your account, please retry."
+          );
+        }
+      } catch (error) {
+        this.$store.commit("createSnackBarError", {
+          text: `An error occured while creating account.`,
+          announcer: this.$announcer
+        });
       }
     }
   }

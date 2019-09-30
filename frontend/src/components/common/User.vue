@@ -34,7 +34,7 @@
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
-      <div >
+      <div>
         <v-btn text link :to="`/${role}/${id}/clock`">Clock Manager</v-btn>
         <v-btn text link :to="`/${role}/${id}/workingTimes/${id}/${username}`">Working Times</v-btn>
         <v-btn text link :to="`/${role}/${id}/chartManager`">Chart Manager</v-btn>
@@ -65,14 +65,26 @@ export default {
   mounted() {
     switch (this.role) {
       case "manager":
-        this.roleButtons.push({text: 'Manage Team', to: `/manager/${this.id}/manageTeam` });
+        this.roleButtons.push({
+          text: "Manage Team",
+          to: `/manager/${this.id}/manageTeam`
+        });
         break;
       case "superManager":
-        this.roleButtons.push({text: 'Manage Employees', to: `/superManager/${this.id}/manageAllEmployees` });
-        this.roleButtons.push({text: 'Manage Teams', to: `/superManager/${this.id}/manageAllTeams` });
+        this.roleButtons.push({
+          text: "Manage Employees",
+          to: `/superManager/${this.id}/manageAllEmployees`
+        });
+        this.roleButtons.push({
+          text: "Manage Teams",
+          to: `/superManager/${this.id}/manageAllTeams`
+        });
         break;
       case "administrator":
-        this.roleButtons.push({text: 'Manage Acounts', to: `/administrator/${this.id}/manageAccounts` });
+        this.roleButtons.push({
+          text: "Manage Acounts",
+          to: `/administrator/${this.id}/manageAccounts`
+        });
         break;
       default:
         break;
@@ -131,14 +143,14 @@ export default {
     },
     createUser() {},
     async deleteUser() {
-      const response = await this.$store.dispatch("deleteUser", this.id);
-      if (response.status === 204) {
+      try {
+        const response = await this.$store.dispatch("deleteUser", this.id);
         this.$store.commit("createSnackBarSuccess", {
           text: `Accound successfully deleted!`,
           announcer: this.$announcer
         });
         this.$router.push("/login");
-      } else {
+      } catch (error) {
         this.$store.commit("createSnackBarSuccess", {
           text: `An error occured while deleting you're account!`,
           announcer: this.$announcer

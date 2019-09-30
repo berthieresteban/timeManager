@@ -14,7 +14,7 @@
         </v-card-text>
         <v-card-actions>
           <v-btn @click="cancel">Cancel</v-btn>
-          <v-spacer />
+          <v-spacer/>
           <v-btn @click="confirm">Confirm</v-btn>
         </v-card-actions>
       </v-card>
@@ -57,13 +57,13 @@ export default {
       this.$emit("cancelUpdate");
     },
     async confirm() {
-      const response = await this.$store.dispatch("updateUser", {
-        user: {
-          username: this.username,
-          email: this.email
-        }
-      });
-      if (response.status === 200) {
+      try {
+        const response = await this.$store.dispatch("updateUser", {
+          user: {
+            username: this.username,
+            email: this.email
+          }
+        });
         this.$store.commit("setUser", {
           username: this.username,
           email: this.email,
@@ -73,13 +73,13 @@ export default {
           text: `Account successfully updated!`,
           announcer: this.$announcer
         });
-      } else {
+        this.$emit("endUpdate");
+      } catch (error) {
         this.$store.commit("createSnackBarError", {
           text: `An error occured while updating you're account!`,
           announcer: this.$announcer
         });
       }
-      this.$emit("endUpdate");
     }
   }
 };

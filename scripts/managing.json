@@ -1,0 +1,60 @@
+{
+    "managing": [
+        {
+            "managing": {
+                "teamId": "1",
+                "employeeId": "7",
+                "isManager": true
+            }
+        },
+        {
+            "managing": {
+                "teamId": "2",
+                "employeeId": "7",
+                "isManager": true
+            }
+        },
+        {
+            "managing": {
+                "teamId": "3",
+                "employeeId": "8",
+                "isManager": true
+            }
+        },
+        {
+            "managing": {
+                "teamId": "1",
+                "employeeId": "2",
+                "isManager": false
+            }
+        },
+        {
+            "managing": {
+                "teamId": "1",
+                "employeeId": "3",
+                "isManager": false
+            }
+        },
+        {
+            "managing": {
+                "teamId": "2",
+                "employeeId": "4",
+                "isManager": false
+            }
+        },
+        {
+            "managing": {
+                "teamId": "3",
+                "employeeId": "5",
+                "isManager": false
+            }
+        },
+        {
+            "managing": {
+                "teamId": "3",
+                "employeeId": "6",
+                "isManager": false
+            }
+        }
+    ]
+}
