@@ -926,7 +926,7 @@
 											"",
 											"pm.test(\"email_test\", function () {",
 											"    var jsonData = JSON.parse(responseBody);",
-											"    pm.expect(jsonData.data.email).to.eql(\"supermanager@manager.com\");",
+											"    pm.expect(jsonData.data.email).to.eql(\"superManager@manager.com\");",
 											"});",
 											"",
 											"pm.test(\"username_test\", function () {",
