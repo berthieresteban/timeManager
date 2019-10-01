@@ -4,8 +4,11 @@ const teams = require('./teams')
 const workingtimes = require('./workingtimes')
 const managing = require('./managing')
 
-const host = "localhost";
-const port = "4000";
+const host = "15.188.8.203"
+const port = "4000"
+
+// const host = "localhost";
+// const port = "4000";
 const route = `http://${host}:${port}`;
 
 let adminToken = null;
