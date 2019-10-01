@@ -957,7 +957,7 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "http://localhost:4000/api/users/{{manager_id}}",
+									"raw": "http://localhost:4000/api/users/{{superManager_id}}",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -966,7 +966,7 @@
 									"path": [
 										"api",
 										"users",
-										"{{manager_id}}"
+										"{{superManager_id}}"
 									]
 								}
 							},
