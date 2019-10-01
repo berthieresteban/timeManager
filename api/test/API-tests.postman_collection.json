@@ -1167,7 +1167,7 @@
 					"name": "auth & get",
 					"item": [
 						{
-							"name": "Manager auth",
+							"name": "Admin auth",
 							"event": [
 								{
 									"listen": "test",
@@ -1227,7 +1227,7 @@
 							"response": []
 						},
 						{
-							"name": "Get current manager",
+							"name": "Get current admin",
 							"event": [
 								{
 									"listen": "test",
@@ -1240,7 +1240,7 @@
 											"",
 											"pm.test(\"email_test\", function () {",
 											"    var jsonData = JSON.parse(responseBody);",
-											"    pm.expect(jsonData.data.email).to.eql(\"localhost@localhost.com\");",
+											"    pm.expect(jsonData.data.email).to.eql(\"localhost@localhost.fr\");",
 											"});",
 											"",
 											"pm.test(\"username_test\", function () {",
@@ -1262,8 +1262,8 @@
 								"header": [
 									{
 										"key": "session_jwt",
-										"value": "{{manager_token}}",
-										"type": "text"
+										"type": "text",
+										"value": "{{admin_token}}"
 									}
 								],
 								"body": {
@@ -1338,7 +1338,7 @@
 									"raw": "{\n\t\"clock\": {\n\t\t\"time\": \"2019-09-09 09:42:27\",\n\t\t\"status\": true,\n\t\t\"user\": {{admin_id}}\n\t}\n}"
 								},
 								"url": {
-									"raw": "http://localhost:4000/api/clocks/{{admin_idi}}",
+									"raw": "http://localhost:4000/api/clocks/{{admin_id}}",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -1347,7 +1347,7 @@
 									"path": [
 										"api",
 										"clocks",
-										"{{admin_idi}}"
+										"{{admin_id}}"
 									]
 								}
 							},
